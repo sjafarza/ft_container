@@ -1,11 +1,14 @@
-# ft_container
-The project on containers c++
+# ft_containers
+recoding some continers of c++
 Implémentez les containers suivants et rendez les fichiers <container>.hpp correspondants :
 • vector
 Vous n’avez pas à faire la spécialisation vector<bool>.
 • map
 • stack
 Elle utilisera votre classe vector comme container sous-jacent par défaut. Cependant, elle restera compatible avec les autres containers, ceux de la STL inclus.
+Vous pouvez valider ce projet sans la stack (80/100).
+Cependant, si vous voulez faire la partie bonus, il faudra avoir
+réalisé les 3 containers obligatoires.
 Vous devez aussi implémenter :
 • iterators_traits
 • reverse_iterator
@@ -16,6 +19,9 @@ Le but est de vous faire découvrir SFINAE.
 • equal et/ou lexicographical_compare
 • std::pair
 • std::make_pair
+5
+ft_containers Les containers C++, tout simplement
+III.1 Prérequis
 • Le namespace doit être ft.
 • La structure de données interne utilisée pour chacun de vos containers doit être
 cohérente et justifiable (utiliser juste un tableau pour map n’est donc pas accepté).
@@ -28,12 +34,4 @@ container sont attendues.
 • Si le container possède un système d’itérateur, vous devez l’implémenter.
 • Vous devez utiliser std::allocator.
 • Pour les surcharges non-membres, le mot-clé friend est autorisé. Chaque utilisation de friend doit être justifiée et sera vérifiée en évaluation.
-• Bien entendu, pour implémenter map::value_compare, le mot-clé friend est autorisé.
-Test
-• Vous devez aussi fournir vos propres tests, au minimum un main.cpp, pour votre
-évaluation. Vous devez pousser plus loin que le main donné en exemple !
-• Vous devez créer deux binaires faisant tourner les mêmes tests : l’un avec vos
-containers et l’autre avec les containers standards.
-• Comparez les sorties et les performances / temps (vos containers peuvent être
-jusqu’à 20 fois plus lents que les originaux).
-• Pour tester vos containers : ft::<container>.
+• Bien entendu, pour implémenter map::value_compare, le mot-clé friend est autoris
