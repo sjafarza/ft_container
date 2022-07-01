@@ -211,28 +211,41 @@ namespace ft
                 return  _start[n];
             }
         //*****************************************************************************************
-        //*                                Modifiers                                              *
+        //*                                Modifiers                                              
         //***************************************************************************************** 
-        template <class InputIterator>
+        /*template <class InputIterator>
         void assign (InputIterator first, InputIterator last);
 
         void assign (size_type n, const value_type& val);
 
         iterator insert (iterator position, const value_type& val);
 
+        void push_back (const value_type& val);
+
+        void pop_back();
+
+        iterator insert (iterator position, const value_type& val);
+
         void insert (iterator position, size_type n, const value_type& val);
 
-            template <class InputIterator>
-            void    insert (iterator position, InputIterator first, InputIterator last)
-            {
+        template <class InputIterator>
+        void    insert (iterator position, InputIterator first, InputIterator last)
+        {
 
-            }
+        }
 
+        iterator erase (iterator position);
 
+        iterator erase (iterator first, iterator last);
+
+        void swap (vector& x);
+
+        void clear();*/
         
     };
+
     //*****************************************************************************************
-    //*                                les fonctions non-membres                                            *
+    //*                                les fonctions non-membres                              *              *
     //***************************************************************************************** 
     template <class T, class Alloc>
     bool operator == (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs)
