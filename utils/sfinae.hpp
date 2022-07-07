@@ -116,3 +116,54 @@ namespace ft
 } // namespace ft
 
 #endif
+
+/*
+template<bool is_integral, typename T>
+    struct is_integral_r
+    {
+        typedef T type;
+        static const bool valude = is_integral;
+    };
+
+    template<typename>
+    struct is_integral_type : public is_integral_r<false,bool> { };
+
+    template<>
+    struct is_integral_type<bool>:public is_integral_r<true,bool> { };
+
+    template<>
+    struct is_integral_type<char>:public is_integral_r<true,char> { };
+
+    template<>
+    struct is_integral_type<signed char>: public is_integral_r<true,signed char> { };
+
+    template<>
+    struct is_integral_type<unsigned char>:public is_integral_r<true,unsigned char> { };
+
+    template<>
+    struct is_integral_type<int>: public is_integral_r<true,int> { };
+
+     template<>
+    struct is_integral_type<unsigned int>: public is_integral_r<true, unsigned int> { };
+
+    template<>
+    struct is_integral_type<short int>: public is_integral_r<true,short int> { };
+
+    template<>
+    struct is_integral_type<unsigned short int>: public is_integral_r<true,unsigned short int> { };
+
+    template<>
+    struct is_integral_type<long int>: public is_integral_r<true,long int> { };
+
+    template<>
+    struct is_integral_type<unsigned long int>:  public is_integral_r<true,unsigned long int> { };
+    
+    template<>
+    struct is_integral_type<long long int>: public is_integral_r<true,long long int> { };
+
+    template<>
+    struct is_integral_type<unsigned long long int>: public is_integral_r<true, unsigned long long int> { };
+
+    template <typename T>
+        struct is_integral : public is_integral_type<T> { };
+		*/
