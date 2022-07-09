@@ -240,11 +240,28 @@ namespace ft
                      typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type* = NULL)
         {
             size_t  n = std::distance(fist, last);
+            if(n > _capacity)
+                reserve(n);
+            for(size_type  i = 0; i < _size; ++i)
+                _alloc.destroy(&_start[i]);
+            _size = n;    
+            for(size_type   i = 0 ; i < n ; ++i)
+                _alloc.construct(&_start[i], *fist++);
+            _end = _start + n;    
+
         }
 
-        void assign (size_type n, const value_type& val);
-
-
+        void assign (size_type n, const value_type& val)
+        {
+            if(n > _capacity)
+                reserve(n);
+            for(size_type  i = 0; i < _size; ++i)
+                _alloc.destroy(&_start[i]);
+            _size = n;    
+            for(size_type   i = 0 ; i < n ; ++i)
+                _alloc.construct(&_start[i], val);
+            _end = _start + n;           
+        }
 
         void push_back (const value_type& val)
         {
@@ -323,14 +340,41 @@ namespace ft
             return iterator(_start[i])
         }
 
-        void swap (vector& x);
+        void swap (vector& x)
+        {
+            if(*this == x)
+            return ;
+            if(x._size > _capacity)
+                reserve(x._size);
+            if(_size > x._)    
+            iterator    it = begin();
+            iterator    x_it = x.begin();
+            iterator    tmp_it;
+            while(x_it < x.end())
+            {
+
+                *it = *x_it;
+                it++;
+                x_it++;
+            }
+            _size = x._size;
+            _end = x.end();
+
+        }
 
         void clear();
-        
+    //*****************************************************************************************
+    //*                               Allocator                                               *
+    //***************************************************************************************** 
+    allocator_type get_allocator() const
+    {
+        return (_alloc);
+    }
+
     };
 
     //*****************************************************************************************
-    //*                                les fonctions non-membres                              *              *
+    //*                                les fonctions non-membres                              *    
     //***************************************************************************************** 
     template <class T, class Alloc>
     bool operator == (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs)
