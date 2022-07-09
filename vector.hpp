@@ -49,21 +49,23 @@ namespace ft
             {
                 if(empty())
                     return ;
-                for(size_type i = 1 ; i < n ; ++i)
+                size_type   k = &(*position) - &(*begin());
+                for(size_type i = _size - 1 ; i >=  k ; --i)
                 {
-                    _alloc.construct(_end - i , *(position + (n - i)));
-                    _alloc.destroy(position + (n - i));
+                    _alloc.construct(&_start[i + n], _start[i]);
+                    _alloc.destroy(&start[i]);
                 }     
             }
 
-            void                _left_right(iterator positon, size_type n)
+            void                _shif_left(iterator positon, size_type n)
             {
                 if(empty())
                     return ;
-                for(size_type i = 0 ; i < n ; ++i)
+                size_type   k = &(*position) - &(*begin());
+                for(size_type i = k ; i < _size - n ; ++i)
                 {
-                    _alloc.construct(_position - (n + i) , *(position + i));
-                    _alloc.destroy(position + i);
+                    _alloc.construct(&_start[i], _size[i + n]);
+                    _alloc.destroy(&_start[i + n]);
                 }     
             }  
 
@@ -112,7 +114,7 @@ namespace ft
              {
                 this->insert(this->begin(), other.begin(), other.end()); 
              }
-             
+
         //*****************************************************************************************
         //*                                  Deconstructors                                       *
         //*****************************************************************************************
@@ -193,7 +195,7 @@ namespace ft
                         _start = tmp_start;
                         _end = _start + n;
                         _capacity = n;
-                        _size = n;
+                       // _size = n;  i tinck is not chenge by reservre
                     }
             };
         //*****************************************************************************************
@@ -244,16 +246,42 @@ namespace ft
 
 
 
-        void push_back (const value_type& val);
+        void push_back (const value_type& val)
+        {
+            if(_size + 1 > _capacity)
+                reserve(_size + 1);
+            _size++;
+            _alloc.construct(_end, val);
+            _end++;    
+        }
 
-        void pop_back();
+        void    pop_back()
+        {
+            _alloc.destroy(_end);
+            _size--;
 
-        iterator insert (iterator position, const value_type& val);
+        }
 
+        iterator insert (iterator position, const value_type& val)
+        {
+            size_type   len = &(*position) - _start;
+            if(1 + _size > _capacity)
+                reserve (1 + _size);
+            _shif_left(Position , 1 );
+            _alloc.Constrauctors(&(*position), val);
+            _size++;
+            return (iterator(_start + len));
+
+        }
 
         void insert (iterator position, size_type n, const value_type& val)
         {
-
+            if(n + _size > _capacity)
+                reserve(n + _size);   
+            _shift_right(position, n);
+            for(size_type i = 0 ; i < n ; ++i)
+                _alloc.construct(&(*position)+ (i + 1), val);
+            _size += n;      
         }
 
         template <class InputIterator>
@@ -262,15 +290,38 @@ namespace ft
         {
             size_type n = ft::distance(first, last);
             if (n + _size > _capacity)
-                reserve(n + _size);
+                reserve(n + _size);   
             _shift_right(positon, n);
             for(size_type i = 0 ; i < n  ; i++)
-                _alloc.construct(position + (i - 1) , *(first + i));               
+                _alloc.construct(&(*position) + (i - 1) , *(first + i));
+            _size += n;                  
         }
 
-        iterator erase (iterator position);
+        iterator erase (iterator position)
+        {
+            size_type  i = &(*position) - &(*begin());
+           _alloc.destroy(&_start[i]);
+           _shift_left(position, 1);
+           _size--;
+           _end--;
+           return iterator(_start[i]);
+        }
 
-        iterator erase (iterator first, iterator last);
+        iterator erase (iterator first, iterator last)
+        {
+            size_type  i = &(*position) - &(*begin());
+            size_type   n = std::distance(first, last);
+            iterator    it = first;
+            while(it != last)
+            {
+                _alloc.destroy(it);
+                ++it;
+            }
+            _shif_left(last + 1 , n);
+            _size -= n;
+            _end -= n;
+            return iterator(_start[i])
+        }
 
         void swap (vector& x);
 
