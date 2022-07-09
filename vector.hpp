@@ -44,8 +44,28 @@ namespace ft
             pointer             _end;                                                      
             size_type           _size;        /* len of vector */
             size_type           _capacity;    /* size of the storage space currentrl allocated != size of vector */
-            //size_type           _g; /* _gold_tatio*/
-        
+           
+            void                _shift_right(iterator positon, size_type n)
+            {
+                if(empty())
+                    return ;
+                for(size_type i = 1 ; i < n ; ++i)
+                {
+                    _alloc.construct(_end - i , *(position + (n - i)));
+                    _alloc.destroy(position + (n - i));
+                }     
+            }
+
+            void                _left_right(iterator positon, size_type n)
+            {
+                if(empty())
+                    return ;
+                for(size_type i = 0 ; i < n ; ++i)
+                {
+                    _alloc.construct(_position - (n + i) , *(position + i));
+                    _alloc.destroy(position + i);
+                }     
+            }  
 
        
         
@@ -54,12 +74,12 @@ namespace ft
         //*                                  Constrauctors                                        *
         //*****************************************************************************************
         explicit vector (const allocator_type& alloc = allocator_type()) :  /* exlicit : used to mark consts not implicitly convert types */
-                _alloc(alloc), _start(u_nullptr), _end(u_nullptr), _size(0), _capacity(0) 
+                _alloc(alloc), _start(NULL), _end(NULL), _size(0), _capacity(0) 
                 {}
 
 
         explicit vector (size_type n, const value_type& val = value_type(), const allocator_type& alloc = allocator_type()) : 
-                _alloc(alloc), _start(u_nullptr),_end(u_nullptr), _size(n), _capacity(n)
+                _alloc(alloc), _start(NULL),_end(NULL), _size(n), _capacity(n)
                 {
                     _start = _alloc.allocate(n);
                     _end = _start;
@@ -71,28 +91,28 @@ namespace ft
                 }
 
         template <class InputIterator>
-        vector (InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type()):
-            _alloc(alloc), _start(u_nullptr),_end(u_nullptr), _size(0), _capacity(0)
+        vector (InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type(),
+                typedef ft::enable_if<!ft::is_integral<InputIterator>::value , ItnputIterator>::type* = NULL):
+            _alloc(alloc), _start(NULL),_end(NULL), _size(0), _capacity(0)
             {
-               difference_type  n = 0;  /*   ????  */
-               iterator         it = first;
+                size_type   n = std::distance(first, last);
+                _start = _alloc.allocate(n);
+                _size = n;
+                _capacity = n;
+                _end = _size + n;
 
-               while(it != last)
-               {
-                 ++n;
-                 ++it;
-               }
-               _start = _alloc.allocate(n);
-               _end = _start + n; 
-               _capcity = n;
+                for(size_type i = 0; i < n ; ++i)
+                    _alloc.costrauct(&(_size[i], *(first + i)));
+
             }
 
 
         Vector(Vector<T, Alloc> const&    other) :
-             _alloc(other._alloc), _start(u_nullptr), _end(u_nullptr), _size(0), _capacity(0)
+             _alloc(other._alloc), _start(NULL), _end(NULL), _size(other._size), _capacity(other._capacity)
              {
-                this->insert(this->begin(), other.begin(), other.end()); // insert() in Modifiers Member func */
+                this->insert(this->begin(), other.begin(), other.end()); 
              }
+             
         //*****************************************************************************************
         //*                                  Deconstructors                                       *
         //*****************************************************************************************
@@ -158,11 +178,11 @@ namespace ft
         
         void reserve (size_type n)
             {
-                    if (n > _malloc.max_size())
+                    if (n > max_size())
                         throw std::length_error("n greater than vector::max_size()");
                     if(n > _capacity)
                     {
-                        value_type*     tmp_start = alloc::allocate(n);
+                        value_type*     tmp_start = _alloc.allocate(n);
                         for(size_type i = 0; i < n; ++i)
                         {
                             _alloc.construct(&tmp_start[i], _start[i]);
@@ -222,7 +242,7 @@ namespace ft
 
         void assign (size_type n, const value_type& val);
 
-        iterator insert (iterator position, const value_type& val);
+
 
         void push_back (const value_type& val);
 
@@ -230,12 +250,22 @@ namespace ft
 
         iterator insert (iterator position, const value_type& val);
 
-        void insert (iterator position, size_type n, const value_type& val);
 
-        template <class InputIterator>
-        void    insert (iterator position, InputIterator first, InputIterator last)
+        void insert (iterator position, size_type n, const value_type& val)
         {
 
+        }
+
+        template <class InputIterator>
+        void    insert (iterator position, InputIterator first, InputIterator last,
+                        typename ft::enable_if< !ft::is_integral<InputIterator>::value, InputIterator>::type* = NULL)
+        {
+            size_type n = ft::distance(first, last);
+            if (n + _size > _capacity)
+                reserve(n + _size);
+            _shift_right(positon, n);
+            for(size_type i = 0 ; i < n  ; i++)
+                _alloc.construct(position + (i - 1) , *(first + i));               
         }
 
         iterator erase (iterator position);
