@@ -127,6 +127,7 @@ namespace ft
         vector (const vector& other):
              _alloc(other._alloc), _start(NULL), _end(NULL), _size(other._size), _capacity(other._capacity)
              {
+                 std::cout << "11/n";
                 this->insert(this->begin(), other.begin(), other.end()); 
              }
 
@@ -325,6 +326,7 @@ namespace ft
         void    insert (iterator position, InputIterator first, InputIterator last,
                         typename ft::enable_if< !ft::is_integral<InputIterator>::value, InputIterator>::type* = NULL)
         {
+            std::cout << "1/n";
             size_type n = std::distance(first, last);
             if (n + _size > _capacity)
                 reserve(n + _size);   
