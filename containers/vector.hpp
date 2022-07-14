@@ -17,6 +17,7 @@ namespace ft
     template <class T, class Alloc = std::allocator<T> >
     class vector
     {
+        public:
         // typedef
 
          typedef Alloc                                          allocator_type;
@@ -100,7 +101,7 @@ namespace ft
                 {
                     _start = _alloc.allocate(n);
                     _end = _start;
-                    while (--n)
+                    while (n--)
                     {
                         _alloc.construct(_end, val);
                         _end++;
@@ -116,10 +117,10 @@ namespace ft
                 _start = _alloc.allocate(n);
                 _size = n;
                 _capacity = n;
-                _end = _size + n;
+                _end = _start + n;
 
                 for(size_type i = 0; i < n ; ++i)
-                    _alloc.costrauct(&(_start[i], *(first + i)));
+                    _alloc.construct(&_start[i], *(first + i));
 
             }
 
@@ -154,7 +155,7 @@ namespace ft
                 iterator                begin() { return iterator(_start);}
                 const_iterator          begin() const { return const_iterator(_start);}
 
-                iterator                end() {return  iteratot (_end);}
+                iterator                end() {return  iterator (_end);}
                 const_iterator          end() const{ return const_iterator (_end);}
 
                 reverse_iterator        rbeing() {return reverse_iterator( end());}
