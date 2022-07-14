@@ -1,17 +1,17 @@
-NAME		=	ft_containers
+NAME		=	test
 
 VPATH		=	src
 OBJDIR		=	obj
 INCLDIR		=	inc 
 
-SRC 		=	main.cpp 
+SRC 		=	main.cpp
 
 OBJ 		=  	$(SRC:%.cpp=$(OBJDIR)/%.o)
 
 CC			=	c++
 CFLAG		=	-Wall -Wextra -Werror -std=c++98
 HEADER			=	-I.
-INCFLAGS	=	vector.hpp iterator_traits.hpp
+INCFLAGS	=	./containers/vector.hpp header_utils.hpp
 
 RM			=	rm -rf
 UNAME           :=      $(shell uname -s)

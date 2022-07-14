@@ -43,7 +43,7 @@ namespace ft
 
         reference operator * () const
         {
-            Iterator    tmp = _bas;
+            Iterator    tmp = _base;
             retun(*(--tmp));
         }
 
@@ -56,7 +56,7 @@ namespace ft
 
         reverse_iterator& operator ++ ()
         {
-            --(_bas);
+            --(_base);
             return (*this);
         }
 
@@ -69,7 +69,7 @@ namespace ft
 
         reverse_iterator& operator += (difference_type n)
         {
-            _bas -= n;
+            _base -= n;
             return (*this);
         }
 
@@ -83,7 +83,7 @@ namespace ft
 
         reverse_iterator& operator --()
         {
-            ++(_bas);
+            ++(_base);
             return (*this);
         }
 
@@ -96,7 +96,7 @@ namespace ft
 
         reverse_iterator& operator -= (difference_type n)
         {
-            _bas += n;
+            _base += n;
             return (*this);
         }
 
@@ -104,7 +104,7 @@ namespace ft
 
         reference operator [] (difference_type n) const
         {
-            return (*(_bas - n - 1));
+            return (*(_base - n - 1));
         }
     };
     //*****************************************************************************************
@@ -151,7 +151,7 @@ namespace ft
     reverse_iterator<Iterator> operator + (
         typename reverse_iterator<Iterator>::difference_type n, const reverse_iterator<Iterator>& rev_it)
     {
-        return (rev_it + n)
+        return (rev_it + n);
     }
 
     template <class Iterator>
