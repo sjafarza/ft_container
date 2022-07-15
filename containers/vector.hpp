@@ -2,12 +2,10 @@
 # define VECTOR_HPP
 
 # include <iostream>
-# include <sstream>
 # include <cmath>
 # include <iostream>
 # include <iterator>
 # include <memory>
-# include <sstream>
 # include <stdexcept>
 
 # include "./header_utils.hpp"
@@ -127,8 +125,15 @@ namespace ft
         vector (const vector& other):
              _alloc(other._alloc), _start(NULL), _end(NULL), _size(other._size), _capacity(other._capacity)
              {
-                 std::cout << "11/n";
-                this->insert(this->begin(), other.begin(), other.end()); 
+                 size_type i;
+                //this->insert(this->begin(), other.begin(), other.end()); 
+                if (other._start)
+                {
+                    _start = _alloc.allocate(_capacity);
+                    for (i = 0; i < _size; i++)
+                        _alloc.construct(&_start[i], other._start[i]);
+                }
+                _end = _start + i;
              }
 
         //*****************************************************************************************
@@ -236,19 +241,19 @@ namespace ft
 
         reference        at (size_type n)
             { 
-                std::stringstream ss;
-                ss << "vector::_M_rang_chek: __n (which is " << n << ") >= this->size() (wich is " << _size << ")";
+               // std::stringstream ss;
+                //ss << "vector::_M_rang_chek: __n (which is " << n << ") >= this->size() (wich is " << _size << ")";
                 if (n >= _size)
-                    throw std::out_of_range(ss.rdbuf()->str());
+                    throw std::out_of_range(/*ss.rdbuf()->str()*/"out of range");
                 return  _start[n];
             }
 
         const_reference at (size_type n) const
             { 
-                std::stringstream ss;
-                ss << "vector::_M_rang_chek: _n (which is " << n << ") >= this->size() (wich is " << _size << ")";
+               // std::stringstream ss;
+               // ss << "vector::_M_rang_chek: _n (which is " << n << ") >= this->size() (wich is " << _size << ")";
                 if (n >= _size)
-                    throw std::out_of_range(ss.rdbuf()->str());
+                    throw std::out_of_range(/*ss.rdbuf()->str()*/ "out of range");
                 return  _start[n];
             }
 

@@ -79,7 +79,9 @@ void    test_constructor()
     std::cout << NORMAL " test range  constructor \t\t\t\t\t\t\t\t"<< vector_is_equal(std_v3 , ft_v3) << std::endl;
 
     std::vector<int>    std_v4(std_v2);
+  // print_vector(std_v4);
     ft::vector<int>     ft_v4(ft_v2);
+    //print_vector(ft_v4);
     std::cout << NORMAL " test copy  constructor \t\t\t\t\t\t\t\t"<< vector_is_equal(std_v4 , ft_v4) << std::endl;
 
 
