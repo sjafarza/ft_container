@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 #include <iterator>
+#include <sys/stat.h>
 
 #include "./containers/vector.hpp"
 
@@ -93,12 +94,13 @@ void    print_vector();
 void    test_constructor()
 {
     std::ofstream        out;
-    std::string const   file = "log_test_constructor_vector";
+    std::string const   file = "./Log/log_test_constructor_vector";
+    if (mkdir("Log", 0777) == -1)
+        std::cerr << "Error : faild to creat directory Log" << std::endl;
     out.open(file.c_str(), std::fstream::trunc | std::ostream::out);
     if(!out.is_open())
-    {
         std::cerr << "Error : faild to open file" << std::endl;
-    }
+    
     /* Detault constructor */
     std::vector<int>     std_v1;
     ft::vector<int>      ft_v1;
