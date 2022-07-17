@@ -198,26 +198,69 @@ namespace ft
                         _start = tmp_start;
                         _end = _start + n;
                         _capacity = n;
-                       _size = n;
+                       //_size = n;
                     }
             }
 
         void resize (size_type n, value_type val = value_type())
         {
-             if (n > _capacity)
+            size_type tmp_size = _size;
+            value_type v = val;
+            if (!val)
+                v = 0;
+
+            if (n > this->max_size())
+					throw (std::length_error("vector::resize"));
+            if (n > _capacity)
                 reserve(n);
-            if(n < _size)
-                while(++n < _size)
+
+            if(n < tmp_size)
+                while(++n < tmp_size + 1)
                 {
                      _alloc.destroy(_end);
-                     _end--;   
+                     _end--;
+                     _size--;  
                 }
-            else if (n > _size)
-                while(--n > _size)
+            else if (n > tmp_size)
+            {
+                n++;
+                while(--n > tmp_size )
                 {
-                     _alloc.construct(_end, (val ? val : NULL));
+                     _alloc.construct(_end, v);
+                     _end++; 
+                     _size++;  
+                } 
+            }   
+            /*std::cout << "1\n"; 
+            if(n < _size)
+            {
+                std::cout << "2\n";
+                std::cout << "$$_size = " << _size << "\n"; 
+              
+                while(++i < _size + 1)
+                {
+                    _end--; 
+                    _alloc.destroy(_end);      
+                }
+               _size =  n;
+            } 
+            std::cout << "3\n";
+            std::cout << "n = " << n << "\n";
+            std::cout << "_size = " << _size  << "\n";
+            if (n > _size)
+            {
+                std::cout << "4\n";
+                std::cout << "**_size = " << _size << "\n"; 
+                //_end -= 2;
+                for(size_type i = _size; i < n ; i++)
+                {
+                    std::cout << "5\n";
+                     _alloc.construct(_end, v);
                      _end++;   
                 }
+                std::cout << "6\n";
+                _size = n;
+            }*/
            
         }
 
@@ -225,7 +268,7 @@ namespace ft
         //*****************************************************************************************
         //*                                Element access                                         *
         //*****************************************************************************************
-        reference       operator[] (size_type n) { return _start[n]; };
+        reference       operator[] (size_type n) { return _start[n]; }
 
         const_reference operator[] (size_type n) const { return _start[n];}
 

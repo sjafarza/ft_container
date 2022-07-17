@@ -50,7 +50,6 @@ std::string print_vector(const std::vector<T> & std_vector)
         st_it++;
     }
     ss << " } ";
-
     return (ss.str());
 }
 
@@ -60,6 +59,7 @@ std::string print_vector(const ft::vector<T> & ft_vector)
     std::ostringstream  ss;
      typename ft::vector<T>::const_iterator   ft_it = ft_vector.begin();
      ss << " { ";
+    
     while(ft_it != ft_vector.end())
     {
         ss << *ft_it ;
@@ -78,13 +78,15 @@ std::string printVectorAttributes(std::vector<T>& std_vector,ft::vector<T>& ft_v
     std::ostringstream fs;
     fs  << YELLOW << titre << "**********************************************************************" NORMAL << std::endl 
         << "***" YELLOW"std::vector" NORMAL"*******************************************************" << std::endl
-        <<"Content = " << print_vector(std_vector) << std::endl
-        << "Size = " << std_vector.size() << "\t" << "Capacity = " << std_vector.capacity() << "\t" << "Max_size = " << std_vector.max_size()
-        << std::endl << std::endl;
+        <<"Content = " << print_vector(std_vector) << std::endl;
+       fs << "Size = " << std_vector.size() << "\t" << "Capacity = " << std_vector.capacity() << "\t" << "Max_size = " << std_vector.max_size()
+          << std::endl << std::endl;
+        
         if (idx == 1)
-            fs << "begin() = " << *(std_vector.begin()) << "\t" << "end() = " <<*(std_vector.end())<< std::endl<< std::endl;
+            fs << "begin() = " << *(std_vector.begin() - 1) << "\t" << "end() = " <<*(std_vector.end() - 1)<< std::endl<< std::endl;
         if (idx == 2)
-            fs << "rbegin() = " << *(std_vector.rbegin()) << "\t" << "rend() = " <<*(std_vector.rend())<< std::endl<< std::endl;
+            fs << "rbegin() = " << *(std_vector.rbegin()) << "\t" << "rend() = " <<*(std_vector.rend() - 1)<< std::endl<< std::endl;
+        
 
 
 
@@ -93,9 +95,9 @@ std::string printVectorAttributes(std::vector<T>& std_vector,ft::vector<T>& ft_v
         << "Size = " << ft_vector.size() << "\t" << "Capacity = " << ft_vector.capacity() << "\t" << "Max_size = " << ft_vector.max_size()
         << std::endl << std::endl;
         if (idx == 1)
-            fs  << "begin() = " << *(ft_vector.begin()) << "\t" << "end() = " << *(ft_vector.end()) << std::endl << std::endl;
+            fs  << "begin() = " << *(ft_vector.begin()) << "\t" << "end() = " << *(ft_vector.end() - 1) << std::endl << std::endl;
         if (idx == 2)
-            fs << "rbegin() = " << *(std_vector.rbegin()) << "\t" << "rend() = " <<*(std_vector.rend())<< std::endl<< std::endl;
+            fs << "rbegin() = " << *(std_vector.rbegin()) << "\t" << "rend() = " <<*(std_vector.rend() - 1)<< std::endl<< std::endl;
 
         fs << "*******************************************************************\n\n\n\n";
     return (fs.str());    
@@ -179,16 +181,17 @@ void    test_operator_assign(void)
     std::vector<int>     std_v = std_ref;
     ft::vector<int>      ft_v = ft_ref;
     out << printVectorAttributes(std_v,ft_v, "Test operatot assign", 0);
-    std::cout << std::endl << NORMAL " test operator assign \t\t\t\t\t\t\t\t\t"<< vector_is_equal(std_v , ft_v) << std::endl;
+    std::cout << std::endl << NORMAL " test operator assign \t\t\t\t\t\t\t\t\t"<< vector_is_equal(std_v , ft_v) << std::endl<< std::endl;
 }    
 
-void    test_begin_end()
+void    test_begin_end_rbegin_rend()
 {
     std::ofstream        out;
     std::string const   file = "./Log_vector/log_test_begin_end";
     out.open(file.c_str(), std::fstream::trunc | std::ostream::out);
     if(!out.is_open())
         std::cerr << "Error : faild to open file" << std::endl;
+
     /*Iterator  begin() end ()*/
     int rang_array[] = {32, 66, 824, -2453, 0, 77};
     ft::vector<int>::iterator   ft_it(&rang_array[0]);
@@ -196,7 +199,12 @@ void    test_begin_end()
     std::vector<int>     std_v(std_it ,std_it + 4);
     ft::vector<int>      ft_v (ft_it , ft_it + 4);
     out << printVectorAttributes(std_v,ft_v, "Test Iterator begin()  end()", 1);
-    std::cout << std::endl << NORMAL " test Iterator begin \t\t\t\t\t\t\t\t\t"<< vector_is_equal(std_v , ft_v) << std::endl;    
+    std::cout << "*****************************Test Iterator***********************************************." << std::endl;
+    std::cout << NORMAL " test Iterator begin \t\t\t\t\t\t\t\t\t"<< vector_is_equal(std_v , ft_v) << std::endl;    
+   
+    /* Reverse Iterator   begin() end ()*/
+    out << printVectorAttributes(std_v,ft_v, "Test reverse Iterator rbegin() rend ()", 2);
+    std::cout << NORMAL " test reverse Iterator rbegin ,rend \t\t\t\t\t\t\t"<< vector_is_equal(std_v , ft_v) << std::endl;
 
     /* Const Iterator   begin() end ()*/
     {
@@ -206,12 +214,63 @@ void    test_begin_end()
         std::vector<int>     std_v(std_it + 1 ,std_it + 4);
         ft::vector<int>      ft_v (ft_it + 1, ft_it + 4);
         out << printVectorAttributes(std_v,ft_v, "Test Const  Iterator begin() end ()", 1);
-        std::cout << std::endl << NORMAL " test Const Iterator begin, end \t\t\t\t\t\t\t"<< vector_is_equal(std_v , ft_v) << std::endl;    
-    }
+        std::cout <<  NORMAL " test Const Iterator begin, end \t\t\t\t\t\t\t"<< vector_is_equal(std_v , ft_v) << std::endl;    
     
-    out << printVectorAttributes(std_v,ft_v, "Test reverse Iterator rbegin() rend ()", 2);
-    std::cout << std::endl << NORMAL " test reverse Iterator rbegin ,rend \t\t\t\t\t\t\t"<< vector_is_equal(std_v , ft_v) << std::endl;    
+    /* Reverse const Iterator   begin() end ()*/
+        out << printVectorAttributes(std_v,ft_v, "Test Const reverse Iterator rbegin() rend ()", 1);
+        std::cout << NORMAL " test Const reverse Iterator, rbegin ,rend \t\t\t\t\t\t"<< vector_is_equal(std_v , ft_v) << std::endl;
+    }
+}
 
+void    test_size(void)
+{
+    std::ofstream        out;
+    std::string const   file = "./Log_vector/log_test_size";
+    out.open(file.c_str(), std::fstream::trunc | std::ostream::out);
+    if(!out.is_open())
+        std::cerr << "Error : faild to open file" << std::endl;
+    
+    /* zero size */
+    std::vector<int>     std_v1(0);
+    ft::vector<int>      ft_v1(0);
+    out << printVectorAttributes(std_v1,ft_v1, "Test zero size", 0);
+
+    std::cout << "*****************************Test capacity***********************************************." << std::endl;
+    std::cout <<NORMAL " test for zero size \t\t\t\t\t\t\t\t\t"<< vector_is_equal(std_v1 , ft_v1) << std::endl;
+    
+    /*normal size */
+    std::vector<int>     std_v2(100);
+    ft::vector<int>      ft_v2(100);
+    out << printVectorAttributes(std_v2,ft_v2, "Test normal size", 0);
+    std::cout <<NORMAL " test for normal size \t\t\t\t\t\t\t\t\t"<< vector_is_equal(std_v2 , ft_v2) << std::endl;
+
+    /*big size */
+    std::vector<int>     std_v3(100000);
+    ft::vector<int>      ft_v3(100000);
+    //out << printVectorAttributes(std_v3,ft_v3, "Test big size", 0);
+    std::cout <<NORMAL " test for big size \t\t\t\t\t\t\t\t\t"<< vector_is_equal(std_v3 , ft_v3) << std::endl;
+}
+
+void    test_resize(void)
+{
+    std::ofstream        out;
+    std::string const   file = "./Log_vector/log_test_resize";
+    out.open(file.c_str(), std::fstream::trunc | std::ostream::out);
+    if(!out.is_open())
+        std::cerr << "Error : faild to open file" << std::endl;
+    std::vector<int>     std_v1(10, 5);
+    ft::vector<int>      ft_v1(10, 5);
+    out << printVectorAttributes(std_v1,ft_v1, "fist definition", 0);
+
+    std_v1.resize(4);
+    ft_v1.resize(4);
+    out << printVectorAttributes(std_v1,ft_v1, "After resize to 4 definition", 0);
+    
+    std_v1.resize(10);
+    ft_v1.resize(10);
+    out << printVectorAttributes(std_v1,ft_v1, "After resize to 12 size", 0);
+    
+    std::cout <<NORMAL " test for resize \t\t\t\t\t\t\t\t\t"<< vector_is_equal(std_v1 , ft_v1) << std::endl;
 }
 
 void    test_vector(void)
@@ -219,12 +278,12 @@ void    test_vector(void)
     
     test_constructor();
     test_operator_assign();
-	test_begin_end();
-	/*test_rbegin_rend();
+	test_begin_end_rbegin_rend();
 	test_size();
-	test_max_size();
-	test_capacity();
-	test_operator_at();
+	/*test_max_size();
+	test_capacity();*/
+    test_resize();
+	/*test_operator_at();
 	test_at();
 	test_front_back();
 	test_assign();
