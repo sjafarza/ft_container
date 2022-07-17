@@ -273,6 +273,44 @@ void    test_resize(void)
     std::cout <<NORMAL " test for resize \t\t\t\t\t\t\t\t\t"<< vector_is_equal(std_v1 , ft_v1) << std::endl;
 }
 
+void    test_empty(void)
+{
+    std::ofstream        out;
+    std::string const   file = "./Log_vector/log_empty()";
+    out.open(file.c_str(), std::fstream::trunc | std::ostream::out);
+    if(!out.is_open())
+        std::cerr << "Error : faild to open file" << std::endl;
+
+    std::vector<char>   std_v1;
+    ft::vector<char>    ft_v1;
+
+    std::vector<char>   std_v2(5);
+    ft::vector<char>    ft_v2(5);
+
+    std::vector<int>   std_v3(5, 3);
+    ft::vector<int>    ft_v3(5, 3);
+
+    std::cout << "*****************************Test empty()***********************************************." << std::endl;
+        if(std_v1.empty() ==ft_v1.empty())
+            std::cout <<NORMAL " test for empty() for  empty vector \t\t\t\t\t\t\t"<< GREEN"✔"<< std::endl;
+        else
+            std::cout <<NORMAL " test for empty() for  empty vector \t\t\t\t\t\t\t"<< RED"✘"<< std::endl;
+
+            
+        if(std_v2.empty() ==ft_v2.empty())
+            std::cout <<NORMAL " test for empty() for vector(size) \t\t\t\t\t\t\t"<< GREEN"✔"<< std::endl;
+        else     
+            std::cout <<NORMAL " test for empty() for  empty vector \t\t\t\t\t\t\t"<< RED"✘"<< std::endl;
+
+        
+        if(std_v3.empty() ==ft_v3.empty())
+            std::cout <<NORMAL " test for empty() for Fill value(s, v) \t\t\t\t\t\t\t"<< GREEN"✔" << std::endl;
+        else
+            std::cout <<NORMAL " test for empty() for  empty vector \t\t\t\t\t\t\t\t\t"<< RED"✘"<< std::endl;
+
+        
+}
+
 void    test_vector(void)
 {
     
@@ -280,9 +318,9 @@ void    test_vector(void)
     test_operator_assign();
 	test_begin_end_rbegin_rend();
 	test_size();
-	/*test_max_size();
-	test_capacity();*/
+	/*test_max_size() and test_capacity() done in befor tests*/
     test_resize();
+    test_empty();
 	/*test_operator_at();
 	test_at();
 	test_front_back();
