@@ -73,19 +73,31 @@ std::string print_vector(const ft::vector<T> & ft_vector)
 }
 
 template <class T>
-std::string printVectorAttributes(std::vector<T>& std_vector,ft::vector<T>& ft_vector , std::string titre)
+std::string printVectorAttributes(std::vector<T>& std_vector,ft::vector<T>& ft_vector , std::string titre, int idx)
 {
     std::ostringstream fs;
     fs  << YELLOW << titre << "**********************************************************************" NORMAL << std::endl 
         << "***" YELLOW"std::vector" NORMAL"*******************************************************" << std::endl
         <<"Content = " << print_vector(std_vector) << std::endl
         << "Size = " << std_vector.size() << "\t" << "Capacity = " << std_vector.capacity() << "\t" << "Max_size = " << std_vector.max_size()
-        << std::endl << std::endl
-        <<  "***" YELLOW"ft::vector" NORMAL"*******************************************************\n"
+        << std::endl << std::endl;
+        if (idx == 1)
+            fs << "begin() = " << *(std_vector.begin()) << "\t" << "end() = " <<*(std_vector.end())<< std::endl<< std::endl;
+        if (idx == 2)
+            fs << "rbegin() = " << *(std_vector.rbegin()) << "\t" << "rend() = " <<*(std_vector.rend())<< std::endl<< std::endl;
+
+
+
+      fs  <<  "***" YELLOW"ft::vector" NORMAL"*******************************************************\n"
         <<"Content = " << print_vector(ft_vector) << std::endl
         << "Size = " << ft_vector.size() << "\t" << "Capacity = " << ft_vector.capacity() << "\t" << "Max_size = " << ft_vector.max_size()
-        << std::endl << std::endl
-        << "*******************************************************************\n\n\n\n";
+        << std::endl << std::endl;
+        if (idx == 1)
+            fs  << "begin() = " << *(ft_vector.begin()) << "\t" << "end() = " << *(ft_vector.end()) << std::endl << std::endl;
+        if (idx == 2)
+            fs << "rbegin() = " << *(std_vector.rbegin()) << "\t" << "rend() = " <<*(std_vector.rend())<< std::endl<< std::endl;
+
+        fs << "*******************************************************************\n\n\n\n";
     return (fs.str());    
 
 }
@@ -94,9 +106,9 @@ void    print_vector();
 void    test_constructor()
 {
     std::ofstream        out;
-    std::string const   file = "./Log/log_test_constructor_vector";
-    if (mkdir("Log", 0777) == -1)
-        std::cerr << "Error : faild to creat directory Log" << std::endl;
+    std::string const   file = "./Log_vector/log_test_constructor";
+    if (mkdir("Log_vector", 0777) == -1)
+        std::cerr << "Error : faild to creat directory Log_vector" << std::endl;
     out.open(file.c_str(), std::fstream::trunc | std::ostream::out);
     if(!out.is_open())
         std::cerr << "Error : faild to open file" << std::endl;
@@ -104,7 +116,7 @@ void    test_constructor()
     /* Detault constructor */
     std::vector<int>     std_v1;
     ft::vector<int>      ft_v1;
-    out << printVectorAttributes(std_v1,ft_v1, "Test default constructor");
+    out << printVectorAttributes(std_v1,ft_v1, "Test default constructor", 0);
 
     std::cout << "*****************************Test constructor***********************************************." << std::endl;
     std::cout << " test default constructor \t\t\t\t\t\t\t\t"<< vector_is_equal(std_v1 , ft_v1) << std::endl;
@@ -112,18 +124,18 @@ void    test_constructor()
     /* Detault pointer constructor */
     std::vector<int>*    std_pointer_default_v =  new std::vector<int>;
     ft::vector<int>*    ft_pointer_default_v =  new ft::vector<int>;
-    out << printVectorAttributes( *std_pointer_default_v,*ft_pointer_default_v, "Test default pointer constructor");
+    out << printVectorAttributes( *std_pointer_default_v,*ft_pointer_default_v, "Test default pointer constructor", 0);
     std::cout << NORMAL " test default pointer constructor \t\t\t\t\t\t\t"<< vector_is_equal(*std_pointer_default_v, *ft_pointer_default_v) << std::endl;
 
     /* Fill constructor */
     std::vector<int>    std_v2(5);
     ft::vector<int>     ft_v2(5);
-    out << printVectorAttributes(std_v2,ft_v2, "Test fill constructor");
+    out << printVectorAttributes(std_v2,ft_v2, "Test fill constructor", 0);
 
     /*Fill constructor size*/
     std::vector<int>    std_v3(5, 100);
     ft::vector<int>     ft_v3(5, 100);
-    out << printVectorAttributes(std_v3,ft_v3, "Test fill constructor size");
+    out << printVectorAttributes(std_v3,ft_v3, "Test fill constructor size", 0);
     std::cout << NORMAL " test fill constructor  size\t\t\t\t\t\t\t\t"<< vector_is_equal(std_v3 , ft_v3) << std::endl;
 
     /*Range constructor */
@@ -131,7 +143,7 @@ void    test_constructor()
     ft::vector<int>     ft_test(5, 7);
     std::vector<int>    std_v4(s_test.begin() + 1, s_test.end() - 2);
     ft::vector<int>     ft_v4(ft_test.begin() + 1, ft_test.end() - 2);
-    out << printVectorAttributes(std_v4,ft_v4, "Test range of another vector constructor");
+    out << printVectorAttributes(std_v4,ft_v4, "Test range of another vector constructor", 0);
     std::cout << NORMAL " test range of another vector constructor \t\t\t\t\t\t"<< vector_is_equal(std_v4 , ft_v4) << std::endl;
     
     int range_array[] = { 15, 65397429, 1299, 965, 5 , 88, 9};
@@ -140,13 +152,13 @@ void    test_constructor()
 
     std::vector<int>    std_arr_v4(std_itr , std_itr + 3);
     ft::vector<int>     ft_arr_v4(ft_itr , ft_itr + 3);
-    out << printVectorAttributes(std_arr_v4,ft_arr_v4, "Test range of array constructor");
+    out << printVectorAttributes(std_arr_v4,ft_arr_v4, "Test range of array constructor", 0);
     std::cout << NORMAL " test range of array constructor \t\t\t\t\t\t\t"<< vector_is_equal(std_arr_v4 , ft_arr_v4) << std::endl;
 
     /*Copy constructor */
     std::vector<int>    std_v5(s_test);
     ft::vector<int>     ft_v5(ft_test);
-     out << printVectorAttributes(std_v5,ft_v5, "Test copy constructor");
+     out << printVectorAttributes(std_v5,ft_v5, "Test copy constructor", 0);
     std::cout << NORMAL " test copy  constructor \t\t\t\t\t\t\t\t"<< vector_is_equal(std_v5 , ft_v5) << std::endl;
 
     delete  ft_pointer_default_v;
@@ -154,13 +166,61 @@ void    test_constructor()
     out.close();
 }
 
+void    test_operator_assign(void)
+{
+    std::ofstream        out;
+    std::string const   file = "./Log_vector/log_test_operator_assign";
+    out.open(file.c_str(), std::fstream::trunc | std::ostream::out);
+    if(!out.is_open())
+        std::cerr << "Error : faild to open file" << std::endl;
+
+    std::vector<int>    std_ref(5, 731);
+    ft::vector<int>     ft_ref(5, 731); 
+    std::vector<int>     std_v = std_ref;
+    ft::vector<int>      ft_v = ft_ref;
+    out << printVectorAttributes(std_v,ft_v, "Test operatot assign", 0);
+    std::cout << std::endl << NORMAL " test operator assign \t\t\t\t\t\t\t\t\t"<< vector_is_equal(std_v , ft_v) << std::endl;
+}    
+
+void    test_begin_end()
+{
+    std::ofstream        out;
+    std::string const   file = "./Log_vector/log_test_begin_end";
+    out.open(file.c_str(), std::fstream::trunc | std::ostream::out);
+    if(!out.is_open())
+        std::cerr << "Error : faild to open file" << std::endl;
+    /*Iterator  begin() end ()*/
+    int rang_array[] = {32, 66, 824, -2453, 0, 77};
+    ft::vector<int>::iterator   ft_it(&rang_array[0]);
+    std::vector<int>::iterator   std_it (&rang_array[0]);
+    std::vector<int>     std_v(std_it ,std_it + 4);
+    ft::vector<int>      ft_v (ft_it , ft_it + 4);
+    out << printVectorAttributes(std_v,ft_v, "Test Iterator begin()  end()", 1);
+    std::cout << std::endl << NORMAL " test Iterator begin \t\t\t\t\t\t\t\t\t"<< vector_is_equal(std_v , ft_v) << std::endl;    
+
+    /* Const Iterator   begin() end ()*/
+    {
+        int rang_array[] = {32, 66, 824, -2453, 0, 77};
+        ft::vector<int>::const_iterator   ft_it(&rang_array[0]);
+        std::vector<int>::const_iterator   std_it (&rang_array[0]);
+        std::vector<int>     std_v(std_it + 1 ,std_it + 4);
+        ft::vector<int>      ft_v (ft_it + 1, ft_it + 4);
+        out << printVectorAttributes(std_v,ft_v, "Test Const  Iterator begin() end ()", 1);
+        std::cout << std::endl << NORMAL " test Const Iterator begin, end \t\t\t\t\t\t\t"<< vector_is_equal(std_v , ft_v) << std::endl;    
+    }
+    
+    out << printVectorAttributes(std_v,ft_v, "Test reverse Iterator rbegin() rend ()", 2);
+    std::cout << std::endl << NORMAL " test reverse Iterator rbegin ,rend \t\t\t\t\t\t\t"<< vector_is_equal(std_v , ft_v) << std::endl;    
+
+}
+
 void    test_vector(void)
 {
     
     test_constructor();
-    /*test_operator_assign();
+    test_operator_assign();
 	test_begin_end();
-	test_rbegin_rend();
+	/*test_rbegin_rend();
 	test_size();
 	test_max_size();
 	test_capacity();
