@@ -84,7 +84,7 @@ std::string printVectorAttributes(std::vector<T>& std_vector,ft::vector<T>& ft_v
         <<"Content = " << print_vector(ft_vector) << std::endl
         << "Size = " << ft_vector.size() << "\t" << "Capacity = " << ft_vector.capacity() << "\t" << "Max_size = " << ft_vector.max_size()
         << std::endl << std::endl
-        << "*******************************************************************\n\n";
+        << "*******************************************************************\n\n\n\n";
     return (fs.str());    
 
 }
@@ -93,7 +93,7 @@ void    print_vector();
 void    test_constructor()
 {
     std::ofstream        out;
-    std::string const   file = "log_test_vector";
+    std::string const   file = "log_test_constructor_vector";
     out.open(file.c_str(), std::fstream::trunc | std::ostream::out);
     if(!out.is_open())
     {
