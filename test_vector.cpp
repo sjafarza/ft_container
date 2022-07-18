@@ -275,11 +275,11 @@ void    test_resize(void)
 
 void    test_empty(void)
 {
-    std::ofstream        out;
+    /*std::ofstream        out;
     std::string const   file = "./Log_vector/log_empty()";
     out.open(file.c_str(), std::fstream::trunc | std::ostream::out);
     if(!out.is_open())
-        std::cerr << "Error : faild to open file" << std::endl;
+        std::cerr << "Error : faild to open file" << std::endl;*/
 
     std::vector<char>   std_v1;
     ft::vector<char>    ft_v1;
@@ -306,9 +306,36 @@ void    test_empty(void)
         if(std_v3.empty() ==ft_v3.empty())
             std::cout <<NORMAL " test for empty() for Fill value(s, v) \t\t\t\t\t\t\t"<< GREEN"✔" << std::endl;
         else
-            std::cout <<NORMAL " test for empty() for  empty vector \t\t\t\t\t\t\t\t\t"<< RED"✘"<< std::endl;
+            std::cout <<NORMAL " test for empty() for  empty vector \t\t\t\t\t\t\t\t\t"<< RED"✘"<< std::endl;       
+}
 
-        
+void    test_reserve(void)
+{
+   /* std::ofstream        out;
+    std::string const   file = "./Log_vector/log_reserve()";
+    out.open(file.c_str(), std::fstream::trunc | std::ostream::out);
+    if(!out.is_open())
+        std::cerr << "Error : faild to open file" << std::endl;*/
+
+    std::vector<int> std_v(7, 11);
+    ft::vector<int> ft_v(7, 11);
+
+    std::vector<int> std_v1(1);
+    ft::vector<int> ft_v1(1);
+
+    std::vector<int>:: size_type   std_v_capacity= std_v.capacity();
+    ft::vector<int>::size_type      ft_v_capacity= ft_v.capacity();
+    
+    std_v1.reserve(std_v_capacity + 50);
+    ft_v1.reserve(ft_v_capacity + 50);
+    
+    std::vector<int>:: size_type    std_v1_capacity= std_v1.capacity();
+    ft::vector<int>::size_type    ft_v1_capacity= ft_v1.capacity();
+    std::cout << "*****************************Test empty()***********************************************." << std::endl;
+    if (std_v1_capacity == ft_v1_capacity)
+        std::cout <<NORMAL " test for reserve \t\t\t\t\t\t\t\t\t"<< GREEN"✔" << std::endl;
+    else
+        std::cout <<NORMAL " test for reserve \t\t\t\t\t\t\t\t\t\t\t"<< RED"✘"<< std::endl;
 }
 
 void    test_vector(void)
@@ -321,6 +348,7 @@ void    test_vector(void)
 	/*test_max_size() and test_capacity() done in befor tests*/
     test_resize();
     test_empty();
+    test_reserve();
 	/*test_operator_at();
 	test_at();
 	test_front_back();
