@@ -44,7 +44,7 @@ namespace ft
         reference operator * () const
         {
             Iterator    tmp = _base;
-            retun(*(--tmp));
+            return(*(--tmp));
         }
 
         reverse_iterator operator + (difference_type n) const

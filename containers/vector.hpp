@@ -161,8 +161,8 @@ namespace ft
                 iterator                begin() { return iterator(_start);}
                 const_iterator          begin() const { return const_iterator(_start);}
 
-                iterator                end() {return  iterator (_end);}
-                const_iterator          end() const{ return const_iterator (_end);}
+                iterator                end() {return  iterator (_start + _size);}
+                const_iterator          end() const{ return const_iterator (_start + _size);}
 
                 reverse_iterator        rbeing() {return reverse_iterator( end());}
                 const_reverse_iterator  rbegin() const { return const_reverse_iterator( end());}
@@ -183,18 +183,19 @@ namespace ft
         
         void reserve (size_type n)
             {
-                    if (n > max_size())
+                if (n > max_size())
                         throw std::length_error("n greater than vector::max_size()");
-                    if(n > _capacity)
+    
+                if(n > _capacity)
                     {
-                        value_type*     tmp_start = _alloc.allocate(n);
-                        for(size_type i = 0; i < n; ++i)
+                        pointer     tmp_start = _alloc.allocate(n);
+                        for(size_type i = 0; i < _size; ++i)
                         {
                             _alloc.construct(&tmp_start[i], _start[i]);
                             _alloc.destroy(&_start[i]);
                         }
                         if(_start)
-                            _alloc.deallocate(_start, _capacity);
+                            _alloc.deallocate(_start, _capacity);    
                         _start = tmp_start;
                         _end = _start + n;
                         _capacity = n;
@@ -231,37 +232,6 @@ namespace ft
                      _size++;  
                 } 
             }   
-            /*std::cout << "1\n"; 
-            if(n < _size)
-            {
-                std::cout << "2\n";
-                std::cout << "$$_size = " << _size << "\n"; 
-              
-                while(++i < _size + 1)
-                {
-                    _end--; 
-                    _alloc.destroy(_end);      
-                }
-               _size =  n;
-            } 
-            std::cout << "3\n";
-            std::cout << "n = " << n << "\n";
-            std::cout << "_size = " << _size  << "\n";
-            if (n > _size)
-            {
-                std::cout << "4\n";
-                std::cout << "**_size = " << _size << "\n"; 
-                //_end -= 2;
-                for(size_type i = _size; i < n ; i++)
-                {
-                    std::cout << "5\n";
-                     _alloc.construct(_end, v);
-                     _end++;   
-                }
-                std::cout << "6\n";
-                _size = n;
-            }*/
-           
         }
 
         
@@ -323,8 +293,9 @@ namespace ft
         {
             if(n > _capacity)
                 reserve(n);
+            
             for(size_type  i = 0; i < _size; ++i)
-                _alloc.destroy(&_start[i]);
+                _alloc.destroy(&_start[i]); 
             _size = n;    
             for(size_type   i = 0 ; i < n ; ++i)
                 _alloc.construct(&_start[i], val);
@@ -335,16 +306,17 @@ namespace ft
         {
             if(_size + 1 > _capacity)
                 reserve(_size + 1);
-            _size++;
-            _alloc.construct(_end, val);
-            _end++;    
+
+            _alloc.construct(_start + _size, val);
+            _end++;
+            _size++ ;
         }
 
         void    pop_back()
         {
             _alloc.destroy(_end);
             _size--;
-
+            _end--;
         }
 
         iterator insert (iterator position, const value_type& val)

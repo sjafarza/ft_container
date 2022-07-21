@@ -19,11 +19,22 @@ std::string vector_is_equal(const std::vector<T> & std_vector, const ft::vector<
     typename std::vector<T>::const_iterator  st_it = std_vector.begin();
     typename ft::vector<T>::const_iterator   ft_it = ft_vector.begin();
     if(std_vector.capacity() != ft_vector.capacity())
-        return (RED"✘ /t/t Capacity");
+        return (RED"✘ \t\t Capacity");
     if(std_vector.size() != ft_vector.size())
-        return (RED"✘ /t/t Size");
+        return (RED"✘ \t\t Size");
     if(std_vector.max_size() != ft_vector.max_size())
-        return (RED"✘ /t/t Size");    
+        return (RED"✘ \t\t Max_size");
+    /*if (!std_vector.empty() && !ft_vector.empty())
+    {    
+        if (*(std_vector.begin()) != *(ft_vector.begin()))
+            return (RED"✘ /t/t begin()");
+        //if (*(std_vector.end()) != *(ft_vector.end()))
+         //   return (RED"✘ \t\t end()");
+        if (*(std_vector.rbegin()) != *(ft_vector.rbegin()))
+            return (RED"✘ \t\t rbegin()");
+        if (*(std_vector.rend()) != *(ft_vector.rend()))
+            return (RED"✘ \t\t rend()");
+    } */        
     if(std_vector.size() == 0 && ft_vector.size() == 0)  
         return (GREEN"✔");  
 
@@ -33,7 +44,7 @@ std::string vector_is_equal(const std::vector<T> & std_vector, const ft::vector<
     }
     if(st_it == std_vector.end() && ft_it == ft_vector.end())
         return (GREEN"✔");
-    return (RED"✘ /t/t Content");  
+    return (RED"✘ \t\tContent");  
 }
 
 template <class T>
@@ -68,7 +79,6 @@ std::string print_vector(const ft::vector<T> & ft_vector)
         ft_it++;
     }
     ss << " } ";
-
     return (ss.str());
 }
 
@@ -200,7 +210,9 @@ void    test_begin_end_rbegin_rend()
     ft::vector<int>      ft_v (ft_it , ft_it + 4);
     out << printVectorAttributes(std_v,ft_v, "Test Iterator begin()  end()", 1);
     std::cout << "*****************************Test Iterator***********************************************." << std::endl;
-    std::cout << NORMAL " test Iterator begin \t\t\t\t\t\t\t\t\t"<< vector_is_equal(std_v , ft_v) << std::endl;    
+    std::cout << NORMAL " test Iterator begin \t\t\t\t\t\t\t\t\t"<< vector_is_equal(std_v , ft_v) && 
+               *(std_v.begin()) == *(ft_v.begin()) && *(std_v.end()) == *(ft_v.end());
+    std::cout << std::endl;    
    
     /* Reverse Iterator   begin() end ()*/
     out << printVectorAttributes(std_v,ft_v, "Test reverse Iterator rbegin() rend ()", 2);
@@ -292,31 +304,25 @@ void    test_empty(void)
 
     std::cout << "*****************************Test empty()***********************************************." << std::endl;
         if(std_v1.empty() ==ft_v1.empty())
-            std::cout <<NORMAL " test for empty() for  empty vector \t\t\t\t\t\t\t"<< GREEN"✔"<< std::endl;
+            std::cout <<NORMAL " test for empty() for  empty vector* \t\t\t\t\t\t\t"<< GREEN"✔"<< std::endl;
         else
-            std::cout <<NORMAL " test for empty() for  empty vector \t\t\t\t\t\t\t"<< RED"✘"<< std::endl;
+            std::cout <<NORMAL " test for empty() for  empty vector* \t\t\t\t\t\t\t"<< RED"✘"<< std::endl;
 
             
         if(std_v2.empty() ==ft_v2.empty())
-            std::cout <<NORMAL " test for empty() for vector(size) \t\t\t\t\t\t\t"<< GREEN"✔"<< std::endl;
+            std::cout <<NORMAL " test for empty() for vector(size)* \t\t\t\t\t\t\t"<< GREEN"✔"<< std::endl;
         else     
-            std::cout <<NORMAL " test for empty() for  empty vector \t\t\t\t\t\t\t"<< RED"✘"<< std::endl;
+            std::cout <<NORMAL " test for empty() for  empty vector* \t\t\t\t\t\t\t"<< RED"✘"<< std::endl;
 
         
         if(std_v3.empty() ==ft_v3.empty())
-            std::cout <<NORMAL " test for empty() for Fill value(s, v) \t\t\t\t\t\t\t"<< GREEN"✔" << std::endl;
+            std::cout <<NORMAL " test for empty() for Fill value(s, v)* \t\t\t\t\t\t"<< GREEN"✔" << std::endl;
         else
-            std::cout <<NORMAL " test for empty() for  empty vector \t\t\t\t\t\t\t\t\t"<< RED"✘"<< std::endl;       
+            std::cout <<NORMAL " test for empty() for  empty vector* \t\t\t\t\t\t\t\t"<< RED"✘"<< std::endl;       
 }
 
 void    test_reserve(void)
 {
-   /* std::ofstream        out;
-    std::string const   file = "./Log_vector/log_reserve()";
-    out.open(file.c_str(), std::fstream::trunc | std::ostream::out);
-    if(!out.is_open())
-        std::cerr << "Error : faild to open file" << std::endl;*/
-
     std::vector<int> std_v(7, 11);
     ft::vector<int> ft_v(7, 11);
 
@@ -331,12 +337,128 @@ void    test_reserve(void)
     
     std::vector<int>:: size_type    std_v1_capacity= std_v1.capacity();
     ft::vector<int>::size_type    ft_v1_capacity= ft_v1.capacity();
-    std::cout << "*****************************Test empty()***********************************************." << std::endl;
+    std::cout << "*****************************Test reserv()***********************************************." << std::endl;
     if (std_v1_capacity == ft_v1_capacity)
-        std::cout <<NORMAL " test for reserve \t\t\t\t\t\t\t\t\t"<< GREEN"✔" << std::endl;
+        std::cout <<NORMAL " test for reserve* \t\t\t\t\t\t\t\t\t"<< GREEN"✔" << std::endl;
     else
-        std::cout <<NORMAL " test for reserve \t\t\t\t\t\t\t\t\t\t\t"<< RED"✘"<< std::endl;
+        std::cout <<NORMAL " test for reserve* \t\t\t\t\t\t\t\t\t\t\t"<< RED"✘"<< std::endl;
 }
+
+
+void    test_element_access(void)
+{
+    //operator []
+    std::ofstream        out;
+    std::string const   file = "./Log_vector/log_element_access";
+    out.open(file.c_str(), std::fstream::trunc | std::ostream::out);
+    if(!out.is_open())
+        std::cerr << "Error : faild to open file" << std::endl;
+
+    int range_array[] = { 15, 65397429, 1299, 965, 5 , 88, 9};
+    std::vector<int>::iterator std_itr(&(range_array[1]));
+    ft::vector<int>::iterator ft_itr(&(range_array[1]));
+
+    std::vector<int>    std_arr_v4(std_itr , std_itr + 4);
+    ft::vector<int>     ft_arr_v4(ft_itr , ft_itr + 4);
+    out << printVectorAttributes(std_arr_v4,ft_arr_v4, "Test operato access", 0);
+    
+    // operator []
+    for (std::vector<int>::size_type i = 0 ; i < std_arr_v4.size(); ++i)
+    {
+        out << "std_arr_arr["<<i<<"] = " << std_arr_v4[i] << "\t\t" << "ft_arr_arr[" <<i << "] = " << ft_arr_v4[i] << "\n";
+        if (std_arr_v4[i] != ft_arr_v4[i])
+            {
+               std::cout <<NORMAL " test for operator [] \t\t\t\t\t\t\t\t\t\t\t"<< RED"✘"<< std::endl;
+               return ;
+            }   
+    }
+    std::cout <<NORMAL " test for operator [] \t\t\t\t\t\t\t\t\t"<< GREEN"✔" << std::endl;
+
+    out << "\n============================================================================\n\n";
+    // at
+    for (std::vector<int>::size_type i = 0 ; i < std_arr_v4.size(); ++i)
+    {
+        out << "std_arr_v4.at("<< i << ") = " << std_arr_v4.at(i) << "\t\t" << "ft_arr_arr.at("<< i << ") = " << ft_arr_v4.at(i) << "\n";
+        if (std_arr_v4.at(i) != ft_arr_v4.at(i))
+            {
+               std::cout <<NORMAL " test for operator at \t\t\t\t\t\t\t\t\t\t\t"<< RED"✘"<< std::endl;
+               return ;
+            }   
+    }
+    std::cout <<NORMAL " test for operator at \t\t\t\t\t\t\t\t\t"<< GREEN"✔" << std::endl;
+
+    
+    //front,  back
+    out << "\n============================================================================\n\n";
+    out << "std_arr_v4.front() = " << std_arr_v4.front() << "\t\t" << "ft_arr_v4.front() = " << ft_arr_v4.front()<< std::endl;
+    if (std_arr_v4.front() != ft_arr_v4.front())
+    {
+        std::cout <<NORMAL " test for front() \t\t\t\t\t\t\t\t\t\t"<< RED"✘"<<  std::endl;
+        return ;
+    }
+
+    out << "std_arr_v4.back() = " << std_arr_v4.back() << "\t" << "ft_arr_v4.back() = " << ft_arr_v4.back()<< std::endl;
+    if (std_arr_v4.back() != ft_arr_v4.back())
+    {
+        std::cout <<NORMAL " test for back() \t\t\t\t\t\t\t\t\t\t"<< RED"✘"<< std::endl;
+        return ;
+    }
+
+    /** chenge vector for test front et back **/
+    std_arr_v4.push_back(2323);std_arr_v4.push_back(-7);
+    ft_arr_v4.push_back(2323);ft_arr_v4.push_back(-7);
+    out << printVectorAttributes(std_arr_v4,ft_arr_v4, "Test front() back() after chenging vector", 0);
+
+    /** test front et back after push_back **/
+    out << "std_arr_v4.front() = " << std_arr_v4.front() << "\t\t" << "ft_arr_v4.front() = " << ft_arr_v4.front()<< std::endl;
+    if (std_arr_v4.front() != ft_arr_v4.front())
+    {
+        std::cout <<NORMAL " test for front() \t\t\t\t\t\t\t\t\t\t"<< RED"✘"<< std::endl;
+        return ;
+    }
+
+    out << "std_arr_v4.back() = " << std_arr_v4.back() << "\t\t" << "ft_arr_v4.back() = " << ft_arr_v4.back()<< std::endl;
+    if (std_arr_v4.back() != ft_arr_v4.back())
+    {
+       std::cout <<NORMAL " test for back() \t\t\t\t\t\t\t\t\t\t"<< RED"✘"<< std::endl;
+       return ;
+    }
+    std::cout <<NORMAL " test for front() back() \t\t\t\t\t\t\t\t"<< GREEN"✔" << std::endl;      
+ }
+
+ void   	test_assign()
+ {
+    std::ofstream        out;
+    std::string const   file = "./Log_vector/log_test_assign";
+
+    out.open(file.c_str(), std::fstream::trunc | std::ostream::out);
+    if(!out.is_open())
+        std::cerr << "Error : faild to open file" << std::endl;
+        
+    std::vector<int>    std_v1, std_v2,  std_v3;
+    ft::vector<int>     ft_v1, ft_v2, ft_v3;
+
+    std_v1.assign(7, 100);
+    ft_v1.assign(7, 100); 
+    
+    out << printVectorAttributes(std_v1,ft_v1, "Test assign(n, val) ", 0);
+    std::cout << "*****************************Test assign()***********************************************." << std::endl;
+    std::cout << NORMAL" Test assign(n, val) \t\t\t\t\t\t\t\t\t"<< vector_is_equal(std_v1 , ft_v1) << std::endl;  
+
+
+    std_v2.assign(std_v1.begin() + 1, std_v1.end() - 1);
+    ft_v2.assign(ft_v1.begin() + 1, ft_v1.end() - 1);
+    out << printVectorAttributes(std_v2,ft_v2, "Test assign(it_first,  it_last) ", 0);
+    std::cout << NORMAL" Test assign(it_first,  it_last) \t\t\t\t\t\t\t"<< vector_is_equal(std_v2 , ft_v2) << std::endl;  
+ 
+    int arr[] = {12, -4567654, 0, 10, 58};
+    std_v3.assign(arr, arr + 3);
+    ft_v3.assign(arr, arr + 3);
+    out << printVectorAttributes(std_v3,ft_v3, "Test assign(it_first_arr,  it_last_arr) ", 0);
+    std::cout << NORMAL" Test assign(it_first_arr,  it_last_arr) \t\t\t\t\t\t"<< vector_is_equal(std_v2 , ft_v2) << std::endl;
+
+ }
+
 
 void    test_vector(void)
 {
@@ -349,11 +471,11 @@ void    test_vector(void)
     test_resize();
     test_empty();
     test_reserve();
-	/*test_operator_at();
-	test_at();
-	test_front_back();
+	test_element_access();
+	/*test_at();
+	test_front_back();*/
 	test_assign();
-	test_push_back();
+	/*test_push_back();
 	test_pop_back();
 	test_insert();
 	test_erase();
