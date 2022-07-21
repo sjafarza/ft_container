@@ -314,9 +314,12 @@ namespace ft
 
         void    pop_back()
         {
-            _alloc.destroy(_end);
-            _size--;
-            _end--;
+            if (_size != 0)
+            {
+                _alloc.destroy(_end);
+                _size--;
+                _end--;
+            }
         }
 
         iterator insert (iterator position, const value_type& val)

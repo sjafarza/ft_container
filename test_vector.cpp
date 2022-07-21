@@ -51,7 +51,11 @@ template <class T>
 std::string print_vector(const std::vector<T> & std_vector)
 {
     std::ostringstream  ss;
-    typename std::vector<T>::const_iterator  st_it = std_vector.begin();
+    if(std_vector.size() == 0)
+        ss << "{ }";
+    else
+    {
+        typename std::vector<T>::const_iterator  st_it = std_vector.begin();
     ss << " { ";
     while(st_it != std_vector.end())
     {
@@ -61,6 +65,7 @@ std::string print_vector(const std::vector<T> & std_vector)
         st_it++;
     }
     ss << " } ";
+    }
     return (ss.str());
 }
 
@@ -71,7 +76,7 @@ std::string print_vector(const ft::vector<T> & ft_vector)
      typename ft::vector<T>::const_iterator   ft_it = ft_vector.begin();
      ss << " { ";
     
-    while(ft_it != ft_vector.end())
+    while(ft_it < ft_vector.end())
     {
         ss << *ft_it ;
         if(ft_it + 1 != ft_vector.end())
@@ -435,8 +440,8 @@ void    test_element_access(void)
     if(!out.is_open())
         std::cerr << "Error : faild to open file" << std::endl;
         
-    std::vector<int>    std_v1, std_v2,  std_v3;
-    ft::vector<int>     ft_v1, ft_v2, ft_v3;
+    std::vector<int>    std_v1(2), std_v2,  std_v3;
+    ft::vector<int>     ft_v1(2), ft_v2, ft_v3;
 
     std_v1.assign(7, 100);
     ft_v1.assign(7, 100); 
@@ -456,9 +461,76 @@ void    test_element_access(void)
     ft_v3.assign(arr, arr + 3);
     out << printVectorAttributes(std_v3,ft_v3, "Test assign(it_first_arr,  it_last_arr) ", 0);
     std::cout << NORMAL" Test assign(it_first_arr,  it_last_arr) \t\t\t\t\t\t"<< vector_is_equal(std_v2 , ft_v2) << std::endl;
-
  }
 
+void    test_push_back()
+{
+    std::ofstream        out;
+    std::string const   file = "./Log_vector/log_test_push_back";
+
+    out.open(file.c_str(), std::fstream::trunc | std::ostream::out);
+    if(!out.is_open())
+        std::cerr << "Error : faild to open file" << std::endl;
+        
+    std::vector<int>    std_v1, std_v2(45),  std_v3(5, 87);
+    ft::vector<int>     ft_v1, ft_v2(45), ft_v3(5, 87);
+    /*empty vector */
+    out << printVectorAttributes(std_v1,ft_v1, "Test push_back() ", 0);
+    std_v1.push_back(42); ft_v1.push_back(42);
+    out << printVectorAttributes(std_v1,ft_v1, "After push_back(42) ", 0);
+    out << std::endl << std::endl;
+    std::cout << "*****************************Test push_back()***********************************************." << std::endl;
+    std::cout << NORMAL" Test push_back for empty vector \t\t\t\t\t\t\t"<< vector_is_equal(std_v1 , ft_v1) << std::endl;  
+   
+    /* vector fill size */
+    out << printVectorAttributes(std_v2,ft_v2, "Test push_back() for vector(size) ", 0);
+    std_v2.push_back(42); ft_v2.push_back(42);
+    out << printVectorAttributes(std_v2,ft_v2, "After push_back(42) ", 0);
+    out << std::endl << std::endl;
+    std::cout << NORMAL" Test push_back for vector fill size \t\t\t\t\t\t\t"<< vector_is_equal(std_v1 , ft_v1) << std::endl;  
+
+    /* vector fill size and value */
+    out << printVectorAttributes(std_v3,ft_v3, "Test push_back() for vector(size, val) ", 0);
+    std_v3.push_back(42); ft_v3.push_back(42);
+    out << printVectorAttributes(std_v3,ft_v3, "after push_back(42) ", 0);
+    out << std::endl << std::endl;
+    std::cout << NORMAL" Test push_back for vector fill size  and value\t\t\t\t\t\t"<< vector_is_equal(std_v1 , ft_v1) << std::endl;  
+
+    
+}
+
+void    test_pop_back()
+{
+    std::ofstream        out;
+    std::string const   file = "./Log_vector/log_test_pop_back";
+
+    out.open(file.c_str(), std::fstream::trunc | std::ostream::out);
+    if(!out.is_open())
+        std::cerr << "Error : faild to open file" << std::endl;
+
+    int arr[] = {12, -4567654, 0, 10, 58};
+    std::vector<int>    std_v1(5, 99),  std_v2;
+    ft::vector<int>     ft_v1(5, 99), ft_v2;
+    std_v2.assign(arr, arr + 3);
+    ft_v2.assign(arr, arr + 3); 
+
+    
+    out << printVectorAttributes(std_v2,ft_v2, "Test pop_back() ", 0);
+    std_v2.pop_back(); ft_v2.pop_back();
+    out << printVectorAttributes(std_v2,ft_v2, "After pop_back() ", 0);
+    out << std::endl << std::endl;
+    std::cout << "*****************************Test pop_back()***********************************************." << std::endl;
+    std::cout << NORMAL" Test pop_back for vector rang const  \t\t\t\t\t\t\t"<< vector_is_equal(std_v2 , ft_v2) << std::endl;
+
+    out << printVectorAttributes(std_v1,ft_v1, "Test pop_back() for vector(n, v) ", 0);
+    std_v1.pop_back(); ft_v1.pop_back();
+    out << print_vector(ft_v1);
+    out << print_vector(std_v1);
+    out << printVectorAttributes(std_v1,ft_v1, "After pop_back() ", 0);
+    out << std::endl << std::endl;
+    std::cout << NORMAL" Test pop_back for vector(n, v)  \t\t\t\t\t\t\t"<< vector_is_equal(std_v1 , ft_v1) << std::endl;  
+
+}
 
 void    test_vector(void)
 {
@@ -475,9 +547,9 @@ void    test_vector(void)
 	/*test_at();
 	test_front_back();*/
 	test_assign();
-	/*test_push_back();
+	test_push_back();
 	test_pop_back();
-	test_insert();
+	/*test_insert();
 	test_erase();
 	test_swap();
 	test_clear();
