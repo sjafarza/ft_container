@@ -531,10 +531,7 @@ void    test_pop_back()
     std::cout << NORMAL" Test pop_back for vector(n, v)  \t\t\t\t\t\t\t"<< vector_is_equal(std_v1 , ft_v1) << std::endl;
 }
 
-void test_erase()
-{
-    
-}
+
 
 void    test_insert()
 {
@@ -570,6 +567,36 @@ void    test_insert()
     out << printVectorAttributes(std_v2,ft_v2, "After insert(begin, arr, arr + 3) ", 0);
     out << std::endl << std::endl;
     std::cout << NORMAL" Test insert(it, arr, arr + n)  \t\t\t\t\t\t\t"<< vector_is_equal(std_v2 , ft_v2) << std::endl;
+    
+
+}
+
+void test_erase()
+{
+    std::ofstream        out;
+    std::string const   file = "./Log_vector/log_test_erase";
+
+    out.open(file.c_str(), std::fstream::trunc | std::ostream::out);
+    if(!out.is_open())
+        std::cerr << "Error : faild to open file" << std::endl;
+
+    int arr[] = {12, -4567654, 0, 10, 58};
+    std::vector<int>    std_v, std_v1(5, 99),  std_v2(1, 66);
+    ft::vector<int>     ft_v , ft_v1(5, 99), ft_v2(1, 66);
+    std_v.assign(arr, arr + 3);
+    ft_v.assign(arr, arr + 3);
+    out << printVectorAttributes(std_v,ft_v, "Test erase(it)  vector ", 0);
+
+    std::cout << "wher ...\n";
+    std_v.erase(std_v.begin()+ 2);
+    std::cout <<" etap 1\n";
+    ft_v.erase(ft_v.begin() + 2);
+    out << printVectorAttributes(std_v,ft_v, "After erase(begin + 1) ", 0);
+    out << std::endl << std::endl;
+     std::cout << "*****************************Test erase()***********************************************." << std::endl;
+    std::cout << NORMAL" Test erase(it)  \t\t\t\t\t\t\t"<< vector_is_equal(std_v , ft_v) << std::endl;
+    std::cout << "fin erase\n";
+    //out << printVectorAttributes(std_v1,ft_v1, "Test insert(it, size, value) ", 0);
     
 
 }

@@ -11,7 +11,7 @@ OBJ 		=  	$(SRC:%.cpp=$(OBJDIR)/%.o)
 CC			=	c++
 CFLAG		=	-Wall -Wextra -Werror -std=c++98
 HEADER			=	-I.
-INCFLAGS	=	./containers/vector.hpp header_utils.hpp
+INCFLAGS	=	./containers/vector.hpp ./containers/stack.hpp header_utils.hpp
 
 RM			=	rm -rf
 UNAME           :=      $(shell uname -s)

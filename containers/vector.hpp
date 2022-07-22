@@ -61,18 +61,19 @@ namespace ft
                 _end += n; 
             }
 
-            void                _shif_left(iterator positon, size_type n)
+            void                _shift_left(iterator positon, size_type n)
             {
                 if(empty())
                     return ;
                 size_type   k = &(*positon) - _start;
-                
+                std::cout << "k in shift_left = " << k << "\n";
                 for(size_type i = 1 ; i <= k ; ++i)
                 {
                     _alloc.construct(&_start[k - i] + n , _start[k - i]);
                     _alloc.destroy(_start + k - i);
                 }
-                _start -= n;
+                _start += n;
+                
                // _size += n;
                /* size_type   k = &(*position) - &(*begin());
                 for(size_type i = k ; i < _size - n ; ++i)
@@ -143,7 +144,8 @@ namespace ft
         virtual ~vector()
             {
                 this->clear();
-                _alloc.deallocate(_start, this->capacity());
+                if (_start)
+                    _alloc.deallocate(_start, _capacity);
             }
 
         //*****************************************************************************************
@@ -373,12 +375,14 @@ namespace ft
 
         iterator erase (iterator position)
         {
+            std::cout << "eee\n";
             size_type  i = &(*position) - _start;
+            std::cout << "i = " << i << "\n";
            _alloc.destroy(&_start[i]);
            _shift_left(position, 1);
            _size--;
            //_start++;  it before change in _shift_left
-           return iterator(_start[i]);
+           return iterator(&_start[i]);
         }
 
         iterator erase (iterator first, iterator last)
@@ -394,7 +398,7 @@ namespace ft
             _shif_left(first , n);
             _size -= n;
            // _end -= n;
-            return iterator(_start[i]);
+            return iterator(&_start[i]);
         }
 
         void swap (vector& x)
