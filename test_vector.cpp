@@ -18,7 +18,7 @@ std::string vector_is_equal(const std::vector<T> & std_vector, const ft::vector<
 {
     typename std::vector<T>::const_iterator  st_it = std_vector.begin();
     typename ft::vector<T>::const_iterator   ft_it = ft_vector.begin();
-    if(std_vector.capacity() != ft_vector.capacity())
+    if(std_vector.capacity() != ft_vector.capacity()) /* != */
         return (RED"✘ \t\t Capacity");
     if(std_vector.size() != ft_vector.size())
         return (RED"✘ \t\t Size");
@@ -452,7 +452,7 @@ void    test_element_access(void)
 
 
     std_v2.assign(std_v1.begin() + 1, std_v1.end() - 1);
-    ft_v2.assign(ft_v1.begin() + 1, ft_v1.end() - 1);
+    ft_v2.assign(ft_v1.begin()+ 1, ft_v1.end() - 1);
     out << printVectorAttributes(std_v2,ft_v2, "Test assign(it_first,  it_last) ", 0);
     std::cout << NORMAL" Test assign(it_first,  it_last) \t\t\t\t\t\t\t"<< vector_is_equal(std_v2 , ft_v2) << std::endl;  
  
@@ -528,7 +528,49 @@ void    test_pop_back()
     out << print_vector(std_v1);
     out << printVectorAttributes(std_v1,ft_v1, "After pop_back() ", 0);
     out << std::endl << std::endl;
-    std::cout << NORMAL" Test pop_back for vector(n, v)  \t\t\t\t\t\t\t"<< vector_is_equal(std_v1 , ft_v1) << std::endl;  
+    std::cout << NORMAL" Test pop_back for vector(n, v)  \t\t\t\t\t\t\t"<< vector_is_equal(std_v1 , ft_v1) << std::endl;
+}
+
+void test_erase()
+{
+    
+}
+
+void    test_insert()
+{
+    std::ofstream        out;
+    std::string const   file = "./Log_vector/log_test_insert";
+
+    out.open(file.c_str(), std::fstream::trunc | std::ostream::out);
+    if(!out.is_open())
+        std::cerr << "Error : faild to open file" << std::endl;
+
+    int arr[] = {12, -4567654, 0, 10, 58};
+    std::vector<int>    std_v, std_v1(5, 99),  std_v2(1, 66);
+    ft::vector<int>     ft_v , ft_v1(5, 99), ft_v2(1, 66);
+    out << printVectorAttributes(std_v,ft_v, "Test insert(it, value) ", 0);
+    std_v.insert(std_v.begin(), 22);
+    ft_v.insert(ft_v.begin(), 22);
+    out << printVectorAttributes(std_v,ft_v, "After insert(begin, 22) ", 0);
+    out << std::endl << std::endl;
+     std::cout << "*****************************Test insert()***********************************************." << std::endl;
+    std::cout << NORMAL" Test insert(it, val)  \t\t\t\t\t\t\t"<< vector_is_equal(std_v , ft_v) << std::endl;
+
+    out << printVectorAttributes(std_v1,ft_v1, "Test insert(it, size, value) ", 0);
+    std_v1.insert(std_v1.begin() + 2  , 15, 300);
+    ft_v1.insert(ft_v1.begin() + 2 , 15, 300);
+    out << printVectorAttributes(std_v1,ft_v1, "After insert(begin+1, 2, 300) ", 0);
+    out << std::endl << std::endl;
+    std::cout << NORMAL" Test insert(it, size, val)  \t\t\t\t\t\t\t"<< vector_is_equal(std_v1 , ft_v1) << std::endl;
+    
+    out << printVectorAttributes(std_v2,ft_v2, "Test insert(it, it_first, it_end) ", 0);
+    out << "arr[] = {12, -4567654, 0, 10, 58}" << std::endl;
+    std_v2.insert(std_v2.begin() + 1, arr, arr + 3);
+    ft_v2.insert(ft_v2.begin() + 1,arr, arr + 3); 
+    out << printVectorAttributes(std_v2,ft_v2, "After insert(begin, arr, arr + 3) ", 0);
+    out << std::endl << std::endl;
+    std::cout << NORMAL" Test insert(it, arr, arr + n)  \t\t\t\t\t\t\t"<< vector_is_equal(std_v2 , ft_v2) << std::endl;
+    
 
 }
 
@@ -549,9 +591,9 @@ void    test_vector(void)
 	test_assign();
 	test_push_back();
 	test_pop_back();
-	/*test_insert();
+	test_insert();
 	test_erase();
-	test_swap();
+	/*test_swap();
 	test_clear();
 	test_get_allocator();
 	test_relational_operators();

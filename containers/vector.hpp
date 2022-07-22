@@ -44,24 +44,21 @@ namespace ft
             size_type           _size;        /* len of vector */
             size_type           _capacity;    /* size of the storage space currentrl allocated != size of vector */
            
-            void                _shift_right(iterator positon, size_type n)
+            void              _shift_right(iterator position, size_type n, size_type len)
             {
                 if(empty())
                     return ;
-                size_type   k = _end - &(*positon);
-                for(size_type i = 0 ; i <= k ; ++i)
+              
+                _end = _start + _size;
+                 size_type      k = _size - len;
+                pointer     t_str = _start;
+                for(size_type i = 0 ; i <= k  ; ++i)
                 {
-                    _alloc.construct(_end + n - i, *(_end - i) );
-                    _alloc.destroy(_end + i);
+                    _alloc.construct(_end + n - i, *(_end  - i) );
+                    _alloc.destroy(_end - i);
                 }
-                //_size += n;
-                _end += n;
-                /*size_type   k = &(*position) - _start;
-                for(size_type i = _size - 1 ; i >=  k ; --i)
-                {
-                    _alloc.construct(&_start[i + n], _start[i]);
-                    _alloc.destroy(&start[i]);
-                }*/  
+                _start = t_str;
+                _end += n; 
             }
 
             void                _shif_left(iterator positon, size_type n)
@@ -69,6 +66,7 @@ namespace ft
                 if(empty())
                     return ;
                 size_type   k = &(*positon) - _start;
+                
                 for(size_type i = 1 ; i <= k ; ++i)
                 {
                     _alloc.construct(&_start[k - i] + n , _start[k - i]);
@@ -91,7 +89,9 @@ namespace ft
         //*****************************************************************************************
         explicit vector (const allocator_type& alloc = allocator_type()) :  /* exlicit : used to mark consts not implicitly convert types */
                 _alloc(alloc), _start(NULL), _end(NULL), _size(0), _capacity(0) 
-                {}
+                {
+                    _end = _start + _size;
+                }
 
 
         explicit vector (size_type n, const value_type& val = value_type(), const allocator_type& alloc = allocator_type()) : 
@@ -104,6 +104,7 @@ namespace ft
                         _alloc.construct(_end, val);
                         _end++;
                     }
+                    _end = _start + _size;
                 }
 
         template <class InputIterator>
@@ -324,12 +325,12 @@ namespace ft
 
         iterator insert (iterator position, const value_type& val)
         {
-            iterator    r;
+            //iterator    r;
             size_type   len = &(*position) - _start;
             if(1 + _size > _capacity)
-                reserve (1 + _size);
-            _shif_rigth(position , 1 );
-            _alloc.constrauctors(&(*position), val);
+                reserve (1 + _size);   
+            _shift_right(position , 1 , len);
+            _alloc.construct((/*& *position */_start + len ), val);
             _size++;
             return (iterator(_start + len));
 
@@ -337,11 +338,20 @@ namespace ft
 
         void insert (iterator position, size_type n, const value_type& val)
         {
+            size_type   len = &(*position) - _start;
+            //pointer tmp_start = _start;
             if(n + _size > _capacity)
-                reserve(n + _size);   
-            _shift_right(position, n);
+            {
+                if (n+_size < 10)
+                    reserve(10);
+                else
+                    reserve(n + _size);
+            } 
+            _shift_right(position + 1, n, len);
             for(size_type i = 0 ; i < n ; ++i)
-                _alloc.construct(&(*position)+ i , val);
+                _alloc.construct(/*&(*position)*/ _start + (len) + i , val);
+            for (size_type j = 0 ; j < len ; ++j)
+                _alloc.construct(_start + j , _start[j]);    
             _size += n;      
         }
 
@@ -349,13 +359,15 @@ namespace ft
         void    insert (iterator position, InputIterator first, InputIterator last,
                         typename ft::enable_if< !ft::is_integral<InputIterator>::value, InputIterator>::type* = NULL)
         {
-            std::cout << "1/n";
             size_type n = std::distance(first, last);
+            size_type   len = &(*position) - _start;
             if (n + _size > _capacity)
                 reserve(n + _size);   
-            _shift_right(position, n);
+            _shift_right(position, n, len);
             for(size_type i = 0 ; i < n  ; i++)
-                _alloc.construct(&(*position) + i  , *(first + i));
+                _alloc.construct(/*&( *position) + i*/ _start + len + i  , *(first + i));    
+            for (size_type j = 0 ; j < len ; ++j)
+                _alloc.construct(_start + j , _start[j]);     
             _size += n;                  
         }
 
