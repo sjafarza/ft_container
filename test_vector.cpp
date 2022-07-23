@@ -158,7 +158,6 @@ std::string printVectorAttributes(std::vector<T>& std_vector,ft::vector<T>& ft_v
 
 }
 
-//void    print_vector();
 void    test_constructor()
 {
     std::ofstream        out;
