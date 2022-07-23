@@ -309,7 +309,7 @@ void    test_operator_assign(void)
 void    test_begin_end_rbegin_rend()
 {
     
-
+    long double              std_time, ft_time;
     std::ofstream        out;
     std::string const   file = "./Log_vector/log_test_begin_end";
     out.open(file.c_str(), std::fstream::trunc | std::ostream::out);
@@ -320,13 +320,20 @@ void    test_begin_end_rbegin_rend()
     int rang_array[] = {32, 66, 824, -2453, 0, 77};
     ft::vector<int>::iterator   ft_it(&rang_array[0]);
     std::vector<int>::iterator   std_it (&rang_array[0]);
+
+    clock_gettime(CLOCK_MONOTONIC, &std_start);
     std::vector<int>     std_v(std_it ,std_it + 4);
+    std_time = std_time_calculator();
+
+    clock_gettime(CLOCK_MONOTONIC, &ft_start);
     ft::vector<int>      ft_v (ft_it , ft_it + 4);
+    ft_time = ft_time_calculator();
+    
     out << printVectorAttributes(std_v,ft_v, "Test Iterator begin()  end()", 1);
     std::cout << "*****************************Test Iterator***********************************************." << std::endl;
     std::cout << NORMAL " test Iterator begin \t\t\t\t\t\t\t\t\t"<< vector_is_equal(std_v , ft_v) && 
                *(std_v.begin()) == *(ft_v.begin()) && *(std_v.end()) == *(ft_v.end());
-    std::cout << std::endl;    
+     std::cout << "\t\t std_time  = " << std_time  << "\t\t ft_time = " << ft_time << " \t" << time_is_ok(ft_time, std_time) << std::endl;    
    
     /* Reverse Iterator   begin() end ()*/
     out << printVectorAttributes(std_v,ft_v, "Test reverse Iterator rbegin() rend ()", 2);
@@ -352,6 +359,7 @@ void    test_begin_end_rbegin_rend()
 
 void    test_size(void)
 {
+    
     std::ofstream        out;
     std::string const   file = "./Log_vector/log_test_size";
     out.open(file.c_str(), std::fstream::trunc | std::ostream::out);
@@ -382,6 +390,7 @@ void    test_size(void)
 
 void    test_resize(void)
 {
+    long double              std_time, ft_time;
     std::ofstream        out;
     std::string const   file = "./Log_vector/log_test_resize";
     out.open(file.c_str(), std::fstream::trunc | std::ostream::out);
@@ -391,26 +400,37 @@ void    test_resize(void)
     ft::vector<int>      ft_v1(10, 5);
     out << printVectorAttributes(std_v1,ft_v1, "fist definition", 0);
 
+    clock_gettime(CLOCK_MONOTONIC, &std_start);
     std_v1.resize(4);
+    std_time = std_time_calculator();
+
+    clock_gettime(CLOCK_MONOTONIC, &ft_start);
     ft_v1.resize(4);
-    out << printVectorAttributes(std_v1,ft_v1, "After resize to 4 definition", 0);
+    ft_time = std_time_calculator();
+
+    out << printVectorAttributes(std_v1,ft_v1, "After resize to 4 ", 0);
+    std::cout <<NORMAL " test for resize to smaller size \t\t\t\t\t\t\t"<< vector_is_equal(std_v1 , ft_v1) 
+            <<"\t\t std_time  = " << std_time  << "\t\t ft_time = " << ft_time << " \t" << time_is_ok(ft_time, std_time) 
+            << std::endl;
     
+    clock_gettime(CLOCK_MONOTONIC, &std_start);
     std_v1.resize(10);
+    std_time = std_time_calculator();
+
+    clock_gettime(CLOCK_MONOTONIC, &ft_start);
     ft_v1.resize(10);
+    ft_time = std_time_calculator();
+
     out << printVectorAttributes(std_v1,ft_v1, "After resize to 12 size", 0);
+    std::cout <<NORMAL " test for resize to biger size \t\t\t\t\t\t\t\t"<< vector_is_equal(std_v1 , ft_v1)
+            <<"\t\t std_time  = " << std_time  << "\t\t ft_time = " << ft_time << " \t" << time_is_ok(ft_time, std_time) 
+            << std::endl;
     
-    std::cout <<NORMAL " test for resize \t\t\t\t\t\t\t\t\t"<< vector_is_equal(std_v1 , ft_v1) << std::endl;
     out.close();
 }
 
 void    test_empty(void)
 {
-    /*std::ofstream        out;
-    std::string const   file = "./Log_vector/log_empty()";
-    out.open(file.c_str(), std::fstream::trunc | std::ostream::out);
-    if(!out.is_open())
-        std::cerr << "Error : faild to open file" << std::endl;*/
-
     std::vector<char>   std_v1;
     ft::vector<char>    ft_v1;
 
@@ -442,6 +462,7 @@ void    test_empty(void)
 
 void    test_reserve(void)
 {
+    long double              std_time, ft_time;
     std::vector<int> std_v(7, 11);
     ft::vector<int> ft_v(7, 11);
 
@@ -451,18 +472,23 @@ void    test_reserve(void)
     std::vector<int>:: size_type   std_v_capacity= std_v.capacity();
     ft::vector<int>::size_type      ft_v_capacity= ft_v.capacity();
     
+    clock_gettime(CLOCK_MONOTONIC, &std_start);
     std_v1.reserve(std_v_capacity + 50);
+    std_time = std_time_calculator();
+
+    clock_gettime(CLOCK_MONOTONIC, &ft_start);
     ft_v1.reserve(ft_v_capacity + 50);
+    ft_time = ft_time_calculator();
     
     std::vector<int>:: size_type    std_v1_capacity= std_v1.capacity();
     ft::vector<int>::size_type    ft_v1_capacity= ft_v1.capacity();
     std::cout << "*****************************Test reserv()***********************************************." << std::endl;
     if (std_v1_capacity == ft_v1_capacity)
-        std::cout <<NORMAL " test for reserve* \t\t\t\t\t\t\t\t\t"<< GREEN"✔" << std::endl;
+        std::cout <<NORMAL " test for reserve* \t\t\t\t\t\t\t\t\t"<< GREEN"✔" ;
     else
-        std::cout <<NORMAL " test for reserve* \t\t\t\t\t\t\t\t\t\t\t"<< RED"✘"<< std::endl;
+        std::cout <<NORMAL " test for reserve* \t\t\t\t\t\t\t\t\t\t\t"<< RED"✘" ;
 
-        
+    std::cout << "\t\t std_time  = " << std_time  << "\t\t ft_time = " << ft_time << " \t" << time_is_ok(ft_time, std_time) << std::endl;    
 }
 
 
@@ -550,39 +576,63 @@ void    test_element_access(void)
 
  void   	test_assign()
  {
+    long double              std_time, ft_time;
     std::ofstream        out;
     std::string const   file = "./Log_vector/log_test_assign";
 
     out.open(file.c_str(), std::fstream::trunc | std::ostream::out);
     if(!out.is_open())
         std::cerr << "Error : faild to open file" << std::endl;
-        
+
     std::vector<int>    std_v1(2), std_v2,  std_v3;
     ft::vector<int>     ft_v1(2), ft_v2, ft_v3;
 
+    clock_gettime(CLOCK_MONOTONIC, &std_start);
     std_v1.assign(7, 100);
-    ft_v1.assign(7, 100); 
+    std_time = std_time_calculator();
+    
+    clock_gettime(CLOCK_MONOTONIC, &ft_start);
+    ft_v1.assign(7, 100);
+    ft_time = ft_time_calculator();
     
     out << printVectorAttributes(std_v1,ft_v1, "Test assign(n, val) ", 0);
     std::cout << "*****************************Test assign()***********************************************." << std::endl;
-    std::cout << NORMAL" Test assign(n, val) \t\t\t\t\t\t\t\t\t"<< vector_is_equal(std_v1 , ft_v1) << std::endl;  
+    std::cout << NORMAL" Test assign(n, val) \t\t\t\t\t\t\t\t\t"<< vector_is_equal(std_v1 , ft_v1)
+              <<"\t\t std_time  = " << std_time  << "\t\t ft_time = " << ft_time << " \t" << time_is_ok(ft_time, std_time) 
+              << std::endl; 
 
-
+    clock_gettime(CLOCK_MONOTONIC, &std_start);
     std_v2.assign(std_v1.begin() + 1, std_v1.end() - 1);
+    std_time = std_time_calculator();
+
+    clock_gettime(CLOCK_MONOTONIC, &ft_start);
     ft_v2.assign(ft_v1.begin()+ 1, ft_v1.end() - 1);
+    ft_time = ft_time_calculator();
+
     out << printVectorAttributes(std_v2,ft_v2, "Test assign(it_first,  it_last) ", 0);
-    std::cout << NORMAL" Test assign(it_first,  it_last) \t\t\t\t\t\t\t"<< vector_is_equal(std_v2 , ft_v2) << std::endl;  
+    std::cout << NORMAL" Test assign(it_first,  it_last) \t\t\t\t\t\t\t"<< vector_is_equal(std_v2 , ft_v2) 
+              <<"\t\t std_time  = " << std_time  << "\t\t ft_time = " << ft_time << " \t" << time_is_ok(ft_time, std_time) 
+              << std::endl;  
  
     int arr[] = {12, -4567654, 0, 10, 58};
+    clock_gettime(CLOCK_MONOTONIC, &std_start);
     std_v3.assign(arr, arr + 3);
+    std_time = std_time_calculator();
+
+    clock_gettime(CLOCK_MONOTONIC, &ft_start);
     ft_v3.assign(arr, arr + 3);
+    ft_time = ft_time_calculator();
+
     out << printVectorAttributes(std_v3,ft_v3, "Test assign(it_first_arr,  it_last_arr) ", 0);
-    std::cout << NORMAL" Test assign(it_first_arr,  it_last_arr) \t\t\t\t\t\t"<< vector_is_equal(std_v2 , ft_v2) << std::endl;
+    std::cout << NORMAL" Test assign(it_first_arr,  it_last_arr) \t\t\t\t\t\t"<< vector_is_equal(std_v2 , ft_v2) 
+            <<"\t\t std_time  = " << std_time  << "\t\t ft_time = " << ft_time << " \t" << time_is_ok(ft_time, std_time) 
+              << std::endl;
     out.close();
  }
 
 void    test_push_back()
 {
+    long double              std_time, ft_time;
     std::ofstream        out;
     std::string const   file = "./Log_vector/log_test_push_back";
 
@@ -594,25 +644,53 @@ void    test_push_back()
     ft::vector<int>     ft_v1, ft_v2(45), ft_v3(5, 87);
     /*empty vector */
     out << printVectorAttributes(std_v1,ft_v1, "Test push_back() ", 0);
-    std_v1.push_back(42); ft_v1.push_back(42);
+    clock_gettime(CLOCK_MONOTONIC, &std_start);
+    std_v1.push_back(42);
+    std_time = std_time_calculator();
+
+    clock_gettime(CLOCK_MONOTONIC, &ft_start);
+    ft_v1.push_back(42);
+    ft_time = ft_time_calculator();
+
     out << printVectorAttributes(std_v1,ft_v1, "After push_back(42) ", 0);
     out << std::endl << std::endl;
     std::cout << "*****************************Test push_back()***********************************************." << std::endl;
-    std::cout << NORMAL" Test push_back for empty vector \t\t\t\t\t\t\t"<< vector_is_equal(std_v1 , ft_v1) << std::endl;  
+    std::cout << NORMAL" Test push_back for empty vector \t\t\t\t\t\t\t"<< vector_is_equal(std_v1 , ft_v1) 
+            <<"\t\t   std_time  = " << std_time  << "\t\t ft_time = " << ft_time << " \t" << time_is_ok(ft_time, std_time)
+            << std::endl;  
    
     /* vector fill size */
     out << printVectorAttributes(std_v2,ft_v2, "Test push_back() for vector(size) ", 0);
-    std_v2.push_back(42); ft_v2.push_back(42);
+    clock_gettime(CLOCK_MONOTONIC, &std_start);
+    std_v2.push_back(42);
+    std_time = std_time_calculator();
+
+    clock_gettime(CLOCK_MONOTONIC, &ft_start);
+    ft_v2.push_back(42);
+    ft_time = ft_time_calculator();
+
     out << printVectorAttributes(std_v2,ft_v2, "After push_back(42) ", 0);
     out << std::endl << std::endl;
-    std::cout << NORMAL" Test push_back for vector fill size \t\t\t\t\t\t\t"<< vector_is_equal(std_v1 , ft_v1) << std::endl;  
+    std::cout << NORMAL" Test push_back for vector fill size \t\t\t\t\t\t\t"<< vector_is_equal(std_v1 , ft_v1) 
+             <<"\t\tstd_time  = " << std_time  << "\t\t ft_time = " << ft_time << " \t" << time_is_ok(ft_time, std_time)
+             << std::endl;  
 
     /* vector fill size and value */
     out << printVectorAttributes(std_v3,ft_v3, "Test push_back() for vector(size, val) ", 0);
-    std_v3.push_back(42); ft_v3.push_back(42);
+
+    clock_gettime(CLOCK_MONOTONIC, &std_start);
+    std_v1.push_back(42);
+    std_time = std_time_calculator();
+
+    clock_gettime(CLOCK_MONOTONIC, &ft_start);
+    ft_v1.push_back(42);
+    ft_time = ft_time_calculator();
+
     out << printVectorAttributes(std_v3,ft_v3, "after push_back(42) ", 0);
     out << std::endl << std::endl;
-    std::cout << NORMAL" Test push_back for vector fill size  and value\t\t\t\t\t\t"<< vector_is_equal(std_v1 , ft_v1) << std::endl; 
+    std::cout << NORMAL" Test push_back for vector fill size  and value\t\t\t\t\t\t"<< vector_is_equal(std_v1 , ft_v1)
+                <<"\t\t   std_time  = " << std_time  << "\t\t ft_time = " << ft_time << " \t" << time_is_ok(ft_time, std_time)
+                << std::endl; 
      out.close();
 
     
@@ -620,6 +698,7 @@ void    test_push_back()
 
 void    test_pop_back()
 {
+    long double              std_time, ft_time;
     std::ofstream        out;
     std::string const   file = "./Log_vector/log_test_pop_back";
 
@@ -635,19 +714,39 @@ void    test_pop_back()
 
     
     out << printVectorAttributes(std_v2,ft_v2, "Test pop_back() ", 0);
-    std_v2.pop_back(); ft_v2.pop_back();
+
+
+    clock_gettime(CLOCK_MONOTONIC, &std_start);
+    std_v2.pop_back();
+    std_time = std_time_calculator();
+
+    clock_gettime(CLOCK_MONOTONIC, &ft_start);
+    ft_v2.pop_back();
+    ft_time = ft_time_calculator();
+
     out << printVectorAttributes(std_v2,ft_v2, "After pop_back() ", 0);
     out << std::endl << std::endl;
     std::cout << "*****************************Test pop_back()***********************************************." << std::endl;
-    std::cout << NORMAL" Test pop_back for vector rang const  \t\t\t\t\t\t\t"<< vector_is_equal(std_v2 , ft_v2) << std::endl;
+    std::cout << NORMAL" Test pop_back for vector rang const  \t\t\t\t\t\t\t"<< vector_is_equal(std_v2 , ft_v2)
+                <<"\t\t   std_time  = " << std_time  << "\t\t ft_time = " << ft_time << " \t" << time_is_ok(ft_time, std_time)
+                << std::endl;
 
     out << printVectorAttributes(std_v1,ft_v1, "Test pop_back() for vector(n, v) ", 0);
-    std_v1.pop_back(); ft_v1.pop_back();
+    clock_gettime(CLOCK_MONOTONIC, &std_start);
+    std_v1.pop_back();
+    std_time = std_time_calculator();
+
+    clock_gettime(CLOCK_MONOTONIC, &ft_start);
+    ft_v1.pop_back();
+    ft_time = ft_time_calculator();
+
     out << print_vector(ft_v1);
     out << print_vector(std_v1);
     out << printVectorAttributes(std_v1,ft_v1, "After pop_back() ", 0);
     out << std::endl << std::endl;
-    std::cout << NORMAL" Test pop_back for vector(n, v)  \t\t\t\t\t\t\t"<< vector_is_equal(std_v1 , ft_v1) << std::endl;
+    std::cout << NORMAL" Test pop_back for vector(n, v)  \t\t\t\t\t\t\t"<< vector_is_equal(std_v1 , ft_v1)
+              <<"\t\t   std_time  = " << std_time  << "\t\t ft_time = " << ft_time << " \t" << time_is_ok(ft_time, std_time)
+              << std::endl;
     out.close();
 }
 
@@ -655,6 +754,7 @@ void    test_pop_back()
 
 void    test_insert()
 {
+    long double              std_time, ft_time;
     std::ofstream        out;
     std::string const   file = "./Log_vector/log_test_insert";
 
@@ -666,33 +766,62 @@ void    test_insert()
     std::vector<int>    std_v, std_v1(5, 99),  std_v2(1, 66);
     ft::vector<int>     ft_v , ft_v1(5, 99), ft_v2(1, 66);
     out << printVectorAttributes(std_v,ft_v, "Test insert(it, value) ", 0);
+    // model 1   insert(itr, value)
+    clock_gettime(CLOCK_MONOTONIC, &std_start);
     std_v.insert(std_v.begin(), 22);
+    std_time = std_time_calculator();
+
+    clock_gettime(CLOCK_MONOTONIC, &ft_start);
     ft_v.insert(ft_v.begin(), 22);
+    ft_time = ft_time_calculator();
+
     out << printVectorAttributes(std_v,ft_v, "After insert(begin, 22) ", 0);
     out << std::endl << std::endl;
      std::cout << "*****************************Test insert()***********************************************." << std::endl;
-    std::cout << NORMAL" Test insert(it, val)  \t\t\t\t\t\t\t\t\t"<< vector_is_equal(std_v , ft_v) << std::endl;
-
+    std::cout << NORMAL" Test insert(it, val)  \t\t\t\t\t\t\t\t\t"<< vector_is_equal(std_v , ft_v)
+              <<"\t\t std_time  = " << std_time  << "\t\t ft_time = " << ft_time << " \t" << time_is_ok(ft_time, std_time)
+              << std::endl;
+    // model 2  insert(itr, size n , value val) 
     out << printVectorAttributes(std_v1,ft_v1, "Test insert(it, size, value) ", 0);
+
+    clock_gettime(CLOCK_MONOTONIC, &std_start);
     std_v1.insert(std_v1.begin() + 2  , 15, 300);
+    std_time = std_time_calculator();
+
+    clock_gettime(CLOCK_MONOTONIC, &ft_start);
     ft_v1.insert(ft_v1.begin() + 2 , 15, 300);
+    ft_time = ft_time_calculator();
+    
     out << printVectorAttributes(std_v1,ft_v1, "After insert(begin+1, 2, 300) ", 0);
     out << std::endl << std::endl;
-    std::cout << NORMAL" Test insert(it, size, val)  \t\t\t\t\t\t\t\t"<< vector_is_equal(std_v1 , ft_v1) << std::endl;
-    
+    std::cout << NORMAL" Test insert(it, size, val)  \t\t\t\t\t\t\t\t"<< vector_is_equal(std_v1 , ft_v1)
+              <<"\t\t std_time  = " << std_time  << "\t\t ft_time = " << ft_time << " \t" << time_is_ok(ft_time, std_time)
+              << std::endl;
+    // model 3     insert(it, it_first, it_end)
     out << printVectorAttributes(std_v2,ft_v2, "Test insert(it, it_first, it_end) ", 0);
     out << "arr[] = {12, -4567654, 0, 10, 58}" << std::endl;
+
+    clock_gettime(CLOCK_MONOTONIC, &std_start);
     std_v2.insert(std_v2.begin() + 1, arr, arr + 3);
-    ft_v2.insert(ft_v2.begin() + 1,arr, arr + 3); 
+    std_time = std_time_calculator();
+
+    clock_gettime(CLOCK_MONOTONIC, &ft_start);
+    ft_v2.insert(ft_v2.begin() + 1,arr, arr + 3);
+    ft_time = ft_time_calculator();
+    
     out << printVectorAttributes(std_v2,ft_v2, "After insert(begin, arr, arr + 3) ", 0);
     out << std::endl << std::endl;
-    std::cout << NORMAL" Test insert(it, arr, arr + n)  \t\t\t\t\t\t\t"<< vector_is_equal(std_v2 , ft_v2) << std::endl;
+    std::cout << NORMAL" Test insert(it, arr, arr + n)  \t\t\t\t\t\t\t"<< vector_is_equal(std_v2 , ft_v2)
+              <<"\t\t std_time  = " << std_time  << "\t\t ft_time = " << ft_time << " \t" << time_is_ok(ft_time, std_time)
+              << std::endl;
     out.close();
 
 }
 
 void test_erase()
-{   /* log */
+{  
+     long double              std_time, ft_time;
+     /* log */
     std::ofstream        out;
     std::string const   file = "./Log_vector/log_test_erase";
 
@@ -708,25 +837,42 @@ void test_erase()
     out << printVectorAttributes(std_v,ft_v, "Test erase(it)  vector ", 0);
 
     /*test erase one positin */
+    clock_gettime(CLOCK_MONOTONIC, &std_start);
     std_v.erase(std_v.begin()+ 2);
+    std_time = std_time_calculator();
+
+    clock_gettime(CLOCK_MONOTONIC, &ft_start);
     ft_v.erase(ft_v.begin() + 2);
+    ft_time = ft_time_calculator();
+
     out << printVectorAttributes(std_v,ft_v, "After erase(begin + 2) ", 0);
     out << std::endl << std::endl;
     std::cout << "*****************************Test erase()***********************************************." << std::endl;
-    std::cout << NORMAL" Test erase(itr position)  \t\t\t\t\t\t\t\t"<< vector_is_equal(std_v , ft_v) << std::endl;
+    std::cout << NORMAL" Test erase(itr position)  \t\t\t\t\t\t\t\t"<< vector_is_equal(std_v , ft_v)
+            <<"\t\t std_time  = " << std_time  << "\t\t ft_time = " << ft_time << " \t" << time_is_ok(ft_time, std_time)
+              << std::endl;
     
-    /*test erase one positin */
+    /*test erase  of range[first,last) */
     
-    std_v.erase(std_v.begin()+ 2);
-    ft_v.erase(ft_v.begin() + 2);
+    clock_gettime(CLOCK_MONOTONIC, &std_start);
+    std_v.erase(std_v.begin()+ 2, std_v.begin() + 5);
+    std_time = std_time_calculator();
+
+    clock_gettime(CLOCK_MONOTONIC, &ft_start);
+    ft_v.erase(ft_v.begin() + 2, ft_v.begin() + 5);
+    ft_time = ft_time_calculator();
+
     out << printVectorAttributes(std_v,ft_v, "After erase(begin + 2 , begin + 5) ", 0);
-    std::cout << NORMAL" Test erase of range  \t\t\t\t\t\t\t\t\t"<< vector_is_equal(std_v , ft_v) << std::endl;
+    std::cout << NORMAL" Test erase of range[first,last)  \t\t\t\t\t\t\t"<< vector_is_equal(std_v , ft_v)
+            <<"\t\t std_time  = " << std_time  << "\t\t ft_time = " << ft_time << " \t" << time_is_ok(ft_time, std_time)
+              << std::endl;
     out.close();
 
 }
 
 void    test_swap()
 {
+    long double              std_time, ft_time;
     /* log */
     std::ofstream        out;
     std::string const   file = "./Log_vector/log_test_swap";
@@ -748,18 +894,28 @@ void    test_swap()
     out << std::endl << std::endl;
 
     /*swap(x)*/
+    clock_gettime(CLOCK_MONOTONIC, &std_start);
     std_v1.swap(std_v2);
+    std_time = std_time_calculator();
+
+    clock_gettime(CLOCK_MONOTONIC, &ft_start);
     ft_v1.swap(ft_v2);
+    ft_time = ft_time_calculator();
+
     out << printVectorAttributes(std_v1,ft_v1, "vectors_one after swap(vector_two) ", 0);
 
     std::cout << "*****************************Test swap(x)**********************************************." << std::endl;
-    std::cout << NORMAL" Test swap(x)  \t\t\t\t\t\t\t\t\t\t"<< vector_is_equal(std_v1 , ft_v1) << std::endl;
+    std::cout << NORMAL" Test swap(x)  \t\t\t\t\t\t\t\t\t\t"<< vector_is_equal(std_v1 , ft_v1)
+                <<"\t\t std_time  = " << std_time  << "\t\t ft_time = " << ft_time << " \t" << time_is_ok(ft_time, std_time)
+                << std::endl;
 
     out.close();
 }
 
 void    test_clear()
 {
+
+    long double              std_time, ft_time;
     /* log */
     std::ofstream        out;
     std::string const   file = "./Log_vector/log_test_clear";
@@ -775,16 +931,35 @@ void    test_clear()
     std_v1.assign(arr1, arr1 + 7);
     ft_v1.assign(arr1, arr1 + 7);
     out << printVectorAttributes(std_v1,ft_v1, "vectors origin ", 0);
+    
+    //clear() for vector non empty
+    clock_gettime(CLOCK_MONOTONIC, &std_start);
     std_v1.clear();
+    std_time = std_time_calculator();
+
+    clock_gettime(CLOCK_MONOTONIC, &ft_start);
     ft_v1.clear();
+    ft_time = ft_time_calculator();
+
     out << printVectorAttributes(std_v1,ft_v1, "vectors,clear() ", 0);
     out << std::endl << std::endl;
 
     std::cout << "*****************************Test clear()**********************************************." << std::endl;
-    std::cout << NORMAL" Test clear()  \t\t\t\t\t\t\t\t\t\t"<< vector_is_equal(std_v1 , ft_v1) << std::endl;
+    std::cout << NORMAL" Test clear()  \t\t\t\t\t\t\t\t\t\t"<< vector_is_equal(std_v1 , ft_v1)
+                <<"\t\t std_time  = " << std_time  << "\t\t ft_time = " << ft_time << " \t" << time_is_ok(ft_time, std_time)
+                << std::endl;
+    //clear() for empty vector 
+    clock_gettime(CLOCK_MONOTONIC, &std_start);
     std_v2.clear();
+    std_time = std_time_calculator();
+
+    clock_gettime(CLOCK_MONOTONIC, &ft_start);
     ft_v2.clear();
-    std::cout << NORMAL" Test clear() for empty vector \t\t\t\t\t\t\t\t"<< vector_is_equal(std_v1 , ft_v1) << std::endl;
+    ft_time = ft_time_calculator();
+
+    std::cout << NORMAL" Test clear() for empty vector \t\t\t\t\t\t\t\t"<< vector_is_equal(std_v1 , ft_v1)
+                <<"\t\t std_time  = " << std_time  << "\t\t ft_time = " << ft_time << " \t" << time_is_ok(ft_time, std_time)
+                << std::endl;
 
    
     out.close();
@@ -949,6 +1124,7 @@ void   test_relational_operators()
 
 void    test_swap_nonmember()
 {
+     long double              std_time, ft_time;
     /* log */
     std::ofstream        out;
 
@@ -969,15 +1145,23 @@ void    test_swap_nonmember()
     out << printVectorAttributes(std_v1,ft_v1, "vectors_one ", 1);
     out << printVectorAttributes(std_v2,ft_v2, "vectors_two ", 1);
    
-
+    clock_gettime(CLOCK_MONOTONIC, &std_start);
     std::swap(std_v1, std_v2);
+    std_time = std_time_calculator();
+
+    
+    clock_gettime(CLOCK_MONOTONIC, &ft_start);
     ft::swap(ft_v1, ft_v2);
+    ft_time = std_time_calculator();
+
     out <<GREEN" ================================ fater swap(v1, v2)==================="<<NORMAL"."   << std::endl << std::endl;
     out << printVectorAttributes(std_v1,ft_v1, "vectors_one ", 1);
     out << printVectorAttributes(std_v2,ft_v2, "vectors_two ", 1);
 
     std::cout << "*****************************Test swap(v1, v2)**********************************************." << std::endl;
-    std::cout << NORMAL" Test swap(v1, v2)  \t\t\t\t\t\t\t\t\t"<< vector_is_equal(std_v1 , ft_v1) << vector_is_equal(std_v2 , ft_v2)  << std::endl;
+    std::cout << NORMAL" Test swap(v1, v2)  \t\t\t\t\t\t\t\t\t"<< vector_is_equal(std_v1 , ft_v1) << vector_is_equal(std_v2 , ft_v2)
+            <<"\t\t std_time  = " << std_time  << "\t\t ft_time = " << ft_time << " \t" << time_is_ok(ft_time, std_time)
+                << std::endl;
     
     
 
