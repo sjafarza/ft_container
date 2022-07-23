@@ -13,6 +13,45 @@
 # define RED    "\033[1;31m"
 # define GREEN  "\033[032m"
 
+/* calule time */
+struct timespec std_start;
+struct timespec ft_start;
+
+double   std_time_calculator(void)
+{
+	struct timespec end;
+	double time_taken;
+    
+	clock_gettime(CLOCK_MONOTONIC, &end);
+	time_taken = (end.tv_sec - std_start.tv_sec) * 1e9;
+    time_taken = (time_taken + (end.tv_nsec - std_start.tv_nsec)) * 1e-9;
+	//std::cout << "<<< " << std::fixed << time_taken << std::endl;
+	clock_gettime(CLOCK_MONOTONIC, &std_start);
+    return(time_taken);
+}
+
+double    ft_time_calculator(void)
+{
+	struct timespec end;
+	double time_taken;
+    
+	clock_gettime(CLOCK_MONOTONIC, &end);
+	time_taken = (end.tv_sec - ft_start.tv_sec) * 1e9;
+    time_taken = (time_taken + (end.tv_nsec - ft_start.tv_nsec)) * 1e-9;
+	//std::cout << "<<< " << std::fixed << time_taken << std::endl;
+	clock_gettime(CLOCK_MONOTONIC, &ft_start);
+    return(time_taken);
+}
+
+std::string    time_is_ok ( long double ft_t, long double std_t)
+{
+    if(ft_t < (std_t * 20))
+        return("ok");
+    else
+        return("ko");    
+}
+
+
 template <class T>
 std::string vector_is_equal(const std::vector<T> & std_vector, const ft::vector<T> & ft_vector)
 {
@@ -98,9 +137,9 @@ std::string printVectorAttributes(std::vector<T>& std_vector,ft::vector<T>& ft_v
           << std::endl << std::endl;
         
         if (idx == 1)
-            fs << "begin() = " << *(std_vector.begin() - 1) << "\t" << "end() = " <<*(std_vector.end() - 1)<< std::endl<< std::endl;
+            fs << "*begin() = " << *(std_vector.begin() /*- 1*/) << "\t\t" << "*end() = " <<*(std_vector.end() - 1)<< std::endl<< std::endl;
         if (idx == 2)
-            fs << "rbegin() = " << *(std_vector.rbegin()) << "\t" << "rend() = " <<*(std_vector.rend() - 1)<< std::endl<< std::endl;
+            fs << "*rbegin() = " << *(std_vector.rbegin()) << "\t\t" << "*rend() = " <<*(std_vector.rend() - 1)<< std::endl<< std::endl;
         
 
 
@@ -110,19 +149,20 @@ std::string printVectorAttributes(std::vector<T>& std_vector,ft::vector<T>& ft_v
         << "Size = " << ft_vector.size() << "\t" << "Capacity = " << ft_vector.capacity() << "\t" << "Max_size = " << ft_vector.max_size()
         << std::endl << std::endl;
         if (idx == 1)
-            fs  << "begin() = " << *(ft_vector.begin()) << "\t" << "end() = " << *(ft_vector.end() - 1) << std::endl << std::endl;
+            fs  << "*begin() = " << *(ft_vector.begin()) << "\t\t" << "*end() = " << *(ft_vector.end() - 1) << std::endl << std::endl;
         if (idx == 2)
-            fs << "rbegin() = " << *(std_vector.rbegin()) << "\t" << "rend() = " <<*(std_vector.rend() - 1)<< std::endl<< std::endl;
+            fs << "*rbegin() = " << *(std_vector.rbegin()) << "\t\t" << "*rend() = " <<*(std_vector.rend() - 1)<< std::endl<< std::endl;
 
         fs << "*******************************************************************\n\n\n\n";
     return (fs.str());    
 
 }
 
-void    print_vector();
+//void    print_vector();
 void    test_constructor()
 {
     std::ofstream        out;
+    long double              std_time, ft_time;
     std::string const   file = "./Log_vector/log_test_constructor";
     if (mkdir("Log_vector", 0777) == -1)
         std::cerr << "Error : faild to creat directory Log_vector" << std::endl;
@@ -131,76 +171,145 @@ void    test_constructor()
         std::cerr << "Error : faild to open file" << std::endl;
     
     /* Detault constructor */
+    clock_gettime(CLOCK_MONOTONIC, &std_start);
     std::vector<int>     std_v1;
+    std_time = std_time_calculator();
+
+    clock_gettime(CLOCK_MONOTONIC, &ft_start);
     ft::vector<int>      ft_v1;
+    ft_time = ft_time_calculator();
+    
     out << printVectorAttributes(std_v1,ft_v1, "Test default constructor", 0);
 
     std::cout << "*****************************Test constructor***********************************************." << std::endl;
-    std::cout << " test default constructor \t\t\t\t\t\t\t\t"<< vector_is_equal(std_v1 , ft_v1) << std::endl;
+    std::cout << " test default constructor \t\t\t\t\t\t\t\t"<< vector_is_equal(std_v1 , ft_v1) 
+             <<"\t\t std_time  = " << std_time  << "\t\t ft_time = " << ft_time << " \t" << time_is_ok(ft_time, std_time) << std::endl;
 
     /* Detault pointer constructor */
+    clock_gettime(CLOCK_MONOTONIC, &std_start);
     std::vector<int>*    std_pointer_default_v =  new std::vector<int>;
+    std_time = std_time_calculator();
+
+    clock_gettime(CLOCK_MONOTONIC, &ft_start);
     ft::vector<int>*    ft_pointer_default_v =  new ft::vector<int>;
+    ft_time = ft_time_calculator();
+
     out << printVectorAttributes( *std_pointer_default_v,*ft_pointer_default_v, "Test default pointer constructor", 0);
-    std::cout << NORMAL " test default pointer constructor \t\t\t\t\t\t\t"<< vector_is_equal(*std_pointer_default_v, *ft_pointer_default_v) << std::endl;
+    std::cout << NORMAL " test default pointer constructor \t\t\t\t\t\t\t"<< vector_is_equal(*std_pointer_default_v, *ft_pointer_default_v) 
+            <<"\t\t std_time  = " << std_time  << "\t\t ft_time = " << ft_time << "\t" << time_is_ok(ft_time, std_time) << std::endl;
 
     /* Fill constructor */
+    clock_gettime(CLOCK_MONOTONIC, &std_start);
     std::vector<int>    std_v2(5);
+    std_time = std_time_calculator();
+
+    clock_gettime(CLOCK_MONOTONIC, &ft_start);
     ft::vector<int>     ft_v2(5);
+    ft_time = ft_time_calculator();
+
     out << printVectorAttributes(std_v2,ft_v2, "Test fill constructor", 0);
+    std::cout << NORMAL " test fill constructor \t\t\t\t\t\t\t\t\t"<< vector_is_equal(std_v2 , ft_v2) 
+              <<"\t\t std_time  = " << std_time  << "\t\t ft_time = " << ft_time << " \t" << time_is_ok(ft_time, std_time) << std::endl;
 
     /*Fill constructor size*/
+    clock_gettime(CLOCK_MONOTONIC, &std_start);
     std::vector<int>    std_v3(5, 100);
+    std_time = std_time_calculator();
+
+    clock_gettime(CLOCK_MONOTONIC, &ft_start);
     ft::vector<int>     ft_v3(5, 100);
+    ft_time = ft_time_calculator();
+
     out << printVectorAttributes(std_v3,ft_v3, "Test fill constructor size", 0);
-    std::cout << NORMAL " test fill constructor  size\t\t\t\t\t\t\t\t"<< vector_is_equal(std_v3 , ft_v3) << std::endl;
+    std::cout << NORMAL " test fill constructor  size\t\t\t\t\t\t\t\t"<< vector_is_equal(std_v3 , ft_v3) 
+              <<"\t\t std_time  = " << std_time  << "\t\t ft_time = " << ft_time << " \t" << time_is_ok(ft_time, std_time) << std::endl;
 
     /*Range constructor */
+    clock_gettime(CLOCK_MONOTONIC, &std_start);
     std::vector<int>    s_test(5, 7);
-    ft::vector<int>     ft_test(5, 7);
     std::vector<int>    std_v4(s_test.begin() + 1, s_test.end() - 2);
-    ft::vector<int>     ft_v4(ft_test.begin() + 1, ft_test.end() - 2);
-    out << printVectorAttributes(std_v4,ft_v4, "Test range of another vector constructor", 0);
-    std::cout << NORMAL " test range of another vector constructor \t\t\t\t\t\t"<< vector_is_equal(std_v4 , ft_v4) << std::endl;
-    
-    int range_array[] = { 15, 65397429, 1299, 965, 5 , 88, 9};
-    std::vector<int>::iterator std_itr(&(range_array[1]));
-    ft::vector<int>::iterator ft_itr(&(range_array[1]));
+    std_time = std_time_calculator();
 
+    clock_gettime(CLOCK_MONOTONIC, &ft_start);
+    ft::vector<int>     ft_test(5, 7);
+    ft::vector<int>     ft_v4(ft_test.begin() + 1, ft_test.end() - 2);
+    ft_time = ft_time_calculator();
+
+    
+    out << printVectorAttributes(std_v4,ft_v4, "Test range of another vector constructor", 0);
+    std::cout << NORMAL " test range of another vector constructor \t\t\t\t\t\t"<< vector_is_equal(std_v4 , ft_v4) 
+            <<"\t\t std_time  = " << std_time  << "\t\t ft_time = " << ft_time << " \t" << time_is_ok(ft_time, std_time) << std::endl;
+    
+
+
+    int range_array[] = { 15, 65397429, 1299, 965, 5 , 88, 9};
+    clock_gettime(CLOCK_MONOTONIC, &std_start);
+    std::vector<int>::iterator std_itr(&(range_array[1]));
     std::vector<int>    std_arr_v4(std_itr , std_itr + 3);
+    std_time = std_time_calculator();
+
+    clock_gettime(CLOCK_MONOTONIC, &ft_start);
+    ft::vector<int>::iterator ft_itr(&(range_array[1]));
     ft::vector<int>     ft_arr_v4(ft_itr , ft_itr + 3);
+    ft_time = ft_time_calculator();
+
+    
     out << printVectorAttributes(std_arr_v4,ft_arr_v4, "Test range of array constructor", 0);
-    std::cout << NORMAL " test range of array constructor \t\t\t\t\t\t\t"<< vector_is_equal(std_arr_v4 , ft_arr_v4) << std::endl;
+    std::cout << NORMAL " test range of array constructor \t\t\t\t\t\t\t"<< vector_is_equal(std_arr_v4 , ft_arr_v4) 
+            <<"\t\t std_time  = " << std_time  << "\t\t ft_time = " << ft_time << " \t" << time_is_ok(ft_time, std_time) << std::endl;
 
     /*Copy constructor */
+    clock_gettime(CLOCK_MONOTONIC, &std_start);
     std::vector<int>    std_v5(s_test);
+    std_time = std_time_calculator();
+
+    clock_gettime(CLOCK_MONOTONIC, &ft_start);
     ft::vector<int>     ft_v5(ft_test);
+    ft_time = ft_time_calculator();
+
      out << printVectorAttributes(std_v5,ft_v5, "Test copy constructor", 0);
-    std::cout << NORMAL " test copy  constructor \t\t\t\t\t\t\t\t"<< vector_is_equal(std_v5 , ft_v5) << std::endl;
+    std::cout << NORMAL " test copy  constructor \t\t\t\t\t\t\t\t"<< vector_is_equal(std_v5 , ft_v5) 
+            <<"\t\t std_time  = " << std_time  << "\t\t ft_time = " << ft_time << " \t" << time_is_ok(ft_time, std_time) << std::endl;
 
     delete  ft_pointer_default_v;
     delete  std_pointer_default_v;
     out.close();
+   
 }
 
 void    test_operator_assign(void)
 {
+    long double              std_time, ft_time;
     std::ofstream        out;
     std::string const   file = "./Log_vector/log_test_operator_assign";
     out.open(file.c_str(), std::fstream::trunc | std::ostream::out);
     if(!out.is_open())
         std::cerr << "Error : faild to open file" << std::endl;
 
+        
+    
+    clock_gettime(CLOCK_MONOTONIC, &std_start);
     std::vector<int>    std_ref(5, 731);
-    ft::vector<int>     ft_ref(5, 731); 
     std::vector<int>     std_v = std_ref;
+    std_time = std_time_calculator();
+
+    
+    clock_gettime(CLOCK_MONOTONIC, &ft_start);
+    ft::vector<int>     ft_ref(5, 731);
     ft::vector<int>      ft_v = ft_ref;
+    ft_time = ft_time_calculator();
+
+
     out << printVectorAttributes(std_v,ft_v, "Test operatot assign", 0);
-    std::cout << std::endl << NORMAL " test operator assign \t\t\t\t\t\t\t\t\t"<< vector_is_equal(std_v , ft_v) << std::endl<< std::endl;
+    std::cout << std::endl << NORMAL " test operator assign \t\t\t\t\t\t\t\t\t"<< vector_is_equal(std_v , ft_v) 
+                <<"\t\t std_time  = " << std_time  << "\t\t ft_time = " << ft_time << " \t" << time_is_ok(ft_time, std_time) << std::endl<< std::endl;
+    out.close();
 }    
 
 void    test_begin_end_rbegin_rend()
 {
+    
+
     std::ofstream        out;
     std::string const   file = "./Log_vector/log_test_begin_end";
     out.open(file.c_str(), std::fstream::trunc | std::ostream::out);
@@ -236,7 +345,9 @@ void    test_begin_end_rbegin_rend()
     /* Reverse const Iterator   begin() end ()*/
         out << printVectorAttributes(std_v,ft_v, "Test Const reverse Iterator rbegin() rend ()", 1);
         std::cout << NORMAL " test Const reverse Iterator, rbegin ,rend \t\t\t\t\t\t"<< vector_is_equal(std_v , ft_v) << std::endl;
+
     }
+    out.close();
 }
 
 void    test_size(void)
@@ -266,6 +377,7 @@ void    test_size(void)
     ft::vector<int>      ft_v3(100000);
     //out << printVectorAttributes(std_v3,ft_v3, "Test big size", 0);
     std::cout <<NORMAL " test for big size \t\t\t\t\t\t\t\t\t"<< vector_is_equal(std_v3 , ft_v3) << std::endl;
+    out.close();
 }
 
 void    test_resize(void)
@@ -288,6 +400,7 @@ void    test_resize(void)
     out << printVectorAttributes(std_v1,ft_v1, "After resize to 12 size", 0);
     
     std::cout <<NORMAL " test for resize \t\t\t\t\t\t\t\t\t"<< vector_is_equal(std_v1 , ft_v1) << std::endl;
+    out.close();
 }
 
 void    test_empty(void)
@@ -323,7 +436,8 @@ void    test_empty(void)
         if(std_v3.empty() ==ft_v3.empty())
             std::cout <<NORMAL " test for empty() for Fill value(s, v)* \t\t\t\t\t\t"<< GREEN"✔" << std::endl;
         else
-            std::cout <<NORMAL " test for empty() for  empty vector* \t\t\t\t\t\t\t\t"<< RED"✘"<< std::endl;       
+            std::cout <<NORMAL " test for empty() for  empty vector* \t\t\t\t\t\t\t\t"<< RED"✘"<< std::endl;
+               
 }
 
 void    test_reserve(void)
@@ -347,6 +461,8 @@ void    test_reserve(void)
         std::cout <<NORMAL " test for reserve* \t\t\t\t\t\t\t\t\t"<< GREEN"✔" << std::endl;
     else
         std::cout <<NORMAL " test for reserve* \t\t\t\t\t\t\t\t\t\t\t"<< RED"✘"<< std::endl;
+
+        
 }
 
 
@@ -428,7 +544,8 @@ void    test_element_access(void)
        std::cout <<NORMAL " test for back() \t\t\t\t\t\t\t\t\t\t"<< RED"✘"<< std::endl;
        return ;
     }
-    std::cout <<NORMAL " test for front() back() \t\t\t\t\t\t\t\t"<< GREEN"✔" << std::endl;      
+    std::cout <<NORMAL " test for front() back() \t\t\t\t\t\t\t\t"<< GREEN"✔" << std::endl; 
+     out.close();    
  }
 
  void   	test_assign()
@@ -461,6 +578,7 @@ void    test_element_access(void)
     ft_v3.assign(arr, arr + 3);
     out << printVectorAttributes(std_v3,ft_v3, "Test assign(it_first_arr,  it_last_arr) ", 0);
     std::cout << NORMAL" Test assign(it_first_arr,  it_last_arr) \t\t\t\t\t\t"<< vector_is_equal(std_v2 , ft_v2) << std::endl;
+    out.close();
  }
 
 void    test_push_back()
@@ -494,7 +612,8 @@ void    test_push_back()
     std_v3.push_back(42); ft_v3.push_back(42);
     out << printVectorAttributes(std_v3,ft_v3, "after push_back(42) ", 0);
     out << std::endl << std::endl;
-    std::cout << NORMAL" Test push_back for vector fill size  and value\t\t\t\t\t\t"<< vector_is_equal(std_v1 , ft_v1) << std::endl;  
+    std::cout << NORMAL" Test push_back for vector fill size  and value\t\t\t\t\t\t"<< vector_is_equal(std_v1 , ft_v1) << std::endl; 
+     out.close();
 
     
 }
@@ -529,6 +648,7 @@ void    test_pop_back()
     out << printVectorAttributes(std_v1,ft_v1, "After pop_back() ", 0);
     out << std::endl << std::endl;
     std::cout << NORMAL" Test pop_back for vector(n, v)  \t\t\t\t\t\t\t"<< vector_is_equal(std_v1 , ft_v1) << std::endl;
+    out.close();
 }
 
 
@@ -551,14 +671,14 @@ void    test_insert()
     out << printVectorAttributes(std_v,ft_v, "After insert(begin, 22) ", 0);
     out << std::endl << std::endl;
      std::cout << "*****************************Test insert()***********************************************." << std::endl;
-    std::cout << NORMAL" Test insert(it, val)  \t\t\t\t\t\t\t"<< vector_is_equal(std_v , ft_v) << std::endl;
+    std::cout << NORMAL" Test insert(it, val)  \t\t\t\t\t\t\t\t\t"<< vector_is_equal(std_v , ft_v) << std::endl;
 
     out << printVectorAttributes(std_v1,ft_v1, "Test insert(it, size, value) ", 0);
     std_v1.insert(std_v1.begin() + 2  , 15, 300);
     ft_v1.insert(ft_v1.begin() + 2 , 15, 300);
     out << printVectorAttributes(std_v1,ft_v1, "After insert(begin+1, 2, 300) ", 0);
     out << std::endl << std::endl;
-    std::cout << NORMAL" Test insert(it, size, val)  \t\t\t\t\t\t\t"<< vector_is_equal(std_v1 , ft_v1) << std::endl;
+    std::cout << NORMAL" Test insert(it, size, val)  \t\t\t\t\t\t\t\t"<< vector_is_equal(std_v1 , ft_v1) << std::endl;
     
     out << printVectorAttributes(std_v2,ft_v2, "Test insert(it, it_first, it_end) ", 0);
     out << "arr[] = {12, -4567654, 0, 10, 58}" << std::endl;
@@ -567,12 +687,12 @@ void    test_insert()
     out << printVectorAttributes(std_v2,ft_v2, "After insert(begin, arr, arr + 3) ", 0);
     out << std::endl << std::endl;
     std::cout << NORMAL" Test insert(it, arr, arr + n)  \t\t\t\t\t\t\t"<< vector_is_equal(std_v2 , ft_v2) << std::endl;
-    
+    out.close();
 
 }
 
 void test_erase()
-{
+{   /* log */
     std::ofstream        out;
     std::string const   file = "./Log_vector/log_test_erase";
 
@@ -580,25 +700,288 @@ void test_erase()
     if(!out.is_open())
         std::cerr << "Error : faild to open file" << std::endl;
 
-    int arr[] = {12, -4567654, 0, 10, 58};
-    std::vector<int>    std_v, std_v1(5, 99),  std_v2(1, 66);
-    ft::vector<int>     ft_v , ft_v1(5, 99), ft_v2(1, 66);
-    std_v.assign(arr, arr + 3);
-    ft_v.assign(arr, arr + 3);
+    int arr[] = {12, -4567654, 0, 10, 58, -5, 77, 52, 66, 45};
+    std::vector<int>    std_v;
+    ft::vector<int>     ft_v ;
+    std_v.assign(arr, arr + 7);
+    ft_v.assign(arr, arr + 7);
     out << printVectorAttributes(std_v,ft_v, "Test erase(it)  vector ", 0);
 
-    std::cout << "wher ...\n";
+    /*test erase one positin */
     std_v.erase(std_v.begin()+ 2);
-    std::cout <<" etap 1\n";
     ft_v.erase(ft_v.begin() + 2);
-    out << printVectorAttributes(std_v,ft_v, "After erase(begin + 1) ", 0);
+    out << printVectorAttributes(std_v,ft_v, "After erase(begin + 2) ", 0);
     out << std::endl << std::endl;
-     std::cout << "*****************************Test erase()***********************************************." << std::endl;
-    std::cout << NORMAL" Test erase(it)  \t\t\t\t\t\t\t"<< vector_is_equal(std_v , ft_v) << std::endl;
-    std::cout << "fin erase\n";
-    //out << printVectorAttributes(std_v1,ft_v1, "Test insert(it, size, value) ", 0);
+    std::cout << "*****************************Test erase()***********************************************." << std::endl;
+    std::cout << NORMAL" Test erase(itr position)  \t\t\t\t\t\t\t\t"<< vector_is_equal(std_v , ft_v) << std::endl;
+    
+    /*test erase one positin */
+    
+    std_v.erase(std_v.begin()+ 2);
+    ft_v.erase(ft_v.begin() + 2);
+    out << printVectorAttributes(std_v,ft_v, "After erase(begin + 2 , begin + 5) ", 0);
+    std::cout << NORMAL" Test erase of range  \t\t\t\t\t\t\t\t\t"<< vector_is_equal(std_v , ft_v) << std::endl;
+    out.close();
+
+}
+
+void    test_swap()
+{
+    /* log */
+    std::ofstream        out;
+    std::string const   file = "./Log_vector/log_test_swap";
+
+    out.open(file.c_str(), std::fstream::trunc | std::ostream::out);
+    if(!out.is_open())
+        std::cerr << "Error : faild to open file" << std::endl;
+    /* product 2 vec */
+    int arr1[] = {1458, -98, 745, 62, 9, 52, 0, 22};
+    int arr2[] = {12, -4567654, 0, 10, 58, -5, 77, 52, 66, 45};
+    std::vector<int>    std_v1, std_v2;
+    ft::vector<int>     ft_v1 , ft_v2;
+    std_v1.assign(arr1, arr1 + 7);
+    ft_v1.assign(arr1, arr1 + 7);
+    out << printVectorAttributes(std_v1,ft_v1, "vectors_one ", 0);
+    std_v2.assign(arr2, arr2 + 4);
+    ft_v2.assign(arr2, arr2 + 4);
+    out << printVectorAttributes(std_v2,ft_v2, "vector_two", 0);
+    out << std::endl << std::endl;
+
+    /*swap(x)*/
+    std_v1.swap(std_v2);
+    ft_v1.swap(ft_v2);
+    out << printVectorAttributes(std_v1,ft_v1, "vectors_one after swap(vector_two) ", 0);
+
+    std::cout << "*****************************Test swap(x)**********************************************." << std::endl;
+    std::cout << NORMAL" Test swap(x)  \t\t\t\t\t\t\t\t\t\t"<< vector_is_equal(std_v1 , ft_v1) << std::endl;
+
+    out.close();
+}
+
+void    test_clear()
+{
+    /* log */
+    std::ofstream        out;
+    std::string const   file = "./Log_vector/log_test_clear";
+
+    out.open(file.c_str(), std::fstream::trunc | std::ostream::out);
+    if(!out.is_open())
+        std::cerr << "Error : faild to open file" << std::endl;
+
+    /* product  vectors */
+    int arr1[] = {1458, -98, 745, 62, 9, 52, 0, 22};
+    std::vector<int>    std_v1, std_v2;
+    ft::vector<int>     ft_v1 , ft_v2;
+    std_v1.assign(arr1, arr1 + 7);
+    ft_v1.assign(arr1, arr1 + 7);
+    out << printVectorAttributes(std_v1,ft_v1, "vectors origin ", 0);
+    std_v1.clear();
+    ft_v1.clear();
+    out << printVectorAttributes(std_v1,ft_v1, "vectors,clear() ", 0);
+    out << std::endl << std::endl;
+
+    std::cout << "*****************************Test clear()**********************************************." << std::endl;
+    std::cout << NORMAL" Test clear()  \t\t\t\t\t\t\t\t\t\t"<< vector_is_equal(std_v1 , ft_v1) << std::endl;
+    std_v2.clear();
+    ft_v2.clear();
+    std::cout << NORMAL" Test clear() for empty vector \t\t\t\t\t\t\t\t"<< vector_is_equal(std_v1 , ft_v1) << std::endl;
+
+   
+    out.close();
+}
+
+void   test_relational_operators()
+{
+     /* log */
+    std::ofstream        out;
+    std::string const   file = "./Log_vector/log_test_operator";
+
+    out.open(file.c_str(), std::fstream::trunc | std::ostream::out);
+    if(!out.is_open())
+        std::cerr << "Error : faild to open file" << std::endl;
+    
+    /* product  vectors */
+    int arr1[] = {1458, -98, 745, 62, 9, 52, 0, 22};
+    std::vector<int>    std_v1, std_v2, std_v3(5, 22);
+    ft::vector<int>     ft_v1 , ft_v2 ,ft_v3(5, 22);
+    
+    std_v1.assign(arr1, arr1 + 7); std_v2.assign(arr1, arr1 + 7);
+    
+    ft_v1.assign(arr1, arr1 + 7); ft_v2.assign(arr1, arr1 + 7);
+    out << printVectorAttributes(std_v1,ft_v1, "vectors_one ", 1);
+    out << printVectorAttributes(std_v2,ft_v2, "vectors_two ", 1);
+    out << printVectorAttributes(std_v3,ft_v3, "vectors_two ", 1);
+    
+   
+    
+    /* operator == */
+    std::cout << "***************************** operator ==  **********************************************." << std::endl;
+    if (std_v1 == std_v2 && ft_v1 == ft_v2)
+         std::cout << NORMAL" Test operator == for 2 vectors identity \t\t\t\t\t\t"<< GREEN"✔" << std::endl;
+    else
+       std::cout << NORMAL" Test operator == for 2 vectors identity \t\t\t\t\t\t"<< RED"✘" << std::endl;
+
+    if (std_v1 != std_v3 && ft_v1 != ft_v3)
+         std::cout << NORMAL" Test operator == for 2 vectors differents \t\t\t\t\t\t"<< GREEN"✔" << std::endl;
+    else
+       std::cout << NORMAL" Test operator == for 2 vectors differents \t\t\t\t\t\t"<< RED"✘" << std::endl; 
+
+    out << GREEN"************  std_v1 == std_v2   return :  "<< ((std_v1 == std_v2 ) ? "True" : "False") << NORMAL" . "<<std::endl;
+    out << std::endl<< GREEN"************  ft_v1 == ft_v2     return :  "<< ((ft_v1 == ft_v2 ) ? "True" : "False") << NORMAL" . "<<std::endl<<std::endl<<std::endl;
+    //out << printVectorAttributes(std_v3,ft_v3, "vectors_two ", 1);
+    out << GREEN"************  std_v1 == std_v3   return :  "<< ((std_v1 == std_v3 ) ? "True" : "False") << NORMAL" . "<<std::endl;
+    out << std::endl<< GREEN"************  ft_v1 == ft_v3     return :  "<< ((ft_v1 == ft_v3 ) ? "True" : "False") << NORMAL" . "<<std::endl<<std::endl<<std::endl;   
+
+    /* operator != */
+    if (std_v1 != std_v3 && ft_v1 != ft_v3)
+         std::cout << NORMAL" Test operator != for 2 vectors differents \t\t\t\t\t\t"<< GREEN"✔" << std::endl;
+    else
+       std::cout << NORMAL" Test operator != for 2 vectors differents \t\t\t\t\t\t"<< RED"✘" << std::endl;
+
+    if (!(std_v1 != std_v2 && ft_v1 != ft_v2))
+         std::cout << NORMAL" Test operator != for 2 vectors identity \t\t\t\t\t\t"<< GREEN"✔" << std::endl;
+    else
+       std::cout << NORMAL" Test operator != for 2 vectors identity \t\t\t\t\t\t"<< RED"✘" << std::endl;
+    out << NORMAL"======================================================================"<<std::endl;
+    out << GREEN"************  std_v1 != std_v2   return :  "<< ((std_v1 != std_v2 ) ? "True" : "False") << NORMAL" . "<<std::endl;
+    out << std::endl<< GREEN"************  ft_v1 != ft_v2     return :  "<< ((ft_v1 != ft_v2 ) ? "True" : "False") << NORMAL" . "<<std::endl<<std::endl<<std::endl;
+    out << GREEN"************  std_v1 != std_v3   return :  "<< ((std_v1 != std_v3 ) ? "True" : "False") << NORMAL" . "<<std::endl;
+    out << std::endl<< GREEN"************  ft_v1 != ft_v3     return :  "<< ((ft_v1 != ft_v3 ) ? "True" : "False") << NORMAL" . "<<std::endl<<std::endl<<std::endl;              
+    
+    /* operator < */
+    if (std_v3 < std_v1 == ft_v3 < ft_v1)
+         std::cout << NORMAL" Test operator < for 2 vectors differents in smal<big \t\t\t\t\t"<< GREEN"✔" << std::endl;
+    else
+       std::cout << NORMAL" Test operator < for 2 vectors differents in smal<big \t\t\t\t\t"<< RED"✘" << std::endl;
+
+    if (std_v3 < std_v1 == ft_v3 < ft_v1)
+         std::cout << NORMAL" Test operator != for 2 vectors big<small \t\t\t\t\t\t"<< GREEN"✔" << std::endl;
+    else
+       std::cout << NORMAL" Test operator <  for 2 vectors big<small \t\t\t\t\t\t"<< RED"✘" << std::endl;
+    if ((std_v1 < std_v2) == (ft_v1 < ft_v2))
+         std::cout << NORMAL" Test operator < for 2 vectors identity \t\t\t\t\t\t"<< GREEN"✔" << std::endl;
+    else
+       std::cout << NORMAL" Test operator < for 2 vectors identity \t\t\t\t\t\t"<< RED"✘" << std::endl;   
+
+
+    out << NORMAL"======================================================================"<<std::endl;
+    out << GREEN"************  std_v3 < std_v1   return :  "<< ((std_v3 < std_v1 ) ? "True" : "False") << NORMAL" . "<<std::endl;
+    out << std::endl<< GREEN"************  ft_v3 < ft_v1     return :  "<< ((ft_v3 < ft_v1 ) ? "True" : "False") << NORMAL" . "<<std::endl<<std::endl<<std::endl;
+    out << GREEN"************  std_v1 < std_v3   return :  "<< ((std_v1 < std_v3 ) ? "True" : "False") << NORMAL" . "<<std::endl;
+    out << std::endl<< GREEN"************  ft_v1 < ft_v3     return :  "<< ((ft_v1 < ft_v3 ) ? "True" : "False") << NORMAL" . "<<std::endl<<std::endl<<std::endl;
+    out << GREEN"************  std_v1 < std_v2   return :  "<< ((std_v1 < std_v2 ) ? "True" : "False") << NORMAL" . "<<std::endl;
+    out << std::endl<< GREEN"************  ft_v1 < ft_v2     return :  "<< ((ft_v1 < ft_v2 ) ? "True" : "False") << NORMAL" . "<<std::endl<<std::endl<<std::endl;
+    
+    /* operator <= */
+    if (std_v3 <= std_v1 == ft_v3 <= ft_v1)
+         std::cout << NORMAL" Test operator < for 2 vectors differents in smal<=big \t\t\t\t\t"<< GREEN"✔" << std::endl;
+    else
+       std::cout << NORMAL" Test operator < for 2 vectors differents in smal<=big \t\t\t\t\t"<< RED"✘" << std::endl;
+
+    if (std_v3 <= std_v1 == ft_v3 <= ft_v1)
+         std::cout << NORMAL" Test operator != for 2 vectors big<=small \t\t\t\t\t\t"<< GREEN"✔" << std::endl;
+    else
+       std::cout << NORMAL" Test operator <  for 2 vectors big<=small \t\t\t\t\t\t"<< RED"✘" << std::endl;
+    if ((std_v1 <= std_v2) == (ft_v1 <= ft_v2))
+         std::cout << NORMAL" Test operator < for 2 vectors identity \t\t\t\t\t\t"<< GREEN"✔" << std::endl;
+    else
+       std::cout << NORMAL" Test operator < for 2 vectors identity \t\t\t\t\t\t"<< RED"✘" << std::endl;   
+
+
+    out << NORMAL"======================================================================"<<std::endl;
+    out << GREEN"************  std_v3 <= std_v1   return :  "<< ((std_v3 <= std_v1 ) ? "True" : "False") << NORMAL" . "<<std::endl;
+    out << std::endl<< GREEN"************  ft_v3 <= ft_v1     return :  "<< ((ft_v3 <= ft_v1 ) ? "True" : "False") << NORMAL" . "<<std::endl<<std::endl<<std::endl;
+    out << GREEN"************  std_v1 <= std_v3   return :  "<< ((std_v1 <= std_v3 ) ? "True" : "False") << NORMAL" . "<<std::endl;
+    out << std::endl<< GREEN"************  ft_v1 <= ft_v3     return :  "<< ((ft_v1 <= ft_v3 ) ? "True" : "False") << NORMAL" . "<<std::endl<<std::endl<<std::endl;
+    out << GREEN"************  std_v1 <= std_v2   return :  "<< ((std_v1 <= std_v2 ) ? "True" : "False") << NORMAL" . "<<std::endl;
+    out << std::endl<< GREEN"************  ft_v1 <= ft_v2     return :  "<< ((ft_v1 <= ft_v2 ) ? "True" : "False") << NORMAL" . "<<std::endl<<std::endl<<std::endl;
+    
+    /* operator > */
+    if (std_v3 > std_v1 == ft_v3 > ft_v1)
+         std::cout << NORMAL" Test operator > for 2 vectors differents in smal>big \t\t\t\t\t"<< GREEN"✔" << std::endl;
+    else
+       std::cout << NORMAL" Test operator > for 2 vectors differents in smal>big \t\t\t\t\t"<< RED"✘" << std::endl;
+
+    if (std_v3 > std_v1 == ft_v3 > ft_v1)
+         std::cout << NORMAL" Test operator > for 2 vectors big>small \t\t\t\t\t\t"<< GREEN"✔" << std::endl;
+    else
+       std::cout << NORMAL" Test operator >  for 2 vectors big>small \t\t\t\t\t\t"<< RED"✘" << std::endl;
+    if ((std_v1 > std_v2) == (ft_v1 > ft_v2))
+         std::cout << NORMAL" Test operator > for 2 vectors identity \t\t\t\t\t\t"<< GREEN"✔" << std::endl;
+    else
+       std::cout << NORMAL" Test operator > for 2 vectors identity \t\t\t\t\t\t"<< RED"✘" << std::endl;   
+
+
+    out << NORMAL"======================================================================"<<std::endl;
+    out << GREEN"************  std_v3 > std_v1   return :  "<< ((std_v3 > std_v1 ) ? "True" : "False") << NORMAL" . "<<std::endl;
+    out << std::endl<< GREEN"************  ft_v3 > ft_v1     return :  "<< ((ft_v3 > ft_v1 ) ? "True" : "False") << NORMAL" . "<<std::endl<<std::endl<<std::endl;
+    out << GREEN"************  std_v1 > std_v3   return :  "<< ((std_v1 > std_v3 ) ? "True" : "False") << NORMAL" . "<<std::endl;
+    out << std::endl<< GREEN"************  ft_v1 > ft_v3     return :  "<< ((ft_v1 > ft_v3 ) ? "True" : "False") << NORMAL" . "<<std::endl<<std::endl<<std::endl;
+    out << GREEN"************  std_v1 > std_v2   return :  "<< ((std_v1 > std_v2 ) ? "True" : "False") << NORMAL" . "<<std::endl;
+    out << std::endl<< GREEN"************  ft_v1 > ft_v2     return :  "<< ((ft_v1 > ft_v2 ) ? "True" : "False") << NORMAL" . "<<std::endl<<std::endl<<std::endl;
+    
+    /* operator >= */
+    if (std_v3 >= std_v1 == ft_v3 >= ft_v1)
+         std::cout << NORMAL" Test operator >= for 2 vectors differents in smal>=big \t\t\t\t"<< GREEN"✔" << std::endl;
+    else
+       std::cout << NORMAL" Test operator >=for 2 vectors differents in smal>=big \t\t\t\t\t"<< RED"✘" << std::endl;
+
+    if (std_v3 >= std_v1 == ft_v3 >= ft_v1)
+         std::cout << NORMAL" Test operator >= for 2 vectors big>=small \t\t\t\t\t\t"<< GREEN"✔" << std::endl;
+    else
+       std::cout << NORMAL" Test operator >= for 2 vectors big>=small \t\t\t\t\t\t"<< RED"✘" << std::endl;
+    if ((std_v1 >= std_v2) == (ft_v1 >= ft_v2))
+         std::cout << NORMAL" Test operator >= for 2 vectors identity \t\t\t\t\t\t"<< GREEN"✔" << std::endl;
+    else
+       std::cout << NORMAL" Test operator >= for 2 vectors identity \t\t\t\t\t\t"<< RED"✘" << std::endl;   
+
+
+    out << NORMAL"======================================================================"<<std::endl;
+    out << GREEN"************  std_v3 >= std_v1   return :  "<< ((std_v3 >= std_v1 ) ? "True" : "False") << NORMAL" . "<<std::endl;
+    out << std::endl<< GREEN"************  ft_v3 >= ft_v1     return :  "<< ((ft_v3 >= ft_v1 ) ? "True" : "False") << NORMAL" . "<<std::endl<<std::endl<<std::endl;
+    out << GREEN"************  std_v1 >= std_v3   return :  "<< ((std_v1 >= std_v3 ) ? "True" : "False") << NORMAL" . "<<std::endl;
+    out << std::endl<< GREEN"************  ft_v1 >= ft_v3     return :  "<< ((ft_v1 >= ft_v3 ) ? "True" : "False") << NORMAL" . "<<std::endl<<std::endl<<std::endl;
+    out << GREEN"************  std_v1 >= std_v2   return :  "<< ((std_v1 >=std_v2 ) ? "True" : "False") << NORMAL" . "<<std::endl;
+    out << std::endl<< GREEN"************  ft_v1 >= ft_v2     return :  "<< ((ft_v1 >= ft_v2 ) ? "True" : "False") << NORMAL" . "<<std::endl<<std::endl<<std::endl;
+
+    out.close();
+}
+
+void    test_swap_nonmember()
+{
+    /* log */
+    std::ofstream        out;
+
+    std::string const   file = "./Log_vector/log_test_swap_nonmember";
+
+    out.open(file.c_str(), std::fstream::trunc | std::ostream::out);
+    if(!out.is_open())
+        std::cerr << "Error : faild to open file" << std::endl;
+    
+    /* product  vectors */
+    int arr1[] = {1458, -98, 745, 62, 9, 52, 0, 22};
+    std::vector<int>    std_v2, std_v1(5, 22);
+    ft::vector<int>     ft_v2 ,ft_v1(5, 22);
+    
+    std_v2.assign(arr1, arr1 + 7); 
+    ft_v2.assign(arr1, arr1 + 7); 
+
+    out << printVectorAttributes(std_v1,ft_v1, "vectors_one ", 1);
+    out << printVectorAttributes(std_v2,ft_v2, "vectors_two ", 1);
+   
+
+    std::swap(std_v1, std_v2);
+    ft::swap(ft_v1, ft_v2);
+    out <<GREEN" ================================ fater swap(v1, v2)==================="<<NORMAL"."   << std::endl << std::endl;
+    out << printVectorAttributes(std_v1,ft_v1, "vectors_one ", 1);
+    out << printVectorAttributes(std_v2,ft_v2, "vectors_two ", 1);
+
+    std::cout << "*****************************Test swap(v1, v2)**********************************************." << std::endl;
+    std::cout << NORMAL" Test swap(v1, v2)  \t\t\t\t\t\t\t\t\t"<< vector_is_equal(std_v1 , ft_v1) << vector_is_equal(std_v2 , ft_v2)  << std::endl;
+    
     
 
+out.close();
 }
 
 void    test_vector(void)
@@ -612,18 +995,16 @@ void    test_vector(void)
     test_resize();
     test_empty();
     test_reserve();
-	test_element_access();
-	/*test_at();
-	test_front_back();*/
+	test_element_access();/*test_at();  test_front_back();*/
 	test_assign();
 	test_push_back();
 	test_pop_back();
 	test_insert();
 	test_erase();
-	/*test_swap();
+	test_swap();
 	test_clear();
-	test_get_allocator();
+	//test_get_allocator();
 	test_relational_operators();
-	test_swap_nonmember();*/
+	test_swap_nonmember();
 
 }

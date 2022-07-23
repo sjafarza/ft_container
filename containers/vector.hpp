@@ -61,10 +61,11 @@ namespace ft
                 _end += n; 
             }
 
-            void                _shift_left(iterator positon, size_type n)
+            void                _shift_left(/*iterator */ size_type position, size_type n)
             {
-                if(empty())
+                /*if(empty())
                     return ;
+                pointer     t_str = _start;    
                 size_type   k = &(*positon) - _start;
                 std::cout << "k in shift_left = " << k << "\n";
                 for(size_type i = 1 ; i <= k ; ++i)
@@ -72,7 +73,7 @@ namespace ft
                     _alloc.construct(&_start[k - i] + n , _start[k - i]);
                     _alloc.destroy(_start + k - i);
                 }
-                _start += n;
+                _start = t_str + n;*/
                 
                // _size += n;
                /* size_type   k = &(*position) - &(*begin());
@@ -80,7 +81,15 @@ namespace ft
                 {
                     _alloc.construct(&_start[i], _size[i + n]);
                     _alloc.destroy(&_start[i + n]);
-                } */         
+                } */ 
+
+                if (empty())
+				return;
+                for (size_type i = position; i < _size - n; i++)
+                {
+                    _alloc.construct(&_start[i], _start[i + n]);
+                    _alloc.destroy(&_start[i + n]);
+                }        
             }
 
 
@@ -96,15 +105,19 @@ namespace ft
 
 
         explicit vector (size_type n, const value_type& val = value_type(), const allocator_type& alloc = allocator_type()) : 
-                _alloc(alloc), _start(NULL),_end(NULL), _size(n), _capacity(n)
+                _alloc(alloc), _start(NULL),_end(NULL), _size(0), _capacity(0)
                 {
                     _start = _alloc.allocate(n);
                     _end = _start;
+                    _size = n;
+                    _capacity = n;
+                   
                     while (n--)
                     {
                         _alloc.construct(_end, val);
                         _end++;
                     }
+                    
                     _end = _start + _size;
                 }
 
@@ -157,6 +170,7 @@ namespace ft
                    return (*this);
                this->clear();
                this->insert(this->end(), rhs.begin(), rhs.end());
+               _capacity = rhs._capacity;
                return (*this);
            }
 
@@ -375,19 +389,26 @@ namespace ft
 
         iterator erase (iterator position)
         {
-            std::cout << "eee\n";
+            /*std::cout << "eee\n";
             size_type  i = &(*position) - _start;
             std::cout << "i = " << i << "\n";
            _alloc.destroy(&_start[i]);
            _shift_left(position, 1);
            _size--;
            //_start++;  it before change in _shift_left
-           return iterator(&_start[i]);
+           return iterator(&_start[i]);*/
+
+           size_type i = &*position - &*begin();
+
+			_alloc.destroy(&_start[i]);
+			_shift_left(i, 1);
+			_size--;
+			return iterator(&_start[i]);
         }
 
         iterator erase (iterator first, iterator last)
         {
-            size_type  i = &(*first) - _start;
+            /*size_type  i = &(*first) - _start;
             size_type   n = std::distance(first, last);
             iterator    it = first;
             while(it != last)
@@ -398,7 +419,16 @@ namespace ft
             _shif_left(first , n);
             _size -= n;
            // _end -= n;
-            return iterator(&_start[i]);
+            return iterator(&_start[i]);*/
+            size_type i = &*first - &*begin();
+			size_type j = &*last - &*begin();
+
+			for (size_type k = i; k < j; k++)
+				_alloc.destroy(&_start[k]);
+			_shift_left(i, j - i);
+			_size -= j - i;
+			return iterator(&_start[i]);
+            
         }
 
         void swap (vector& x)
@@ -441,17 +471,17 @@ namespace ft
     template <class T, class Alloc>
     bool operator == (const vector<T,Alloc> & lhs, const vector<T,Alloc> & rhs)
     {
-        if(lhs._size != rhs._size)
+        if(lhs.size() != rhs.size())
             return false;
-        retun(ft::equal(lhs.begin(), lhs.end(), rhs.begin()));    
+        return(ft::equal(lhs.begin(), lhs.end(), rhs.begin()));    
     }
 
     template <class T, class Alloc>
     bool operator != (const ft::vector<T,Alloc>& lhs, const ft::vector<T,Alloc>& rhs)
     {
-        if(lhs._size != rhs._size)
+        if(lhs.size()!= rhs.size())
             return true;
-        retun( !(lhs == rhs));    
+        return( !(lhs == rhs));    
     }
 
     template <class T, class Alloc>
@@ -482,8 +512,9 @@ namespace ft
     template <class T> 
     void swap (T& a, T& b)
     {
-      T c(a); a=b; b=c;  
+      T c(a); a=b; b=c;
     }
+      
 } // fin namespase ft
 
 #endif
