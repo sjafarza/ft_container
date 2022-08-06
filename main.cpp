@@ -9,13 +9,15 @@
 
 void test_vector(void);
 void test_stack(void);
+void test_map(void);
+
 
 int main (int ac, char** av)
 {
     if (ac != 2)
 	{
-		std::cerr << "Usage: ./test seed" << std::endl;
-		std::cerr << "Provide a seed please" << std::endl;
+		std::cerr << "Usage: ./test vector / stack / map" << std::endl;
+		std::cerr << "Provide name of test please" << std::endl;
 		
 		return 1;
 	}
@@ -30,10 +32,16 @@ int main (int ac, char** av)
         test_vector();
     }
 
-	if(str == "stack")
+	/*if(str == "stack")
     {
         std::cout << " start test stack" << std::endl;
         test_stack();
+    }*/
+
+	if(str == "map")
+    {
+        std::cout << " start test map" << std::endl;
+        test_map();
     }
 
     return 0;

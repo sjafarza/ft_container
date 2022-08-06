@@ -16,6 +16,7 @@
 # define GREEN  "\033[032m"
 
 /* calcule time ******************************************************************/
+/*
 struct timespec std_start;
 struct timespec ft_start;
 
@@ -50,11 +51,11 @@ std::string    time_is_ok ( long double ft_t, long double std_t)
     else
         return("ko");    
 }
-
+*/
 
 /* Generic functions for comparison ******************************************************************/
-template <class T, class Container = ft::vector<T> >
-std::string stack_is_equal(const std::stack<T, Container> & std_stack, const ft::stack<T, Container> & ft_stack)
+template <class T, class Container = ft::vector<T>, class container = std::vector<T> >
+std::string stack_is_equal( std::stack<T, container> & std_stack,  ft::stack<T, Container> & ft_stack)
 {
     while (1)
     {
@@ -108,19 +109,19 @@ std::string print_stack(const ft::stack<T, Container>& ft_stack)
     return (ss.str());
 }
 
-template <class T, class Container = ft::vector<T> >
-std::string printStackAttributes(std::stack<T, Container>& std_stack,ft::stack<T, Container>& ft_stack , std::string titre)
+template <class T, class Container = ft::vector<T>, class container = std::vector<T> >
+std::string printStackAttributes(std::stack<T, container>& std_stack,ft::stack<T, Container>& ft_stack , std::string titre)
 {
     std::ostringstream fs;
     fs  << YELLOW << titre << "**********************************************************************" NORMAL << std::endl 
         << "***" YELLOW"std::stack" NORMAL"*******************************************************" << std::endl
-        <<"Content = " << print_stack(std_stack) << std::endl;
+        <<"Content = " << "print_stack(std_stack)" << std::endl;
     fs << "Size = " << std_stack.size() <<std::endl<<std::endl;
 
     fs  <<  "***" YELLOW"ft::stack" NORMAL"*******************************************************\n"
-        <<"Content = " << print_stack(ft_stack) << std::endl; 
+        <<"Content = " << "print_stack(ft_stack)" << std::endl; 
         fs << "Size = " << ft_stack.size() <<std::endl<<std::endl; 
-
+    return (fs.str());
 }
 
 /* Test Stack ******************************************************************/
@@ -134,24 +135,26 @@ void    test_stack(void)
     out.open(file.c_str(), std::fstream::trunc | std::ostream::out);
     if(!out.is_open())
         std::cerr << "Error : faild to open file" << std::endl;
-   
+   std::cout << "in stack \n";
     /* Default Constructor */
     
     
 
-    clock_gettime(CLOCK_MONOTONIC, &std_start);
+   // clock_gettime(CLOCK_MONOTONIC, &std_start);
     std::stack<int, std::vector<int> >  std_default;
-    std_time = std_time_calculator();
+   // std::stack<int >  std_default;
+   // std_time = std_time_calculator();
 
-    clock_gettime(CLOCK_MONOTONIC, &ft_start);
-    ft::stack<int, ft::vector<int>> ft_default;
-    ft_time = ft_time_calculator();
+   // clock_gettime(CLOCK_MONOTONIC, &ft_start);
+    ft::stack<int, ft::vector<int> >    ft_default;
+    // ft::stack<int >    ft_default;
+   // ft_time = ft_time_calculator();
     
     out << printStackAttributes(std_default, ft_default, "Test default constructor");
 
     std::cout << "*****************************Test constructor***********************************************." << std::endl;
-    std::cout << " test default constructor \t\t\t\t\t\t\t\t"<< stack_is_equal(std_default , ft_default) 
-             <<"\t\t std_time  = " << std_time  << "\t\t ft_time = " << ft_time << " \t" << time_is_ok(ft_time, std_time) << std::endl;
+   // std::cout << " test default constructor \t\t\t\t\t\t\t\t"<< stack_is_equal(std_default , ft_default) 
+    //         <<"\t\t std_time  = " << std_time  << "\t\t ft_time = " << ft_time << " \t" << time_is_ok(ft_time, std_time) << std::endl;
 
     /* Empty true  False*/
     /* Size */

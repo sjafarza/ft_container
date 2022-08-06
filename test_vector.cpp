@@ -10,7 +10,7 @@
 
 # define NORMAL "\033[0;37m"
 # define YELLOW "\033[0;33m"
-# define RED    "\033[1;31m"
+# define REDD    "\033[1;31m"
 # define GREEN  "\033[032m"
 
 /* calule time */
@@ -58,11 +58,11 @@ std::string vector_is_equal(const std::vector<T> & std_vector, const ft::vector<
     typename std::vector<T>::const_iterator  st_it = std_vector.begin();
     typename ft::vector<T>::const_iterator   ft_it = ft_vector.begin();
     if(std_vector.capacity() != ft_vector.capacity()) /* != */
-        return (RED"✘ \t\t Capacity");
+        return (REDD"✘ \t\t Capacity");
     if(std_vector.size() != ft_vector.size())
-        return (RED"✘ \t\t Size");
+        return (REDD"✘ \t\t Size");
     if(std_vector.max_size() != ft_vector.max_size())
-        return (RED"✘ \t\t Max_size");
+        return (REDD"✘ \t\t Max_size");
     /*if (!std_vector.empty() && !ft_vector.empty())
     {    
         if (*(std_vector.begin()) != *(ft_vector.begin()))
@@ -83,7 +83,7 @@ std::string vector_is_equal(const std::vector<T> & std_vector, const ft::vector<
     }
     if(st_it == std_vector.end() && ft_it == ft_vector.end())
         return (GREEN"✔");
-    return (RED"✘ \t\tContent");  
+    return (REDD"✘ \t\tContent");  
 }
 
 template <class T>
@@ -443,19 +443,19 @@ void    test_empty(void)
         if(std_v1.empty() ==ft_v1.empty())
             std::cout <<NORMAL " test for empty() for  empty vector* \t\t\t\t\t\t\t"<< GREEN"✔"<< std::endl;
         else
-            std::cout <<NORMAL " test for empty() for  empty vector* \t\t\t\t\t\t\t"<< RED"✘"<< std::endl;
+            std::cout <<NORMAL " test for empty() for  empty vector* \t\t\t\t\t\t\t"<< REDD"✘"<< std::endl;
 
             
         if(std_v2.empty() ==ft_v2.empty())
             std::cout <<NORMAL " test for empty() for vector(size)* \t\t\t\t\t\t\t"<< GREEN"✔"<< std::endl;
         else     
-            std::cout <<NORMAL " test for empty() for  empty vector* \t\t\t\t\t\t\t"<< RED"✘"<< std::endl;
+            std::cout <<NORMAL " test for empty() for  empty vector* \t\t\t\t\t\t\t"<< REDD"✘"<< std::endl;
 
         
         if(std_v3.empty() ==ft_v3.empty())
             std::cout <<NORMAL " test for empty() for Fill value(s, v)* \t\t\t\t\t\t"<< GREEN"✔" << std::endl;
         else
-            std::cout <<NORMAL " test for empty() for  empty vector* \t\t\t\t\t\t\t\t"<< RED"✘"<< std::endl;
+            std::cout <<NORMAL " test for empty() for  empty vector* \t\t\t\t\t\t\t\t"<< REDD"✘"<< std::endl;
                
 }
 
@@ -485,7 +485,7 @@ void    test_reserve(void)
     if (std_v1_capacity == ft_v1_capacity)
         std::cout <<NORMAL " test for reserve* \t\t\t\t\t\t\t\t\t"<< GREEN"✔" ;
     else
-        std::cout <<NORMAL " test for reserve* \t\t\t\t\t\t\t\t\t\t\t"<< RED"✘" ;
+        std::cout <<NORMAL " test for reserve* \t\t\t\t\t\t\t\t\t\t\t"<< REDD"✘" ;
 
     std::cout << "\t\t std_time  = " << std_time  << "\t\t ft_time = " << ft_time << " \t" << time_is_ok(ft_time, std_time) << std::endl;    
 }
@@ -514,7 +514,7 @@ void    test_element_access(void)
         out << "std_arr_arr["<<i<<"] = " << std_arr_v4[i] << "\t\t" << "ft_arr_arr[" <<i << "] = " << ft_arr_v4[i] << "\n";
         if (std_arr_v4[i] != ft_arr_v4[i])
             {
-               std::cout <<NORMAL " test for operator [] \t\t\t\t\t\t\t\t\t\t\t"<< RED"✘"<< std::endl;
+               std::cout <<NORMAL " test for operator [] \t\t\t\t\t\t\t\t\t\t\t"<< REDD"✘"<< std::endl;
                return ;
             }   
     }
@@ -527,7 +527,7 @@ void    test_element_access(void)
         out << "std_arr_v4.at("<< i << ") = " << std_arr_v4.at(i) << "\t\t" << "ft_arr_arr.at("<< i << ") = " << ft_arr_v4.at(i) << "\n";
         if (std_arr_v4.at(i) != ft_arr_v4.at(i))
             {
-               std::cout <<NORMAL " test for operator at \t\t\t\t\t\t\t\t\t\t\t"<< RED"✘"<< std::endl;
+               std::cout <<NORMAL " test for operator at \t\t\t\t\t\t\t\t\t\t\t"<< REDD"✘"<< std::endl;
                return ;
             }   
     }
@@ -539,14 +539,14 @@ void    test_element_access(void)
     out << "std_arr_v4.front() = " << std_arr_v4.front() << "\t\t" << "ft_arr_v4.front() = " << ft_arr_v4.front()<< std::endl;
     if (std_arr_v4.front() != ft_arr_v4.front())
     {
-        std::cout <<NORMAL " test for front() \t\t\t\t\t\t\t\t\t\t"<< RED"✘"<<  std::endl;
+        std::cout <<NORMAL " test for front() \t\t\t\t\t\t\t\t\t\t"<< REDD"✘"<<  std::endl;
         return ;
     }
 
     out << "std_arr_v4.back() = " << std_arr_v4.back() << "\t" << "ft_arr_v4.back() = " << ft_arr_v4.back()<< std::endl;
     if (std_arr_v4.back() != ft_arr_v4.back())
     {
-        std::cout <<NORMAL " test for back() \t\t\t\t\t\t\t\t\t\t"<< RED"✘"<< std::endl;
+        std::cout <<NORMAL " test for back() \t\t\t\t\t\t\t\t\t\t"<< REDD"✘"<< std::endl;
         return ;
     }
 
@@ -559,14 +559,14 @@ void    test_element_access(void)
     out << "std_arr_v4.front() = " << std_arr_v4.front() << "\t\t" << "ft_arr_v4.front() = " << ft_arr_v4.front()<< std::endl;
     if (std_arr_v4.front() != ft_arr_v4.front())
     {
-        std::cout <<NORMAL " test for front() \t\t\t\t\t\t\t\t\t\t"<< RED"✘"<< std::endl;
+        std::cout <<NORMAL " test for front() \t\t\t\t\t\t\t\t\t\t"<< REDD"✘"<< std::endl;
         return ;
     }
 
     out << "std_arr_v4.back() = " << std_arr_v4.back() << "\t\t" << "ft_arr_v4.back() = " << ft_arr_v4.back()<< std::endl;
     if (std_arr_v4.back() != ft_arr_v4.back())
     {
-       std::cout <<NORMAL " test for back() \t\t\t\t\t\t\t\t\t\t"<< RED"✘"<< std::endl;
+       std::cout <<NORMAL " test for back() \t\t\t\t\t\t\t\t\t\t"<< REDD"✘"<< std::endl;
        return ;
     }
     std::cout <<NORMAL " test for front() back() \t\t\t\t\t\t\t\t"<< GREEN"✔" << std::endl; 
@@ -993,12 +993,12 @@ void   test_relational_operators()
     if (std_v1 == std_v2 && ft_v1 == ft_v2)
          std::cout << NORMAL" Test operator == for 2 vectors identity \t\t\t\t\t\t"<< GREEN"✔" << std::endl;
     else
-       std::cout << NORMAL" Test operator == for 2 vectors identity \t\t\t\t\t\t"<< RED"✘" << std::endl;
+       std::cout << NORMAL" Test operator == for 2 vectors identity \t\t\t\t\t\t"<< REDD"✘" << std::endl;
 
     if (std_v1 != std_v3 && ft_v1 != ft_v3)
          std::cout << NORMAL" Test operator == for 2 vectors differents \t\t\t\t\t\t"<< GREEN"✔" << std::endl;
     else
-       std::cout << NORMAL" Test operator == for 2 vectors differents \t\t\t\t\t\t"<< RED"✘" << std::endl; 
+       std::cout << NORMAL" Test operator == for 2 vectors differents \t\t\t\t\t\t"<< REDD"✘" << std::endl; 
 
     out << GREEN"************  std_v1 == std_v2   return :  "<< ((std_v1 == std_v2 ) ? "True" : "False") << NORMAL" . "<<std::endl;
     out << std::endl<< GREEN"************  ft_v1 == ft_v2     return :  "<< ((ft_v1 == ft_v2 ) ? "True" : "False") << NORMAL" . "<<std::endl<<std::endl<<std::endl;
@@ -1010,12 +1010,12 @@ void   test_relational_operators()
     if (std_v1 != std_v3 && ft_v1 != ft_v3)
          std::cout << NORMAL" Test operator != for 2 vectors differents \t\t\t\t\t\t"<< GREEN"✔" << std::endl;
     else
-       std::cout << NORMAL" Test operator != for 2 vectors differents \t\t\t\t\t\t"<< RED"✘" << std::endl;
+       std::cout << NORMAL" Test operator != for 2 vectors differents \t\t\t\t\t\t"<< REDD"✘" << std::endl;
 
     if (!(std_v1 != std_v2 && ft_v1 != ft_v2))
          std::cout << NORMAL" Test operator != for 2 vectors identity \t\t\t\t\t\t"<< GREEN"✔" << std::endl;
     else
-       std::cout << NORMAL" Test operator != for 2 vectors identity \t\t\t\t\t\t"<< RED"✘" << std::endl;
+       std::cout << NORMAL" Test operator != for 2 vectors identity \t\t\t\t\t\t"<< REDD"✘" << std::endl;
     out << NORMAL"======================================================================"<<std::endl;
     out << GREEN"************  std_v1 != std_v2   return :  "<< ((std_v1 != std_v2 ) ? "True" : "False") << NORMAL" . "<<std::endl;
     out << std::endl<< GREEN"************  ft_v1 != ft_v2     return :  "<< ((ft_v1 != ft_v2 ) ? "True" : "False") << NORMAL" . "<<std::endl<<std::endl<<std::endl;
@@ -1026,16 +1026,16 @@ void   test_relational_operators()
     if (std_v3 < std_v1 == ft_v3 < ft_v1)
          std::cout << NORMAL" Test operator < for 2 vectors differents in smal<big \t\t\t\t\t"<< GREEN"✔" << std::endl;
     else
-       std::cout << NORMAL" Test operator < for 2 vectors differents in smal<big \t\t\t\t\t"<< RED"✘" << std::endl;
+       std::cout << NORMAL" Test operator < for 2 vectors differents in smal<big \t\t\t\t\t"<< REDD"✘" << std::endl;
 
     if (std_v3 < std_v1 == ft_v3 < ft_v1)
          std::cout << NORMAL" Test operator != for 2 vectors big<small \t\t\t\t\t\t"<< GREEN"✔" << std::endl;
     else
-       std::cout << NORMAL" Test operator <  for 2 vectors big<small \t\t\t\t\t\t"<< RED"✘" << std::endl;
+       std::cout << NORMAL" Test operator <  for 2 vectors big<small \t\t\t\t\t\t"<< REDD"✘" << std::endl;
     if ((std_v1 < std_v2) == (ft_v1 < ft_v2))
          std::cout << NORMAL" Test operator < for 2 vectors identity \t\t\t\t\t\t"<< GREEN"✔" << std::endl;
     else
-       std::cout << NORMAL" Test operator < for 2 vectors identity \t\t\t\t\t\t"<< RED"✘" << std::endl;   
+       std::cout << NORMAL" Test operator < for 2 vectors identity \t\t\t\t\t\t"<< REDD"✘" << std::endl;   
 
 
     out << NORMAL"======================================================================"<<std::endl;
@@ -1050,16 +1050,16 @@ void   test_relational_operators()
     if (std_v3 <= std_v1 == ft_v3 <= ft_v1)
          std::cout << NORMAL" Test operator < for 2 vectors differents in smal<=big \t\t\t\t\t"<< GREEN"✔" << std::endl;
     else
-       std::cout << NORMAL" Test operator < for 2 vectors differents in smal<=big \t\t\t\t\t"<< RED"✘" << std::endl;
+       std::cout << NORMAL" Test operator < for 2 vectors differents in smal<=big \t\t\t\t\t"<< REDD"✘" << std::endl;
 
     if (std_v3 <= std_v1 == ft_v3 <= ft_v1)
          std::cout << NORMAL" Test operator != for 2 vectors big<=small \t\t\t\t\t\t"<< GREEN"✔" << std::endl;
     else
-       std::cout << NORMAL" Test operator <  for 2 vectors big<=small \t\t\t\t\t\t"<< RED"✘" << std::endl;
+       std::cout << NORMAL" Test operator <  for 2 vectors big<=small \t\t\t\t\t\t"<< REDD"✘" << std::endl;
     if ((std_v1 <= std_v2) == (ft_v1 <= ft_v2))
          std::cout << NORMAL" Test operator < for 2 vectors identity \t\t\t\t\t\t"<< GREEN"✔" << std::endl;
     else
-       std::cout << NORMAL" Test operator < for 2 vectors identity \t\t\t\t\t\t"<< RED"✘" << std::endl;   
+       std::cout << NORMAL" Test operator < for 2 vectors identity \t\t\t\t\t\t"<< REDD"✘" << std::endl;   
 
 
     out << NORMAL"======================================================================"<<std::endl;
@@ -1074,16 +1074,16 @@ void   test_relational_operators()
     if (std_v3 > std_v1 == ft_v3 > ft_v1)
          std::cout << NORMAL" Test operator > for 2 vectors differents in smal>big \t\t\t\t\t"<< GREEN"✔" << std::endl;
     else
-       std::cout << NORMAL" Test operator > for 2 vectors differents in smal>big \t\t\t\t\t"<< RED"✘" << std::endl;
+       std::cout << NORMAL" Test operator > for 2 vectors differents in smal>big \t\t\t\t\t"<< REDD"✘" << std::endl;
 
     if (std_v3 > std_v1 == ft_v3 > ft_v1)
          std::cout << NORMAL" Test operator > for 2 vectors big>small \t\t\t\t\t\t"<< GREEN"✔" << std::endl;
     else
-       std::cout << NORMAL" Test operator >  for 2 vectors big>small \t\t\t\t\t\t"<< RED"✘" << std::endl;
+       std::cout << NORMAL" Test operator >  for 2 vectors big>small \t\t\t\t\t\t"<< REDD"✘" << std::endl;
     if ((std_v1 > std_v2) == (ft_v1 > ft_v2))
          std::cout << NORMAL" Test operator > for 2 vectors identity \t\t\t\t\t\t"<< GREEN"✔" << std::endl;
     else
-       std::cout << NORMAL" Test operator > for 2 vectors identity \t\t\t\t\t\t"<< RED"✘" << std::endl;   
+       std::cout << NORMAL" Test operator > for 2 vectors identity \t\t\t\t\t\t"<< REDD"✘" << std::endl;   
 
 
     out << NORMAL"======================================================================"<<std::endl;
@@ -1098,16 +1098,16 @@ void   test_relational_operators()
     if (std_v3 >= std_v1 == ft_v3 >= ft_v1)
          std::cout << NORMAL" Test operator >= for 2 vectors differents in smal>=big \t\t\t\t"<< GREEN"✔" << std::endl;
     else
-       std::cout << NORMAL" Test operator >=for 2 vectors differents in smal>=big \t\t\t\t\t"<< RED"✘" << std::endl;
+       std::cout << NORMAL" Test operator >=for 2 vectors differents in smal>=big \t\t\t\t\t"<< REDD"✘" << std::endl;
 
     if (std_v3 >= std_v1 == ft_v3 >= ft_v1)
          std::cout << NORMAL" Test operator >= for 2 vectors big>=small \t\t\t\t\t\t"<< GREEN"✔" << std::endl;
     else
-       std::cout << NORMAL" Test operator >= for 2 vectors big>=small \t\t\t\t\t\t"<< RED"✘" << std::endl;
+       std::cout << NORMAL" Test operator >= for 2 vectors big>=small \t\t\t\t\t\t"<< REDD"✘" << std::endl;
     if ((std_v1 >= std_v2) == (ft_v1 >= ft_v2))
          std::cout << NORMAL" Test operator >= for 2 vectors identity \t\t\t\t\t\t"<< GREEN"✔" << std::endl;
     else
-       std::cout << NORMAL" Test operator >= for 2 vectors identity \t\t\t\t\t\t"<< RED"✘" << std::endl;   
+       std::cout << NORMAL" Test operator >= for 2 vectors identity \t\t\t\t\t\t"<< REDD"✘" << std::endl;   
 
 
     out << NORMAL"======================================================================"<<std::endl;

@@ -4,14 +4,15 @@ VPATH		=	src
 OBJDIR		=	obj
 INCLDIR		=	inc 
 
-SRC 		=	main.cpp test_vector.cpp test_stack.cpp
+SRC 		=	main.cpp test_vector.cpp  test_map.cpp
+
 
 OBJ 		=  	$(SRC:%.cpp=$(OBJDIR)/%.o)
 
 CC			=	c++
 CFLAG		=	-Wall -Wextra -Werror -std=c++98
 HEADER			=	-I.
-INCFLAGS	=	./containers/vector.hpp ./containers/stack.hpp header_utils.hpp
+INCFLAGS	=	./containers/vector.hpp   ./header_utils.hpp 
 
 RM			=	rm -rf
 UNAME           :=      $(shell uname -s)
@@ -19,9 +20,10 @@ UNAME           :=      $(shell uname -s)
 all:			$(NAME)
 $(OBJDIR)/%.o:	%.cpp $(INCFLAGS) | $(OBJDIR)
 					@c++ $(HEADER) $(CFLAGS) -c $< -o $@
+					
 
 $(NAME):		$(OBJ)
-				@echo "\033[032m\n\nCompiling canon... "
+				@echo "\033[032m\n\nCompiling containers... "
 				@c++ $(CFLAGS) -o $@ $^ $(LFLAGS)
 				@echo "\n\033[0mDone !"
 
