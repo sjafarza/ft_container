@@ -307,7 +307,7 @@ void    test_operator_assign(void)
 
 void    test_begin_end_rbegin_rend()
 {
-    
+    std::string                result = REDD"✘";
     long double              std_time, ft_time;
     std::ofstream        out;
     std::string const   file = "./Log_vector/log_test_begin_end";
@@ -319,6 +319,7 @@ void    test_begin_end_rbegin_rend()
     int rang_array[] = {32, 66, 824, -2453, 0, 77};
     ft::vector<int>::iterator   ft_it(&rang_array[0]);
     std::vector<int>::iterator   std_it (&rang_array[0]);
+    
 
     clock_gettime(CLOCK_MONOTONIC, &std_start);
     std::vector<int>     std_v(std_it ,std_it + 4);
@@ -330,13 +331,16 @@ void    test_begin_end_rbegin_rend()
     
     out << printVectorAttributes(std_v,ft_v, "Test Iterator begin()  end()", 1);
     std::cout << "*****************************Test Iterator***********************************************." << std::endl;
-    std::cout << NORMAL " test Iterator begin \t\t\t\t\t\t\t\t\t"<< vector_is_equal(std_v , ft_v) && 
-               *(std_v.begin()) == *(ft_v.begin()) && *(std_v.end()) == *(ft_v.end());
-     std::cout << "\t\t std_time  = " << std_time  << "\t\t ft_time = " << ft_time << " \t" << time_is_ok(ft_time, std_time) << std::endl;    
+    if ( vector_is_equal(std_v, ft_v) == GREEN"✔" &&  *(std_v.begin()) == *(ft_v.begin())  && *(std_v.end()) == *(ft_v.end()))
+        result = GREEN "✔";     
+    std::cout << NORMAL "Test Iterator begin end\t\t\t\t\t\t\t\t\t"<< result<< std::endl;
+    std::cout << "\t\t std_time  = " << std_time  << "\t\t ft_time = " << ft_time << " \t" << time_is_ok(ft_time, std_time) << std::endl;    
    
     /* Reverse Iterator   begin() end ()*/
     out << printVectorAttributes(std_v,ft_v, "Test reverse Iterator rbegin() rend ()", 2);
-    std::cout << NORMAL " test reverse Iterator rbegin ,rend \t\t\t\t\t\t\t"<< vector_is_equal(std_v , ft_v) << std::endl;
+    if ( vector_is_equal(std_v, ft_v) == GREEN"✔" &&  *(std_v.rbegin()) == *(ft_v.rbegin())  && *(std_v.rend()) == *(ft_v.rend()))
+        result = GREEN "✔";     
+    std::cout << NORMAL "Test Iterator rbegin rend\t\t\t\t\t\t\t\t"<< result << std::endl;
 
     /* Const Iterator   begin() end ()*/
     {
@@ -346,12 +350,15 @@ void    test_begin_end_rbegin_rend()
         std::vector<int>     std_v(std_it + 1 ,std_it + 4);
         ft::vector<int>      ft_v (ft_it + 1, ft_it + 4);
         out << printVectorAttributes(std_v,ft_v, "Test Const  Iterator begin() end ()", 1);
-        std::cout <<  NORMAL " test Const Iterator begin, end \t\t\t\t\t\t\t"<< vector_is_equal(std_v , ft_v) << std::endl;    
+        if ( vector_is_equal(std_v, ft_v) == GREEN"✔" &&  *(std_v.begin()) == *(ft_v.begin())  && *(std_v.end()) == *(ft_v.end()))
+        result = GREEN "✔";     
+        std::cout << NORMAL "Test const Iterator begin end\t\t\t\t\t\t\t\t"<< result<< std::endl;  
     
     /* Reverse const Iterator   begin() end ()*/
         out << printVectorAttributes(std_v,ft_v, "Test Const reverse Iterator rbegin() rend ()", 1);
-        std::cout << NORMAL " test Const reverse Iterator, rbegin ,rend \t\t\t\t\t\t"<< vector_is_equal(std_v , ft_v) << std::endl;
-
+        if ( vector_is_equal(std_v, ft_v) == GREEN"✔" &&  *(std_v.begin()) == *(ft_v.begin())  && *(std_v.end()) == *(ft_v.end()))
+        result = GREEN "✔";     
+        std::cout << NORMAL "Test Iterator begin end\t\t\t\t\t\t\t\t\t"<< result<< std::endl;
     }
     out.close();
 }
