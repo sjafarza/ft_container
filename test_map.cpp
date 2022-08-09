@@ -1053,6 +1053,7 @@ void    test_operations()
 
 
     //count element exist
+    result = GREEN"✔";
     bool    std_cnt, ft_cnt;
     clock_gettime(CLOCK_MONOTONIC, &std_map_start);
     std_cnt = std_map.count(2);
@@ -1068,7 +1069,8 @@ void    test_operations()
     std::cout << NORMAL"Test count \t\t\t\t\t\t\t" << result 
                 <<"\t\t std_time  = " << std_time  << "\t\t ft_time = " 
                 << ft_time << " \t" << tim_is_ok(ft_time, std_time) << std::endl;
-    //count   element not exist         
+    //count   element not exist 
+    result = GREEN"✔";        
     clock_gettime(CLOCK_MONOTONIC, &std_map_start);
     std_cnt = std_map.count(22);
     std_time = std_time_calcul();
@@ -1084,8 +1086,127 @@ void    test_operations()
                 <<"\t\t std_time  = " << std_time  << "\t\t ft_time = " 
                 << ft_time << " \t" << tim_is_ok(ft_time, std_time) << std::endl;             
     //lower_bound
+    result = GREEN"✔";
+    clock_gettime(CLOCK_MONOTONIC, &std_map_start);
+    std_it = std_map.lower_bound(3);
+    std_time = std_time_calcul();
+
+    clock_gettime(CLOCK_MONOTONIC, &ft_map_start);
+    ft_it = ft_map.lower_bound(3);
+    ft_time = ft_time_calcul();
+
+    if (std_it->second != ft_it->second )
+        result = RD"✘";
+    out <<"\n***lower_bound : " << std::endl<< std::endl;
+    out<<"stl_map.lower_bound(2) = " << std_it->second << " ft_it = ft_map.lower_bound(2)) = " << ft_it->second << "\n\n";
+
+    std::cout << NORMAL"Test lower_bound \t\t\t\t\t\t" << result 
+                <<"\t\t std_time  = " << std_time  << "\t\t ft_time = " 
+                << ft_time << " \t" << tim_is_ok(ft_time, std_time) << std::endl;
+    
+	/* Const it Lower bound */
+    result = GREEN"✔";
+    clock_gettime(CLOCK_MONOTONIC, &std_map_start);
+    std_cst_it = std_map.lower_bound(3);
+    std_time = std_time_calcul();
+
+    clock_gettime(CLOCK_MONOTONIC, &ft_map_start);
+    ft_cst_it = ft_map.lower_bound(3);
+    ft_time = ft_time_calcul();
+
+    if (std_cst_it->second != ft_cst_it->second )
+        result = RD"✘";
+    out <<"\n***lower_bound : " << std::endl<< std::endl;
+    out<<"std_map.lower_bound(2) = " << std_cst_it->second << " ft_it = ft_map.lower_bound(2)) = " << ft_cst_it->second << "\n\n";
+
+    std::cout << NORMAL"Test Const lower_bound \t\t\t\t\t\t" << result 
+                <<"\t\t std_time  = " << std_time  << "\t\t ft_time = " 
+                << ft_time << " \t" << tim_is_ok(ft_time, std_time) << std::endl;
+    
+
     //upper_bound
+    result = GREEN"✔";
+    clock_gettime(CLOCK_MONOTONIC, &std_map_start);
+    std_it = std_map.upper_bound(4);
+    std_time = std_time_calcul();
+
+    clock_gettime(CLOCK_MONOTONIC, &ft_map_start);
+    ft_it = ft_map.upper_bound(4);
+    ft_time = ft_time_calcul();
+
+    if (std_it->second != ft_it->second )
+        result = RD"✘";
+    out <<"\n***upper_bound : " << std::endl<< std::endl;
+    out<<"stl_map.upper_bound(4) = " << std_it->second << " ft_it = ft_map.upper_bound(4)) = " << ft_it->second << "\n\n";
+
+    std::cout << NORMAL"Test upper_bound \t\t\t\t\t\t" << result 
+                <<"\t\t std_time  = " << std_time  << "\t\t ft_time = " 
+                << ft_time << " \t" << tim_is_ok(ft_time, std_time) << std::endl;
+    /* Const it Upper bound */
+    result = GREEN"✔";
+    clock_gettime(CLOCK_MONOTONIC, &std_map_start);
+    std_cst_it = std_map.upper_bound(4);
+    std_time = std_time_calcul();
+
+    clock_gettime(CLOCK_MONOTONIC, &ft_map_start);
+    ft_cst_it = ft_map.upper_bound(4);
+    ft_time = ft_time_calcul();
+
+    if (std_cst_it->second != ft_cst_it->second )
+        result = RD"✘";
+    out <<"\n***upper_bound : " << std::endl<< std::endl;
+    out<<"std_map.upper_bound(4) = " << std_cst_it->second << " ft_it = ft_map.upper_bound(4)) = " << ft_cst_it->second << "\n\n";
+
+    std::cout << NORMAL"Test upper_bound \t\t\t\t\t\t" << result 
+                <<"\t\t std_time  = " << std_time  << "\t\t ft_time = " 
+                << ft_time << " \t" << tim_is_ok(ft_time, std_time) << std::endl;
+
     //equal_range
+    result = GREEN"✔";
+    std::pair<std::map<int,std::string>::iterator, std::map<int,std::string>::iterator>     std_ret;
+    ft::pair<ft::map<int,std::string>::iterator, ft::map<int,std::string>::iterator>        ft_ret;
+
+    std_ret = std_map.equal_range(2);
+    ft_ret = ft_map.equal_range(2);
+
+    out << "equal_range ,lower bound  points to: ";
+    out << std_ret.first->first << " => " << std_ret.first->second << "\n\n";
+
+    out << "equal_range ,upper bound points to: ";
+    out << ft_ret.second->first << " => " << ft_ret.second->second << "\n\n";
+
+    if (std_ret.first->first != ft_ret.first->first || std_ret.first->second != ft_ret.first->second ||
+        std_ret.second->first != ft_ret.second->first || std_ret.second->second != ft_ret.second->second)
+        result = RD"✘";
+
+    std::cout << NORMAL"Test equal_bound \t\t\t\t\t\t" << result 
+                <<"\t\t std_time  = " << std_time  << "\t\t ft_time = " 
+                << ft_time << " \t" << tim_is_ok(ft_time, std_time) << std::endl;    
+}
+
+void    test_map_get_allocator()
+{
+    int std_psize;
+    std::map<char,int> std_mymap;
+    std::pair<const char,int>* std_p;
+
+    int ft_psize;
+    ft::map<char,int> ft_mymap;
+    ft::pair<const char,int>* ft_p;
+
+    // allocate an array of 5 elements using mymap's allocator:
+    std_p=std_mymap.get_allocator().allocate(5);
+    ft_p=ft_mymap.get_allocator().allocate(5);
+
+    // assign some values to array
+    std_psize = sizeof(std::map<char,int>::value_type)*5;
+    ft_psize = sizeof(ft::map<char,int>::value_type)*5;
+
+    std::cout << "The allocated array has a size of " << std_psize << " bytes.\n";
+    std::cout << "The allocated array has a size of " << ft_psize << " bytes.\n";
+
+    std_mymap.get_allocator().deallocate(std_p,5);
+    ft_mymap.get_allocator().deallocate(ft_p,5);
 }
 
 void    test_map(void)
@@ -1104,6 +1225,6 @@ void    test_map(void)
 	test_map_clear();
     test_observers();
     test_operations();
-    //test_get_allocator();
+    test_map_get_allocator();
 }
 
