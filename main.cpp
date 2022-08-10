@@ -22,13 +22,11 @@ int main (int ac, char** av)
 		return 1;
 	}
     std::string     str = av[1];
-    std::cout << "Start projet containers " << std::endl;
-
-    std::cout << "************************** Test 1**********************************" << std::endl;
+    std::cout << "************************** Test  projet containers**********************************" << std::endl;
 
     if(str == "vector")
     {
-        std::cout << " start test vector" << std::endl;
+        std::cout << " start test vector ..." << std::endl;
         test_vector();
     }
 
@@ -40,38 +38,13 @@ int main (int ac, char** av)
 
 	if(str == "map")
     {
-        std::cout << " start test map" << std::endl;
+        std::cout << " start test map ..." << std::endl;
         test_map();
     }
 
     return 0;
 }
 
-
-/*int std_psize;
-    std::map<char,int> std_mymap;
-    std::pair<const char,int>* p;
-
-    int ft_psize;
-    ft::map<char,int> ft_mymap;
-    ft::pair<const char,int>* ft_p;
-
-    // allocate an array of 5 elements using mymap's allocator:
-    std_p=std_mymap.get_allocator().allocate(5);
-    ft_p=ft_mymap.get_allocator().allocate(5);
-
-    // assign some values to array
-    std_psize = sizeof(std::map<char,int>::value_type)*5;
-    ft_psize = sizeof(ft::map<char,int>::value_type)*5;
-
-    std::cout << "The allocated array has a size of " << std_psize << " bytes.\n";
-
-    std::cout << "The allocated array has a size of " << ft_psize << " bytes.\n";
-
-    std_mymap.get_allocator().deallocate(p,5);
-    //ft_mymap.get_allocator().deallocate(ft_p,5);
-
-*/
 
 /*********** main 42 **********************/
 /*

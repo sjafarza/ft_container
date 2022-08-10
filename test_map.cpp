@@ -1186,13 +1186,22 @@ void    test_operations()
 
 void    test_map_get_allocator()
 {
+    std::ofstream        out;
+    long double          std_time, ft_time;
+   
+    std::string const   file = "./Log_map/allocator";
+    out.open(file.c_str(), std::fstream::trunc | std::ostream::out);
+    if(!out.is_open())
+        std::cerr << "Error : faild to open file" << std::endl;
+    std::string                result = GREEN"✔";
+
     int std_psize;
     std::map<char,int> std_mymap;
     std::pair<const char,int>* std_p;
 
     int ft_psize;
     ft::map<char,int> ft_mymap;
-    ft::pair<const char,int>* ft_p;
+    ft::pair<char,int>* ft_p;
 
     // allocate an array of 5 elements using mymap's allocator:
     std_p=std_mymap.get_allocator().allocate(5);
@@ -1202,11 +1211,23 @@ void    test_map_get_allocator()
     std_psize = sizeof(std::map<char,int>::value_type)*5;
     ft_psize = sizeof(ft::map<char,int>::value_type)*5;
 
-    std::cout << "The allocated array has a size of " << std_psize << " bytes.\n";
-    std::cout << "The allocated array has a size of " << ft_psize << " bytes.\n";
+    out << "The allocated array has a size of " << std_psize << " bytes.\n";
+    out << "The allocated array has a size of " << ft_psize << " bytes.\n";
 
+    clock_gettime(CLOCK_MONOTONIC, &std_map_start);
     std_mymap.get_allocator().deallocate(std_p,5);
+    std_time = std_time_calcul();
+
+    clock_gettime(CLOCK_MONOTONIC, &ft_map_start);
     ft_mymap.get_allocator().deallocate(ft_p,5);
+    ft_time = ft_time_calcul();
+
+    if (std_psize != ft_psize)
+        result = RD"✘";
+
+    std::cout << NORMAL"Test get_allocator \t\t\t\t\t\t" << result 
+                <<"\t\t std_time  = " << std_time  << "\t\t ft_time = " 
+                << ft_time << " \t" << tim_is_ok(ft_time, std_time) << std::endl;   
 }
 
 void    test_map(void)
