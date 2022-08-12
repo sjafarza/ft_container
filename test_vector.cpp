@@ -974,6 +974,7 @@ void    test_clear()
 void   test_relational_operators()
 {
      /* log */
+    long double              std_time, ft_time;
     std::ofstream        out;
     std::string const   file = "./Log_vector/log_test_operator";
 
@@ -989,40 +990,80 @@ void   test_relational_operators()
     std_v1.assign(arr1, arr1 + 7); std_v2.assign(arr1, arr1 + 7);
     
     ft_v1.assign(arr1, arr1 + 7); ft_v2.assign(arr1, arr1 + 7);
-    out << printVectorAttributes(std_v1,ft_v1, "vectors_one ", 1);
-    out << printVectorAttributes(std_v2,ft_v2, "vectors_two ", 1);
-    out << printVectorAttributes(std_v3,ft_v3, "vectors_two ", 1);
-    
-   
+    out << printVectorAttributes(std_v1,ft_v1, "vectors_V1 ", 1);
+    out << printVectorAttributes(std_v2,ft_v2, "vectors_V2 ", 1);
+    out << printVectorAttributes(std_v3,ft_v3, "vectors_V3 ", 1);
     
     /* operator == */
+    clock_gettime(CLOCK_MONOTONIC, &std_start);
+    std_v1 == std_v2;
+    std_time = std_time_calculator();
+
+    clock_gettime(CLOCK_MONOTONIC, &ft_start);
+    ft_v1 == ft_v2;
+    ft_time = ft_time_calculator();
+
     std::cout << "***************************** operator ==  **********************************************." << std::endl;
     if (std_v1 == std_v2 && ft_v1 == ft_v2)
-         std::cout << NORMAL" Test operator == for 2 vectors identity \t\t\t\t\t\t"<< GREEN"✔" << std::endl;
+         std::cout << NORMAL" Test operator == for 2 vectors identity \t\t\t\t\t\t"<< GREEN"✔"; 
+         
     else
-       std::cout << NORMAL" Test operator == for 2 vectors identity \t\t\t\t\t\t"<< REDD"✘" << std::endl;
+       std::cout << NORMAL" Test operator == for 2 vectors identity \t\t\t\t\t\t"<< REDD"✘" ;
+     
+    std::cout << "\t\t std_time  = " << std_time  << "\t\t ft_time = " << ft_time << " \t" << time_is_ok(ft_time, std_time)
+         << std::endl;   
+/* ==  in False condition*/
+    clock_gettime(CLOCK_MONOTONIC, &std_start);
+    std_v1 == std_v3;
+    std_time = std_time_calculator();
 
-    if (std_v1 != std_v3 && ft_v1 != ft_v3)
-         std::cout << NORMAL" Test operator == for 2 vectors differents \t\t\t\t\t\t"<< GREEN"✔" << std::endl;
+    clock_gettime(CLOCK_MONOTONIC, &ft_start);
+    ft_v1 == ft_v3;
+    ft_time = ft_time_calculator();
+
+    if ((std_v1 == std_v3) == (ft_v1 == ft_v3))
+         std::cout << NORMAL" Test operator == for 2 vectors differents \t\t\t\t\t\t"<< GREEN"✔";
     else
-       std::cout << NORMAL" Test operator == for 2 vectors differents \t\t\t\t\t\t"<< REDD"✘" << std::endl; 
+       std::cout << NORMAL" Test operator == for 2 vectors differents \t\t\t\t\t\t"<< REDD"✘" ; 
+    std::cout << "\t\t std_time  = " << std_time  << "\t\t ft_time = " << ft_time << " \t" << time_is_ok(ft_time, std_time)
+         << std::endl<<std::endl;  
 
     out << GREEN"************  std_v1 == std_v2   return :  "<< ((std_v1 == std_v2 ) ? "True" : "False") << NORMAL" . "<<std::endl;
     out << std::endl<< GREEN"************  ft_v1 == ft_v2     return :  "<< ((ft_v1 == ft_v2 ) ? "True" : "False") << NORMAL" . "<<std::endl<<std::endl<<std::endl;
-    //out << printVectorAttributes(std_v3,ft_v3, "vectors_two ", 1);
     out << GREEN"************  std_v1 == std_v3   return :  "<< ((std_v1 == std_v3 ) ? "True" : "False") << NORMAL" . "<<std::endl;
     out << std::endl<< GREEN"************  ft_v1 == ft_v3     return :  "<< ((ft_v1 == ft_v3 ) ? "True" : "False") << NORMAL" . "<<std::endl<<std::endl<<std::endl;   
 
     /* operator != */
-    if (std_v1 != std_v3 && ft_v1 != ft_v3)
-         std::cout << NORMAL" Test operator != for 2 vectors differents \t\t\t\t\t\t"<< GREEN"✔" << std::endl;
-    else
-       std::cout << NORMAL" Test operator != for 2 vectors differents \t\t\t\t\t\t"<< REDD"✘" << std::endl;
+    clock_gettime(CLOCK_MONOTONIC, &std_start);
+    std_v1 != std_v2;
+    std_time = std_time_calculator();
 
-    if (!(std_v1 != std_v2 && ft_v1 != ft_v2))
-         std::cout << NORMAL" Test operator != for 2 vectors identity \t\t\t\t\t\t"<< GREEN"✔" << std::endl;
+    clock_gettime(CLOCK_MONOTONIC, &ft_start);
+    ft_v1 != ft_v2;
+    ft_time = ft_time_calculator();
+
+    if ((std_v1 != std_v3) == (ft_v1 != ft_v3))
+         std::cout << NORMAL" Test operator != for 2 vectors differents \t\t\t\t\t\t"<< GREEN"✔";
     else
-       std::cout << NORMAL" Test operator != for 2 vectors identity \t\t\t\t\t\t"<< REDD"✘" << std::endl;
+       std::cout << NORMAL" Test operator != for 2 vectors differents \t\t\t\t\t\t"<< REDD"✘";
+    std::cout << "\t\t std_time  = " << std_time  << "\t\t ft_time = " << ft_time << " \t" << time_is_ok(ft_time, std_time)
+         << std::endl;
+    /* in False condition */
+    clock_gettime(CLOCK_MONOTONIC, &std_start);
+    std_v1 != std_v2;
+    std_time = std_time_calculator();
+
+    clock_gettime(CLOCK_MONOTONIC, &ft_start);
+    ft_v1 != ft_v2;
+    ft_time = ft_time_calculator();
+
+    if ((std_v1 != std_v2) == (ft_v1 != ft_v2))
+         std::cout << NORMAL" Test operator != for 2 vectors identity \t\t\t\t\t\t"<< GREEN"✔";
+    else
+       std::cout << NORMAL" Test operator != for 2 vectors identity \t\t\t\t\t\t"<< REDD"✘" ;
+    std::cout << "\t\t std_time  = " << std_time  << "\t\t ft_time = " << ft_time << " \t" << time_is_ok(ft_time, std_time)
+         << std::endl<<std::endl;
+
     out << NORMAL"======================================================================"<<std::endl;
     out << GREEN"************  std_v1 != std_v2   return :  "<< ((std_v1 != std_v2 ) ? "True" : "False") << NORMAL" . "<<std::endl;
     out << std::endl<< GREEN"************  ft_v1 != ft_v2     return :  "<< ((ft_v1 != ft_v2 ) ? "True" : "False") << NORMAL" . "<<std::endl<<std::endl<<std::endl;
@@ -1030,19 +1071,34 @@ void   test_relational_operators()
     out << std::endl<< GREEN"************  ft_v1 != ft_v3     return :  "<< ((ft_v1 != ft_v3 ) ? "True" : "False") << NORMAL" . "<<std::endl<<std::endl<<std::endl;              
     
     /* operator < */
-    if (std_v3 < std_v1 == ft_v3 < ft_v1)
-         std::cout << NORMAL" Test operator < for 2 vectors differents in smal<big \t\t\t\t\t"<< GREEN"✔" << std::endl;
-    else
-       std::cout << NORMAL" Test operator < for 2 vectors differents in smal<big \t\t\t\t\t"<< REDD"✘" << std::endl;
+    clock_gettime(CLOCK_MONOTONIC, &std_start);
+    std_v3 < std_v1;
+    std_time = std_time_calculator();
 
+    clock_gettime(CLOCK_MONOTONIC, &ft_start);
+    ft_v3 < ft_v1;
+    ft_time = ft_time_calculator();
+    /* True cond */
     if (std_v3 < std_v1 == ft_v3 < ft_v1)
-         std::cout << NORMAL" Test operator != for 2 vectors big<small \t\t\t\t\t\t"<< GREEN"✔" << std::endl;
+         std::cout << NORMAL"1 Test operator < for 2 vectors differents in smal<big \t\t\t\t\t"<< GREEN"✔";
     else
-       std::cout << NORMAL" Test operator <  for 2 vectors big<small \t\t\t\t\t\t"<< REDD"✘" << std::endl;
+       std::cout << NORMAL" Test operator < for 2 vectors differents in smal<big \t\t\t\t\t"<< REDD"✘";
+    std::cout << "\t\t std_time  = " << std_time  << "\t\t ft_time = " << ft_time <<"\t" << time_is_ok(ft_time, std_time)
+         << std::endl;
+    /* False cond */
+    if (std_v3 < std_v1 == ft_v3 < ft_v1)
+         std::cout << NORMAL"2 Test operator < for 2 vectors big<small \t\t\t\t\t\t"<< GREEN"✔";
+    else
+       std::cout << NORMAL" Test operator <  for 2 vectors big<small \t\t\t\t\t\t"<< REDD"✘";
+    std::cout << "\t\t std_time  = " << std_time  << "\t\t ft_time = " << ft_time << " \t" << time_is_ok(ft_time, std_time)
+         << std::endl;
+
     if ((std_v1 < std_v2) == (ft_v1 < ft_v2))
-         std::cout << NORMAL" Test operator < for 2 vectors identity \t\t\t\t\t\t"<< GREEN"✔" << std::endl;
+         std::cout << NORMAL"3 Test operator < for 2 vectors identity \t\t\t\t\t\t"<< GREEN"✔";
     else
-       std::cout << NORMAL" Test operator < for 2 vectors identity \t\t\t\t\t\t"<< REDD"✘" << std::endl;   
+       std::cout << NORMAL" Test operator < for 2 vectors identity \t\t\t\t\t\t"<< REDD"✘";
+    std::cout << "\t\t std_time  = " << std_time  << "\t\t ft_time = " << ft_time << " \t" << time_is_ok(ft_time, std_time)
+         << std::endl<<std::endl;      
 
 
     out << NORMAL"======================================================================"<<std::endl;
@@ -1054,19 +1110,34 @@ void   test_relational_operators()
     out << std::endl<< GREEN"************  ft_v1 < ft_v2     return :  "<< ((ft_v1 < ft_v2 ) ? "True" : "False") << NORMAL" . "<<std::endl<<std::endl<<std::endl;
     
     /* operator <= */
-    if (std_v3 <= std_v1 == ft_v3 <= ft_v1)
-         std::cout << NORMAL" Test operator < for 2 vectors differents in smal<=big \t\t\t\t\t"<< GREEN"✔" << std::endl;
-    else
-       std::cout << NORMAL" Test operator < for 2 vectors differents in smal<=big \t\t\t\t\t"<< REDD"✘" << std::endl;
+    clock_gettime(CLOCK_MONOTONIC, &std_start);
+    std_v3 <= std_v1;
+    std_time = std_time_calculator();
+
+    clock_gettime(CLOCK_MONOTONIC, &ft_start);
+    ft_v3 <= ft_v1;
+    ft_time = ft_time_calculator();
 
     if (std_v3 <= std_v1 == ft_v3 <= ft_v1)
-         std::cout << NORMAL" Test operator != for 2 vectors big<=small \t\t\t\t\t\t"<< GREEN"✔" << std::endl;
+         std::cout << NORMAL" Test operator <= for 2 vectors differents in smal<=big \t\t\t\t"<< GREEN"✔";
     else
-       std::cout << NORMAL" Test operator <  for 2 vectors big<=small \t\t\t\t\t\t"<< REDD"✘" << std::endl;
+       std::cout << NORMAL" Test operator <= for 2 vectors differents in smal<=big \t\t\t\t\t"<< REDD"✘";
+    std::cout << "\t\t std_time  = " << std_time  << "\t\t ft_time = " << ft_time << " \t" << time_is_ok(ft_time, std_time)
+         << std::endl;
+
+    if (std_v3 <= std_v1 == ft_v3 <= ft_v1)
+         std::cout << NORMAL" Test operator <= for 2 vectors big<=small \t\t\t\t\t\t"<< GREEN"✔";
+    else
+       std::cout << NORMAL" Test operator <=  for 2 vectors big<=small \t\t\t\t\t\t"<< REDD"✘";
+    std::cout << "\t\t std_time  = " << std_time  << "\t\t ft_time = " << ft_time << " \t" << time_is_ok(ft_time, std_time)
+         << std::endl;
+
     if ((std_v1 <= std_v2) == (ft_v1 <= ft_v2))
-         std::cout << NORMAL" Test operator < for 2 vectors identity \t\t\t\t\t\t"<< GREEN"✔" << std::endl;
+         std::cout << NORMAL" Test operator <= for 2 vectors identity \t\t\t\t\t\t"<< GREEN"✔";
     else
-       std::cout << NORMAL" Test operator < for 2 vectors identity \t\t\t\t\t\t"<< REDD"✘" << std::endl;   
+       std::cout << NORMAL" Test operator <= for 2 vectors identity \t\t\t\t\t\t"<< REDD"✘";
+    std::cout << "\t\t std_time  = " << std_time  << "\t\t ft_time = " << ft_time << " \t" << time_is_ok(ft_time, std_time)
+         << std::endl<<std::endl;      
 
 
     out << NORMAL"======================================================================"<<std::endl;
@@ -1078,20 +1149,34 @@ void   test_relational_operators()
     out << std::endl<< GREEN"************  ft_v1 <= ft_v2     return :  "<< ((ft_v1 <= ft_v2 ) ? "True" : "False") << NORMAL" . "<<std::endl<<std::endl<<std::endl;
     
     /* operator > */
-    if (std_v3 > std_v1 == ft_v3 > ft_v1)
-         std::cout << NORMAL" Test operator > for 2 vectors differents in smal>big \t\t\t\t\t"<< GREEN"✔" << std::endl;
-    else
-       std::cout << NORMAL" Test operator > for 2 vectors differents in smal>big \t\t\t\t\t"<< REDD"✘" << std::endl;
+    clock_gettime(CLOCK_MONOTONIC, &std_start);
+    std_v3 > std_v1;
+    std_time = std_time_calculator();
 
-    if (std_v3 > std_v1 == ft_v3 > ft_v1)
-         std::cout << NORMAL" Test operator > for 2 vectors big>small \t\t\t\t\t\t"<< GREEN"✔" << std::endl;
+    clock_gettime(CLOCK_MONOTONIC, &ft_start);
+    ft_v3 > ft_v1;
+    ft_time = ft_time_calculator();
+
+    if ((std_v3 > std_v1) == (ft_v3 > ft_v1))
+         std::cout << NORMAL" Test operator > for 2 vectors differents in smal>big \t\t\t\t\t"<< GREEN"✔";
     else
-       std::cout << NORMAL" Test operator >  for 2 vectors big>small \t\t\t\t\t\t"<< REDD"✘" << std::endl;
+       std::cout << NORMAL" Test operator > for 2 vectors differents in smal>big \t\t\t\t\t"<< REDD"✘";
+    std::cout << "\t\t std_time  = " << std_time  << "\t\t ft_time = " << ft_time << " \t" << time_is_ok(ft_time, std_time)
+         << std::endl;
+
+    if ((std_v3 > std_v1) == (ft_v3 > ft_v1))
+         std::cout << NORMAL" Test operator > for 2 vectors big>small \t\t\t\t\t\t"<< GREEN"✔";
+    else
+       std::cout << NORMAL" Test operator >  for 2 vectors big>small \t\t\t\t\t\t"<< REDD"✘";
+    std::cout << "\t\t std_time  = " << std_time  << "\t\t ft_time = " << ft_time << " \t" << time_is_ok(ft_time, std_time)
+         << std::endl;
+
     if ((std_v1 > std_v2) == (ft_v1 > ft_v2))
-         std::cout << NORMAL" Test operator > for 2 vectors identity \t\t\t\t\t\t"<< GREEN"✔" << std::endl;
+         std::cout << NORMAL" Test operator > for 2 vectors identity \t\t\t\t\t\t"<< GREEN"✔";
     else
-       std::cout << NORMAL" Test operator > for 2 vectors identity \t\t\t\t\t\t"<< REDD"✘" << std::endl;   
-
+       std::cout << NORMAL" Test operator > for 2 vectors identity \t\t\t\t\t\t"<< REDD"✘";   
+    std::cout << "\t\t std_time  = " << std_time  << "\t\t ft_time = " << ft_time << " \t" << time_is_ok(ft_time, std_time)
+         << std::endl<<std::endl;
 
     out << NORMAL"======================================================================"<<std::endl;
     out << GREEN"************  std_v3 > std_v1   return :  "<< ((std_v3 > std_v1 ) ? "True" : "False") << NORMAL" . "<<std::endl;
@@ -1102,19 +1187,34 @@ void   test_relational_operators()
     out << std::endl<< GREEN"************  ft_v1 > ft_v2     return :  "<< ((ft_v1 > ft_v2 ) ? "True" : "False") << NORMAL" . "<<std::endl<<std::endl<<std::endl;
     
     /* operator >= */
-    if (std_v3 >= std_v1 == ft_v3 >= ft_v1)
-         std::cout << NORMAL" Test operator >= for 2 vectors differents in smal>=big \t\t\t\t"<< GREEN"✔" << std::endl;
+    clock_gettime(CLOCK_MONOTONIC, &std_start);
+    std_v3 >= std_v1;
+    std_time = std_time_calculator();
+
+    clock_gettime(CLOCK_MONOTONIC, &ft_start);
+    ft_v3 >= ft_v1;
+    ft_time = ft_time_calculator();
+
+    if ((std_v3 >= std_v1) == (ft_v3 >= ft_v1))
+         std::cout << NORMAL" Test operator >= for 2 vectors differents in smal>=big \t\t\t\t"<< GREEN"✔" ;
     else
-       std::cout << NORMAL" Test operator >=for 2 vectors differents in smal>=big \t\t\t\t\t"<< REDD"✘" << std::endl;
+       std::cout << NORMAL" Test operator >=for 2 vectors differents in smal>=big \t\t\t\t\t"<< REDD"✘";
+    std::cout << "\t\t std_time  = " << std_time  << "\t\t ft_time = " << ft_time << " \t" << time_is_ok(ft_time, std_time)
+         << std::endl;
 
     if (std_v3 >= std_v1 == ft_v3 >= ft_v1)
-         std::cout << NORMAL" Test operator >= for 2 vectors big>=small \t\t\t\t\t\t"<< GREEN"✔" << std::endl;
+         std::cout << NORMAL" Test operator >= for 2 vectors big>=small \t\t\t\t\t\t"<< GREEN"✔";
     else
-       std::cout << NORMAL" Test operator >= for 2 vectors big>=small \t\t\t\t\t\t"<< REDD"✘" << std::endl;
+       std::cout << NORMAL" Test operator >= for 2 vectors big>=small \t\t\t\t\t\t"<< REDD"✘";
+    std::cout << "\t\t std_time  = " << std_time  << "\t\t ft_time = " << ft_time << " \t" << time_is_ok(ft_time, std_time)
+         << std::endl;
+
     if ((std_v1 >= std_v2) == (ft_v1 >= ft_v2))
-         std::cout << NORMAL" Test operator >= for 2 vectors identity \t\t\t\t\t\t"<< GREEN"✔" << std::endl;
+         std::cout << NORMAL" Test operator >= for 2 vectors identity \t\t\t\t\t\t"<< GREEN"✔";
     else
-       std::cout << NORMAL" Test operator >= for 2 vectors identity \t\t\t\t\t\t"<< REDD"✘" << std::endl;   
+       std::cout << NORMAL" Test operator >= for 2 vectors identity \t\t\t\t\t\t"<< REDD"✘"; 
+    std::cout << "\t\t std_time  = " << std_time  << "\t\t ft_time = " << ft_time << " \t" << time_is_ok(ft_time, std_time)
+         << std::endl<<std::endl;     
 
 
     out << NORMAL"======================================================================"<<std::endl;
@@ -1194,7 +1294,7 @@ void    test_vector_get_allocator()
   // construct values in-place on the array:
   for (i=0; i<5; i++) myvector.get_allocator().construct(&p[i],i);
 
-  std::cout << "The allocated array contains:";
+  //std::cout << "The allocated array contains:";
   for (i=0; i<5; i++) std::cout << ' ' << p[i];
   std::cout << '\n';
 
@@ -1236,7 +1336,7 @@ void    test_vector_get_allocator()
     // destroy and std_deallocate:
     for (std_i=0; std_i<5; std_i++) std_myvector.get_allocator().destroy(&std_p[std_i]);
     std_myvector.get_allocator().deallocate(std_p,5);
-std::cout<<"5chek\n";
+
     // destroy and ft_deallocate:
     for (ft_i=0; ft_i<5; ft_i++) ft_myvector.get_allocator().destroy(&ft_p[ft_i]);
     ft_myvector.get_allocator().deallocate(ft_p,5);
@@ -1248,6 +1348,7 @@ std::cout<<"5chek\n";
             result = REDD"✘";
         }
     }
+    std::cout << "*****************************Test get_allocator**********************************************." << std::endl;
     std::cout << NORMAL"Test get_allocator \t\t\t\t\t\t\t\t\t" << result 
                 <<"\t\t std_time  = " << std_time  << "\t\t ft_time = " 
                 << ft_time << " \t" << time_is_ok(ft_time, std_time) << std::endl;  
