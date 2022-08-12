@@ -1168,10 +1168,89 @@ void    test_swap_nonmember()
     std::cout << NORMAL" Test swap(v1, v2)  \t\t\t\t\t\t\t\t\t"<< vector_is_equal(std_v1 , ft_v1) << vector_is_equal(std_v2 , ft_v2)
             <<"\t\t std_time  = " << std_time  << "\t\t ft_time = " << ft_time << " \t" << time_is_ok(ft_time, std_time)
                 << std::endl;
-    
-    
-
 out.close();
+}
+
+void    test_vector_get_allocator()
+{
+    std::ofstream        out;
+    long double          std_time, ft_time;
+   
+    std::string const   file = "./Log_vector/allocator";
+    out.open(file.c_str(), std::fstream::trunc | std::ostream::out);
+    if(!out.is_open())
+        std::cerr << "Error : faild to open file" << std::endl;
+    std::string                result = GREEN"✔";
+
+
+    //****************
+    std::vector<int> myvector;
+  int * p;
+  unsigned int i;
+
+  // allocate an array with space for 5 elements using vector's allocator:
+  p = myvector.get_allocator().allocate(5);
+
+  // construct values in-place on the array:
+  for (i=0; i<5; i++) myvector.get_allocator().construct(&p[i],i);
+
+  std::cout << "The allocated array contains:";
+  for (i=0; i<5; i++) std::cout << ' ' << p[i];
+  std::cout << '\n';
+
+  // destroy and deallocate:
+  for (i=0; i<5; i++) myvector.get_allocator().destroy(&p[i]);
+  myvector.get_allocator().deallocate(p,5);
+
+
+//*******
+
+    std::vector<int> std_myvector;
+    int*         std_p;
+    unsigned int std_i;
+    
+    ft::vector<int> ft_myvector;
+    int*            ft_p;
+    unsigned int    ft_i;
+
+    // allocate an array with space for 5 elements using vector's allocator:
+    std_p = std_myvector.get_allocator().allocate(5);
+    ft_p = ft_myvector.get_allocator().allocate(5);
+     
+    // construct values in-place on the array:
+    clock_gettime(CLOCK_MONOTONIC, &std_start);
+    for (std_i=0; std_i<5; std_i++) std_myvector.get_allocator().construct(&std_p[std_i], std_i);
+    std_time = std_time_calculator();
+
+    clock_gettime(CLOCK_MONOTONIC, &ft_start);
+    for (ft_i=0; ft_i<5; ft_i++) ft_myvector.get_allocator().construct(&ft_p[ft_i], ft_i);
+    ft_time = ft_time_calculator();
+
+    out << "The allocated array std_contains:";
+    for (std_i=0; std_i<5; std_i++) out << ' ' << std_p[std_i];
+    out << '\n';
+
+    out << "The allocated array std_contains:";
+    for (ft_i=0; ft_i<5; ft_i++) out << ' ' << ft_p[ft_i];
+    out << '\n';
+    // destroy and std_deallocate:
+    for (std_i=0; std_i<5; std_i++) std_myvector.get_allocator().destroy(&std_p[std_i]);
+    std_myvector.get_allocator().deallocate(std_p,5);
+std::cout<<"5chek\n";
+    // destroy and ft_deallocate:
+    for (ft_i=0; ft_i<5; ft_i++) ft_myvector.get_allocator().destroy(&ft_p[ft_i]);
+    ft_myvector.get_allocator().deallocate(ft_p,5);
+
+    for (std_i=0; std_i<5; std_i++) out << ' ' << std_p[i];
+    {
+        if (std_p[std_i] != ft_p[std_i])
+        {
+            result = REDD"✘";
+        }
+    }
+    std::cout << NORMAL"Test get_allocator \t\t\t\t\t\t\t\t\t" << result 
+                <<"\t\t std_time  = " << std_time  << "\t\t ft_time = " 
+                << ft_time << " \t" << time_is_ok(ft_time, std_time) << std::endl;  
 }
 
 void    test_vector(void)
@@ -1193,7 +1272,7 @@ void    test_vector(void)
 	test_erase();
 	test_swap();
 	test_clear();
-	//test_get_allocator();
+	test_vector_get_allocator();
 	test_relational_operators();
 	test_swap_nonmember();
 

@@ -4,7 +4,7 @@ VPATH		=	src
 OBJDIR		=	obj
 INCLDIR		=	inc 
 
-SRC 		=	main.cpp test_vector.cpp  test_map.cpp
+SRC 		=	main.cpp test_vector.cpp  test_map.cpp test_stack.cpp
 
 
 OBJ 		=  	$(SRC:%.cpp=$(OBJDIR)/%.o)
@@ -12,7 +12,7 @@ OBJ 		=  	$(SRC:%.cpp=$(OBJDIR)/%.o)
 CC			=	c++
 CFLAG		=	-Wall -Wextra -Werror -std=c++98
 HEADER			=	-I.
-INCFLAGS	=	./containers/vector.hpp   ./header_utils.hpp 
+INCFLAGS	=	./containers/vector.hpp   ./header_utils.hpp  ./containers/stack.hpp  ./containers/map.hpp
 
 RM			=	rm -rf
 UNAME           :=      $(shell uname -s)
