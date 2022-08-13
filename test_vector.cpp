@@ -333,7 +333,7 @@ void    test_begin_end_rbegin_rend()
     std::cout << "*****************************Test Iterator***********************************************." << std::endl;
     if ( vector_is_equal(std_v, ft_v) == GREEN"✔" &&  *(std_v.begin()) == *(ft_v.begin())  && *(std_v.end()) == *(ft_v.end()))
         result = GREEN "✔";     
-    std::cout << NORMAL "Test Iterator begin end\t\t\t\t\t\t\t\t\t"<< result<< std::endl;
+    std::cout << NORMAL "Test Iterator begin end\t\t\t\t\t\t\t\t\t"<< result;
     std::cout << "\t\t std_time  = " << std_time  << "\t\t ft_time = " << ft_time << " \t" << time_is_ok(ft_time, std_time) << std::endl;    
    
     /* Reverse Iterator   begin() end ()*/
@@ -430,13 +430,13 @@ void    test_resize(void)
     out << printVectorAttributes(std_v1,ft_v1, "After resize to 12 size", 0);
     std::cout <<NORMAL " test for resize to biger size \t\t\t\t\t\t\t\t"<< vector_is_equal(std_v1 , ft_v1)
             <<"\t\t std_time  = " << std_time  << "\t\t ft_time = " << ft_time << " \t" << time_is_ok(ft_time, std_time) 
-            << std::endl;
-    
+            << std::endl <<std::endl;
     out.close();
 }
 
 void    test_empty(void)
 {
+    long double              std_time, ft_time;
     std::vector<char>   std_v1;
     ft::vector<char>    ft_v1;
 
@@ -446,12 +446,21 @@ void    test_empty(void)
     std::vector<int>   std_v3(5, 3);
     ft::vector<int>    ft_v3(5, 3);
 
+    clock_gettime(CLOCK_MONOTONIC, &std_start);
+    std_v1.empty();
+    std_time = std_time_calculator();
+
+    clock_gettime(CLOCK_MONOTONIC, &ft_start);
+    ft_v1.empty();
+    ft_time = std_time_calculator();
+
     std::cout << "*****************************Test empty()***********************************************." << std::endl;
         if(std_v1.empty() ==ft_v1.empty())
-            std::cout <<NORMAL " test for empty() for  empty vector* \t\t\t\t\t\t\t"<< GREEN"✔"<< std::endl;
+            std::cout <<NORMAL " test for empty() for  empty vector* \t\t\t\t\t\t\t"<< GREEN"✔";
         else
-            std::cout <<NORMAL " test for empty() for  empty vector* \t\t\t\t\t\t\t"<< REDD"✘"<< std::endl;
-
+            std::cout <<NORMAL " test for empty() for  empty vector* \t\t\t\t\t\t\t"<< REDD"✘";
+        std::cout<<"\t\t std_time  = " << std_time  << "\t\t ft_time = " << ft_time << " \t" << time_is_ok(ft_time, std_time) 
+            << std::endl <<std::endl;
             
         if(std_v2.empty() ==ft_v2.empty())
             std::cout <<NORMAL " test for empty() for vector(size)* \t\t\t\t\t\t\t"<< GREEN"✔"<< std::endl;
@@ -500,8 +509,8 @@ void    test_reserve(void)
 
 void    test_element_access(void)
 {
-    //operator []
     std::ofstream        out;
+    long double          std_time, ft_time;
     std::string const   file = "./Log_vector/log_element_access";
     out.open(file.c_str(), std::fstream::trunc | std::ostream::out);
     if(!out.is_open())
@@ -516,46 +525,78 @@ void    test_element_access(void)
     out << printVectorAttributes(std_arr_v4,ft_arr_v4, "Test operato access", 0);
     
     // operator []
+    clock_gettime(CLOCK_MONOTONIC, &std_start);
+    std_arr_v4[1];
+    std_time = std_time_calculator();
+
+    clock_gettime(CLOCK_MONOTONIC, &ft_start);
+    ft_arr_v4[1];
+    ft_time = ft_time_calculator();
+
     for (std::vector<int>::size_type i = 0 ; i < std_arr_v4.size(); ++i)
     {
         out << "std_arr_arr["<<i<<"] = " << std_arr_v4[i] << "\t\t" << "ft_arr_arr[" <<i << "] = " << ft_arr_v4[i] << "\n";
         if (std_arr_v4[i] != ft_arr_v4[i])
             {
-               std::cout <<NORMAL " test for operator [] \t\t\t\t\t\t\t\t\t\t\t"<< REDD"✘"<< std::endl;
+               std::cout <<NORMAL " test for operator [] \t\t\t\t\t\t\t\t\t\t\t"<< REDD"✘";
                return ;
             }   
     }
-    std::cout <<NORMAL " test for operator [] \t\t\t\t\t\t\t\t\t"<< GREEN"✔" << std::endl;
-
+    std::cout <<NORMAL " test for operator [] \t\t\t\t\t\t\t\t\t"<< GREEN"✔" ;
+    std::cout << "\t\t std_time  = " << std_time  << "\t\t ft_time = " << ft_time << " \t" << time_is_ok(ft_time, std_time) << std::endl;
     out << "\n============================================================================\n\n";
     // at
+    clock_gettime(CLOCK_MONOTONIC, &std_start);
+    std_arr_v4.at(1);
+    std_time = std_time_calculator();
+
+    clock_gettime(CLOCK_MONOTONIC, &ft_start);
+    ft_arr_v4.at(1);
+    ft_time = ft_time_calculator();
+
     for (std::vector<int>::size_type i = 0 ; i < std_arr_v4.size(); ++i)
     {
         out << "std_arr_v4.at("<< i << ") = " << std_arr_v4.at(i) << "\t\t" << "ft_arr_arr.at("<< i << ") = " << ft_arr_v4.at(i) << "\n";
         if (std_arr_v4.at(i) != ft_arr_v4.at(i))
             {
-               std::cout <<NORMAL " test for operator at \t\t\t\t\t\t\t\t\t\t\t"<< REDD"✘"<< std::endl;
+               std::cout <<NORMAL " test for operator at \t\t\t\t\t\t\t\t\t\t\t"<< REDD"✘";
                return ;
             }   
     }
-    std::cout <<NORMAL " test for operator at \t\t\t\t\t\t\t\t\t"<< GREEN"✔" << std::endl;
-
+    std::cout <<NORMAL " test for operator at \t\t\t\t\t\t\t\t\t"<< GREEN"✔";
+    std::cout << "\t\t std_time  = " << std_time  << "\t\t ft_time = " << ft_time << " \t" << time_is_ok(ft_time, std_time) << std::endl;
     
     //front,  back
+    clock_gettime(CLOCK_MONOTONIC, &std_start);
+    std_arr_v4.front();
+    std_time = std_time_calculator();
+
+    clock_gettime(CLOCK_MONOTONIC, &ft_start);
+    ft_arr_v4.front();
+    ft_time = ft_time_calculator();
+
     out << "\n============================================================================\n\n";
     out << "std_arr_v4.front() = " << std_arr_v4.front() << "\t\t" << "ft_arr_v4.front() = " << ft_arr_v4.front()<< std::endl;
     if (std_arr_v4.front() != ft_arr_v4.front())
-    {
-        std::cout <<NORMAL " test for front() \t\t\t\t\t\t\t\t\t\t"<< REDD"✘"<<  std::endl;
-        return ;
-    }
+        std::cout <<NORMAL " test for front() \t\t\t\t\t\t\t\t\t\t"<< REDD"✘";
+    std::cout <<NORMAL " test for operator front() \t\t\t\t\t\t\t\t"<< GREEN"✔";
+    std::cout << "\t\t std_time  = " << std_time  << "\t\t ft_time = " << ft_time << " \t" << time_is_ok(ft_time, std_time) << std::endl;
 
-    out << "std_arr_v4.back() = " << std_arr_v4.back() << "\t" << "ft_arr_v4.back() = " << ft_arr_v4.back()<< std::endl;
+
+    clock_gettime(CLOCK_MONOTONIC, &std_start);
+    std_arr_v4.back();
+    std_time = std_time_calculator();
+
+    clock_gettime(CLOCK_MONOTONIC, &ft_start);
+    ft_arr_v4.back();
+    ft_time = ft_time_calculator();
+
+    out << "std_arr_v4.back() = " << std_arr_v4.back() << "\t" << "ft_arr_v4.back() = " << ft_arr_v4.back();
     if (std_arr_v4.back() != ft_arr_v4.back())
-    {
-        std::cout <<NORMAL " test for back() \t\t\t\t\t\t\t\t\t\t"<< REDD"✘"<< std::endl;
-        return ;
-    }
+        std::cout <<NORMAL " test for back() \t\t\t\t\t\t\t\t\t\t"<< REDD"✘";
+    std::cout <<NORMAL " test for operator back() \t\t\t\t\t\t\t\t"<< GREEN"✔";
+    std::cout << "\t\t std_time  = " << std_time  << "\t\t ft_time = " << ft_time << " \t" << time_is_ok(ft_time, std_time) << std::endl;
+
 
     /** chenge vector for test front et back **/
     std_arr_v4.push_back(2323);std_arr_v4.push_back(-7);
@@ -566,17 +607,17 @@ void    test_element_access(void)
     out << "std_arr_v4.front() = " << std_arr_v4.front() << "\t\t" << "ft_arr_v4.front() = " << ft_arr_v4.front()<< std::endl;
     if (std_arr_v4.front() != ft_arr_v4.front())
     {
-        std::cout <<NORMAL " test for front() \t\t\t\t\t\t\t\t\t\t"<< REDD"✘"<< std::endl;
-        return ;
+        std::cout <<NORMAL " test for front() after change \t\t\t\t\t"<< REDD"✘"<< std::endl;
     }
+    std::cout <<NORMAL " test for operator front() after change \t\t\t\t\t\t"<< GREEN"✔";
+    std::cout << "\t\t std_time  = " << std_time  << "\t\t ft_time = " << ft_time << " \t" << time_is_ok(ft_time, std_time) << std::endl;
 
     out << "std_arr_v4.back() = " << std_arr_v4.back() << "\t\t" << "ft_arr_v4.back() = " << ft_arr_v4.back()<< std::endl;
     if (std_arr_v4.back() != ft_arr_v4.back())
     {
        std::cout <<NORMAL " test for back() \t\t\t\t\t\t\t\t\t\t"<< REDD"✘"<< std::endl;
-       return ;
     }
-    std::cout <<NORMAL " test for front() back() \t\t\t\t\t\t\t\t"<< GREEN"✔" << std::endl; 
+    std::cout <<NORMAL " test for front() back() after push \t\t\t\t\t\t\t"<< GREEN"✔" << std::endl; 
      out.close();    
  }
 
@@ -662,7 +703,6 @@ void    test_push_back()
     out << std::endl << std::endl;
     std::cout << "*****************************Test push_back()***********************************************." << std::endl;
     std::cout << NORMAL" Test push_back for empty vector \t\t\t\t\t\t\t"<< vector_is_equal(std_v1 , ft_v1) 
-            <<"\t\t   std_time  = " << std_time  << "\t\t ft_time = " << ft_time << " \t" << time_is_ok(ft_time, std_time)
             << std::endl;  
    
     /* vector fill size */
@@ -697,9 +737,7 @@ void    test_push_back()
     std::cout << NORMAL" Test push_back for vector fill size  and value\t\t\t\t\t\t"<< vector_is_equal(std_v1 , ft_v1)
                 <<"\t\t   std_time  = " << std_time  << "\t\t ft_time = " << ft_time << " \t" << time_is_ok(ft_time, std_time)
                 << std::endl; 
-     out.close();
-
-    
+     out.close();   
 }
 
 void    test_pop_back()
