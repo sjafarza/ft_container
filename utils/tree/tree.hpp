@@ -18,12 +18,12 @@ namespace ft
 	template <class T>
 	struct _rb_node
 	{
-		typedef T value_type;
-		_rb_node *parent;
-		_rb_node *left;
-		_rb_node *right;
-		bool color;
-		T data;
+		typedef T 	value_type;
+		_rb_node 	*parent;
+		_rb_node 	*left;
+		_rb_node 	*right;
+		bool 		color;
+		T 			data;
 		_rb_node(T const &data) : data(data) {}
 	};
 
@@ -33,17 +33,27 @@ namespace ft
 	public:
 		// typedef
 
-		typedef Compare compare;
-		typedef Allocator allocator;
-		typedef T value_type;
-		typedef size_t size_type;
-		typedef _rb_node<value_type> node;
-		typedef node *node_ptr;
-		typedef std::ptrdiff_t difference_type;
-		typedef ft::tree_iterator<node> iterator;
-		typedef ft::tree_iterator<node> const_iterator;
-		typedef ft::reverse_iterator<iterator> reverse_iterator;
-		typedef ft::reverse_iterator<const_iterator> const_reverse_iterator;
+		typedef Compare 								compare;
+		typedef Allocator 								allocator;
+		typedef T 										value_type;
+		typedef size_t 									size_type;
+		typedef _rb_node<value_type> 					node;
+		typedef node*									node_ptr;
+		typedef std::ptrdiff_t 							difference_type;
+		typedef ft::tree_iterator<node> 				iterator;
+		typedef ft::tree_iterator<node> 				const_iterator;
+		typedef ft::reverse_iterator<iterator> 			reverse_iterator;
+		typedef ft::reverse_iterator<const_iterator> 	const_reverse_iterator;
+
+		private:
+		node_ptr root;
+		node_ptr NIL;		  	//sentinel
+		compare _compare;	  	// used to compare nodes
+		allocator _alloc; 		// used to allocate nodes
+		size_type _size;	  	// number of nodes in the tree (to have O(1) size())
+
+
+		public:
 
 		// constructors
 		_rb_tree(allocator alloc = allocator()) : _compare(compare()), _size(0)
@@ -315,15 +325,10 @@ namespace ft
 			}
 		}
 
-	private:
-		node_ptr root;
-		node_ptr NIL;		  //sentinel
-		compare _compare;	  // used to compare nodes
-		allocator _alloc; // used to allocate nodes
-		size_type _size;	  // number of nodes in the tree (to have O(1) size())
-
+	
+		private:
 		// new node
-		node *_new_node(value_type const &data)
+		node*	_new_node(value_type const &data)
 		{
 			node *node = _alloc.allocate(1);
 			_alloc.construct(node, data);
