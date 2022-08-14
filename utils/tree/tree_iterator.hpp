@@ -10,25 +10,33 @@ namespace ft
 	class tree_iterator
 	{
 	public:
-		typedef Node value_type;
-		typedef value_type *node_ptr;
-		typedef typename Node::value_type const data_type;
-		typedef data_type &reference;
-		typedef data_type const &const_reference;
-		typedef data_type *pointer;
-		typedef data_type const *const_pointer;
-		typedef typename std::ptrdiff_t difference_type;
-		typedef std::bidirectional_iterator_tag iterator_category;
+		typedef Node 								value_type;
+		typedef value_type*							node_ptr;
+		typedef typename Node::value_type const 	data_type;
+		typedef data_type&							reference;
+		typedef data_type const&					const_reference;
+		typedef data_type*							pointer;
+		typedef data_type const*					const_pointer;
+		typedef typename std::ptrdiff_t 			difference_type;
+		typedef std::bidirectional_iterator_tag 	iterator_category;
 
-		node_ptr node;
+		private:
+		node_ptr root;
+		node_ptr NIL;
 
+		public:
+		node_ptr									 node;
+
+		// constructors  Deconstructors
 		tree_iterator(node_ptr node, node_ptr root, node_ptr NIL)
-			: node(node), root(root), NIL(NIL) {}
+			: node(node), root(root), NIL(NIL) 
+			{}
 
 		tree_iterator(void) : node(NULL), root(NULL), NIL(NULL) {}
 
 		tree_iterator(const tree_iterator &other)
-			: node(other.node), root(other.root), NIL(other.NIL) {}
+			: node(other.node), root(other.root), NIL(other.NIL) 
+			{}
 
 		~tree_iterator(void) {}
 
@@ -38,7 +46,7 @@ namespace ft
 			return tree_iterator<value_type const>(node, root, NIL);
 		}
 
-		tree_iterator &operator=(const tree_iterator &other)
+		tree_iterator &operator = (const tree_iterator &other)
 		{
 			node = other.node;
 			root = other.root;
@@ -46,51 +54,51 @@ namespace ft
 			return *this;
 		}
 
-		bool operator==(const tree_iterator &other) const
+		bool operator == (const tree_iterator &other) const
 		{
 			return node == other.node;
 		}
 
-		bool operator!=(const tree_iterator &other) const
+		bool operator != (const tree_iterator &other) const
 		{
 			return node != other.node;
 		}
 
-		reference operator*(void)
+		reference operator * (void)
 		{
 			return node->data;
 		}
 
-		const_reference operator*(void) const
+		const_reference operator * (void) const
 		{
 			return *(node->data);
 		}
 
-		pointer operator->(void)
+		pointer operator -> (void)
 		{
 			return &(operator*());
 		}
 
-		const_pointer operator->(void) const
+		const_pointer operator -> (void) const
 		{
 			return &(operator*());
 		}
 
-		tree_iterator &operator++(void)
+		tree_iterator&	operator ++ (void)
 		{
 			if (node != NIL)
 				node = _next();
 			return *this;
 		}
 
-		tree_iterator operator++(int)
+		tree_iterator operator ++ (int)
 		{
 			tree_iterator tmp(*this);
 			++(*this);
 			return tmp;
 		}
 
-		tree_iterator &operator--(void)
+		tree_iterator &operator -- (void)
 		{
 			if (node != NIL)
 				node = _prev();
@@ -99,16 +107,16 @@ namespace ft
 			return *this;
 		}
 
-		tree_iterator operator--(int)
+		tree_iterator operator -- (int)
 		{
 			tree_iterator tmp(*this);
 			--(*this);
 			return tmp;
 		}
 
-	private:
-		node_ptr root;
-		node_ptr NIL;
+	
+
+	private:	
 
 		node_ptr _max(node_ptr node)
 		{
